@@ -1,9 +1,12 @@
 # madda
+
+[![Code Climate](https://codeclimate.com/github/yoghi/madda/badges/gpa.svg)](https://codeclimate.com/github/yoghi/madda)
+
 Model And Domain Driven Architecture
 
 ## Requirements
 
- * Symfony 3.0+ 
+ * Symfony 3.0+
 
 ## Installation
 
