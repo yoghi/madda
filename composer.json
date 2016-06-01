@@ -1,0 +1,38 @@
+{
+    "name": "Yoghi/Madda",
+    "license": "GPLv3",
+    "type": "symfony-bundle",
+    "description": "Model And Domain Driven Architecture",
+    "keywords": ["MDA", "DDD", "generator"],
+    "homepage": "https://github.com/yoghi/madda/tree/master",
+    "authors": [
+        {
+            "name": "Stefano Tamagnini",
+            "homepage": "http://www.sigmalab.net"
+        }
+    ],
+    "autoload": {
+        "psr-4": { "Yoghi\\Bundle\\MaddaBundle": "" }
+    },
+    "prefer-stable": true,
+    "require": {
+        "php": ">=5.6",
+        "psr/log": "^1.0",
+        "symfony/finder": "^3.0",
+        "symfony/console": "^3.0",
+        "symfony/process": "^3.0",
+        "symfony/filesystem": "^3.0",
+        "symfony/phpunit-bridge": "^3.0",
+        "webpatser/laravel-uuid": "2.*",
+        "nette/php-generator": "^2.3",
+        "friendsofphp/php-cs-fixer": "^1.11"
+    },
+    "require-dev" : {
+        "sensiolabs/security-checker": "^3.0",
+        "codeclimate/php-test-reporter": "^0.3.2"
+    },
+    "scripts": {
+    },
+    "extra": {
+    }
+}

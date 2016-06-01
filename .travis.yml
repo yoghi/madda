@@ -1,0 +1,61 @@
+# curl -H "Accept: text/plain" https://security.sensiolabs.org/check_lock -F lock=@./composer.lock
+# https://docs.travis-ci.com/user/languages/php
+# https://docs.travis-ci.com/user/customizing-the-build
+
+language: php
+
+php:
+  - '5.6'
+  - '7.0'
+  - hhvm
+
+# env:
+#   - SYMFONY_VERSION="3.0.*" DB=mysql
+#   - DB=sqlite
+#   - DB=mysql
+#   - DB=postgres
+
+# database
+# https://docs.travis-ci.com/user/database-setup/
+
+services:
+  #  - neo4j
+
+# whitelist
+branches:
+  only:
+    - master
+    # - stable
+
+before_script:
+  # - mkdir -p resources/logs resources/tmp
+
+before_install:
+  - composer self-update
+
+install:
+  - composer install
+
+cache:
+  directories:
+    - $HOME/.composer/cache/files
+
+# addons:
+#   code_climate:
+#     repo_token:
+#       secure: "Cw8PcwP/1vC0OwHCoXMKh+wSOMzvOZKjgP0w1UbJtZ6SsRZnqilEhPdqbxS04W9BRwuiMAuMQ6wtvUKPkRJA6w9bNaSPfL4kpwz12Q16WIIL3GlH0M7XUrRktStYmtrEPlmRmTWgUWTF8e2g/YCi6HiNyesKNJvLFXZpH4K0zL8="
+
+# after_script:
+#   - php vendor/bin/coveralls -v
+#   - php vendor/bin/test-reporter --stdout > codeclimate.json
+#   - 'curl -X POST -d @codeclimate.json -H "Content-Type: application/json" -H "User-Agent: Code Climate (PHP Test Reporter v1.0.1-dev)"  https://codeclimate.com/test_reports'
+#   - cat app/logs/*
+
+# script:
+#   - phpunit --configuration $DB.phpunit.xml
+#   - phpunit --coverage-text
+
+# notifications:
+#   slack: liip:3QOs1QKt3aCFxpJvRzpJCbVZ
+#   email:
+#     - friendsofsymfony-dev@googlegroups.com
