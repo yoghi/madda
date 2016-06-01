@@ -12,7 +12,7 @@
         }
     ],
     "autoload": {
-        "psr-4": { "Yoghi\\Bundle\\MaddaBundle": "" }
+        "psr-4": { "Yoghi\\Bundle\\MaddaBundle\\": "" }
     },
     "prefer-stable": true,
     "require": {
