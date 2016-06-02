@@ -2,7 +2,7 @@
 
 namespace Yoghi\Bundle\MaddaBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -19,7 +19,7 @@ use Symfony\Component\Yaml\Parser;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Local;
 
-class GenerateModelCommand extends ContainerAwareCommand
+class GenerateModelCommand extends Command
 {
 
     private $logger;

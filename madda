@@ -1,0 +1,39 @@
+#!/usr/bin/env php
+<?php
+
+/*
+ * This file is part of the MADDA project.
+ *
+ * (c) Stefano Tamagnini <>
+ *
+ * This source file is subject to the GPLv3 license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
+/**
+ * @author Stefano Tamagnini <>
+ */
+
+//$version_id = $major_version * 10000 + $minor_version * 100 + $release_version;
+if (!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 50600) {
+    fwrite(STDERR, 'PHP needs to be a minimum version of PHP 5.6.0 - using '.PHP_VERSION_ID."\n");
+    exit(1);
+}
+
+set_error_handler(function ($severity, $message, $file, $line) {
+    if ($severity & error_reporting()) {
+        throw new ErrorException($message, 0, $severity, $file, $line);
+    }
+});
+
+// installed via composer?
+if (file_exists($a = __DIR__.'/../../autoload.php')) {
+    require_once $a;
+} else {
+    require_once __DIR__.'/vendor/autoload.php';
+}
+
+use Yoghi\Bundle\MaddaBundle\Console\Application;
+
+$application = new Application();
+$application->run();

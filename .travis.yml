@@ -21,6 +21,8 @@ php:
 # services:
   #  - neo4j
 
+sudo: false
+
 # whitelist
 branches:
   only:
@@ -51,9 +53,16 @@ cache:
 #   - 'curl -X POST -d @codeclimate.json -H "Content-Type: application/json" -H "User-Agent: Code Climate (PHP Test Reporter v1.0.1-dev)"  https://codeclimate.com/test_reports'
 #   - cat app/logs/*
 
-# script:
+before_script:
+  - mkdir -p build/logs
+
+script:
 #   - phpunit --configuration $DB.phpunit.xml
 #   - phpunit --coverage-text
+  - phpunit -c phpunit.xml.dist
+
+after_success:
+  - travis_retry php vendor/bin/coveralls -v
 
 # notifications:
 #   slack: liip:3QOs1QKt3aCFxpJvRzpJCbVZ

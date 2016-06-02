@@ -22,17 +22,19 @@
         "symfony/console": "^3.0",
         "symfony/process": "^3.0",
         "symfony/filesystem": "^3.0",
-        "symfony/phpunit-bridge": "^3.0",
         "webpatser/laravel-uuid": "2.*",
         "nette/php-generator": "^2.3",
         "friendsofphp/php-cs-fixer": "^1.11"
     },
     "require-dev" : {
         "sensiolabs/security-checker": "^3.0",
-        "codeclimate/php-test-reporter": "^0.3.2"
+        "codeclimate/php-test-reporter": "^0.3.2",
+        "phpunit/phpunit": "5.3.*",
+        "phpunit/php-code-coverage": "^3.3"
     },
     "scripts": {
     },
     "extra": {
-    }
+    },
+    "bin": ["madda"]
 }
