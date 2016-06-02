@@ -33,7 +33,7 @@ branches:
   # - mkdir -p resources/logs resources/tmp
 
 before_install:
-  - composer self-update
+  - composer --version
 
 install:
   - composer install
