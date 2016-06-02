@@ -1,7 +1,7 @@
 {
-    "name": "Yoghi/Madda",
+    "name": "yoghi/madda",
     "license": "GPLv3",
-    "type": "symfony-bundle",
+    "type": "application",
     "description": "Model And Domain Driven Architecture",
     "keywords": ["MDA", "DDD", "generator"],
     "homepage": "https://github.com/yoghi/madda/tree/master",
