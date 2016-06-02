@@ -28,4 +28,13 @@
         <log type="coverage-clover" target="build/logs/clover.xml"/>
     </logging>
 
+    <filter>
+      <directory>./Command</directory>
+      <directory>./Console</directory>
+      <exclude>
+          <directory>./Resources</directory>
+          <directory>./Tests</directory>
+      </exclude>
+    </filter>
+
 </phpunit>
