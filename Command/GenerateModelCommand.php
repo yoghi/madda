@@ -358,7 +358,7 @@ class GenerateModelCommand extends Command
         } //for
     }
 
-    
+
 
     protected function scan($filesystem, $baseDirectory, $directory, $directoryOutput, $io)
     {
@@ -420,7 +420,7 @@ class GenerateModelCommand extends Command
             $input = new ArrayInput(array(
                'path' => $directoryOutput,
                '--level' => 'psr2',
-               '--fixers' => 'strict_param,short_array_syntax,trailing_spaces,indentation,line_after_namespace,php_closing_tag'
+               '--fixers' => 'eof_ending,strict_param,short_array_syntax,trailing_spaces,indentation,line_after_namespace,php_closing_tag'
             ));
 
             $output = new BufferedOutput();

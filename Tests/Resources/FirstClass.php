@@ -1,6 +1,9 @@
 <?php
 namespace TestNamespace;
 
-class FirstClass
+use ExtendClass;
+use IClass;
+
+class FirstClass extends ExtendClass implements IClass
 {
 }

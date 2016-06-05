@@ -31,6 +31,45 @@ class ClassGenerator
         $this->currentClass = $this->currentFile->addClass($namespace.'\\'.ucfirst($class_name));
     }
 
+    /**
+     * Aggiungere il costruttore
+     */
+    private function addConstructor()
+    {
+        $mc = $this->currentClass->addMethod('__construct');
+        $mc->setStatic(false);
+        $mc->setVisibility('public');
+        $mc->addDocument('costruttore');
+        $mc->setFinal(true);
+    }
+
+    private function addGetter($field_name, $field_class_full, $is_static, $is_concrete)
+    {
+        /** $m @var \Nette\PhpGenerator\Method */
+        $m = $this->currentClass->addMethod('get'.ucfirst($field_name));
+        $m->setStatic($is_static);
+        $m->addDocument('@return '.$field_class_full);
+        if ($is_concrete) {
+            $m->setFinal(true);
+            $m->setBody('return $this->?;', [$field_name]);
+        }
+    }
+
+    private function addSetter($field_name, $field_class_full, $is_static, $is_concrete)
+    {
+        /** $m @var \Nette\PhpGenerator\Method */
+      $m = $this->currentClass->addMethod('set'.ucfirst($field_name));
+        $m->setStatic($is_static);
+        $m->addDocument('@var '.$name.' '.$field_class_full);
+        $m->addParameter($name)->setTypeHint($field_class_name);
+
+        if ($is_concrete) {
+            $m->setFinal(true);
+            $m->setBody('$this->? = $?;', [$name, $name]);
+            $m->addParameter($name)->setTypeHint($field_class_name);
+        }
+    }
+
     public function generateClassType($properties, $types_reference, $types_description, Config $config)
     {
         // extend class
@@ -41,20 +80,21 @@ class ClassGenerator
 
         // implements class
         if (array_key_exists('implements', $properties)) {
-            $this->currentClass->setImplements($properties['implements']);
-            foreach ($properties['implements'] as $implement_use) {
+            $implementsList = array();
+            if (!is_array($properties['implements'])) {
+                $implementsList[] = $properties['implements'];
+            } else {
+                $implementsList = array_merge($implementsList, $properties['implements']);
+            }
+            $this->currentClass->setImplements($implementsList);
+            foreach ($implementsList as $implement_use) {
                 $this->currentClass->getNamespace()->addUse($implement_use);
             }
         }
 
         if (array_key_exists('fields', $properties)) {
             if ($config->add_constructor) {
-                //costruttore
-                $mc = $this->currentClass->addMethod('__construct');
-                $mc->setStatic(false);
-                $mc->setVisibility('public');
-                $mc->addDocument('costruttore');
-                $mc->setFinal(true);
+                $this->addConstructor();
             }
 
             $body = '';
@@ -142,7 +182,6 @@ class ClassGenerator
                     }
                 }
 
-
                 if (!$config->is_interface) {
                     /** $field @var \Nette\PhpGenerator\Property */
                     $field = $this->currentClass->addProperty($name);
@@ -167,37 +206,19 @@ class ClassGenerator
 
                 if ($config->is_interface) {
                     if ($create_getter) {
-                        /** $m @var \Nette\PhpGenerator\Method */
-                        $m = $this->currentClass->addMethod('get'.ucfirst($name));
-                        $m->setStatic($is_static);
-                        $m->addDocument('@return '.$field_class_full);
+                        $this->addGetter($name, $field_class_full, $is_static, false);
                     }
 
                     if ($create_setter) {
-                        /** $m @var \Nette\PhpGenerator\Method */
-                        $m = $this->currentClass->addMethod('set'.ucfirst($name));
-                        $m->setStatic($is_static);
-                        $m->addDocument('@var '.$name.' '.$field_class_full);
-                        $m->addParameter($name)->setTypeHint($field_class_name);
+                        $this->addSetter($name, $field_class_full, $is_static, false);
                     }
                 } else {
                     if ($create_getter) {
-                        /** $m @var \Nette\PhpGenerator\Method */
-                        $m = $this->currentClass->addMethod('get'.ucfirst($name));
-                        $m->setStatic($is_static);
-                        $m->addDocument('@return '.$field_class_full);
-                        $m->setFinal(true);
-                        $m->setBody('return $this->?;', [$name]);
+                        $this->addGetter($name, $field_class_full, $is_static, true);
                     }
 
                     if ($create_setter) {
-                        /** $m @var \Nette\PhpGenerator\Method */
-                        $m = $this->currentClass->addMethod('set'.ucfirst($name));
-                        $m->setStatic($is_static);
-                        $m->addDocument('@var '.$name.' '.$field_class_full);
-                        $m->setFinal(true);
-                        $m->setBody('$this->? = $?;', [$name, $name]);
-                        $m->addParameter($name)->setTypeHint($field_class_name);
+                        $this->addSetter($name, $field_class_full, $is_static, true);
                     }
                 }
             }
