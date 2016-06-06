@@ -41,17 +41,23 @@
 
     <logging>
         <log type="coverage-clover" target="build/logs/clover.xml"/>
+        <log type="coverage-html" target="build/php/coverage"/>
+        <log type="junit" target="build/php/test-results.xml"/>
     </logging>
 
     <filter>
       <whitelist>
         <directory>./Command</directory>
         <directory>./Console</directory>
-        <exclude>
-            <directory>./Resources</directory>
-            <directory>./Tests</directory>
-        </exclude>
+        <directory>./Generator</directory>
+        <directory>./Model</directory>
+        <directory>./Exception</directory>
       </whitelist>
+      <blacklist>
+        <directory>vendor</directory>
+        <directory>./Resources</directory>
+        <directory>./Tests</directory>
+    </blacklist>
     </filter>
 
 </phpunit>
