@@ -20,7 +20,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException Yoghi\Bundle\MaddaBundle\Exception\MaddaException
      */
-    public function testReadInvalidFile()
+    public function testReadNotExistFile()
     {
         $baseDirectory = __DIR__.'/';
         $fileName = "nonEsite.yml";
@@ -40,6 +40,17 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
           "classes" => array()
         );
         $this->assertEquals($propExpected, $prop, "corretta lettura yml");
+    }
+
+    /**
+     * @expectedException Yoghi\Bundle\MaddaBundle\Exception\MaddaException
+     */
+    public function testReadInvalidFile()
+    {
+        $baseDirectory = __DIR__.'/../Resources/';
+        $fileName = "invalidModel.yml";
+        $rym = new Reader();
+        $rym->readYaml($baseDirectory, $fileName);
     }
 
     /**

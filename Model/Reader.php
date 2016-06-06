@@ -12,6 +12,7 @@ namespace Yoghi\Bundle\MaddaBundle\Model;
  */
 
  use Symfony\Component\Yaml\Parser;
+ use Symfony\Component\Yaml\Exception\ParseException;
  use Yoghi\Bundle\MaddaBundle\Exception\MaddaException;
  use Arrayzy\ArrayImitator as A;
 
