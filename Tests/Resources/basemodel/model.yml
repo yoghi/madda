@@ -1,0 +1,13 @@
+ddd:
+  vo:
+    package: Yoghi\Bundle\Madda\Domain\ValueObject
+    getter: true
+
+classes:
+    TestEnum:
+        ddd:
+          type: vo
+        name: TestEnum
+        description: "Test Enum"
+        namespace: Yoghi\Bundle\Madda\Domain\ValueObject #OVERRIDE, in questo caso superfluo
+        enum: [ TEST ]

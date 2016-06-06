@@ -15,7 +15,7 @@ namespace Yoghi\Bundle\MaddaBundle\Generator;
 /**
  * @author Stefano Tamagnini <>
  */
-class Config
+class ClassConfig
 {
     public $is_enum;
     public $is_interface;

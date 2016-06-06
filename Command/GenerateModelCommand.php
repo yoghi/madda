@@ -15,9 +15,9 @@ use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\PhpLiteral;
 use Nette\PhpGenerator\Method;
 use Nette\PhpGenerator\PhpFile;
-use Symfony\Component\Yaml\Parser;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Local;
+use Yoghi\Bundle\MaddaBundle\Model\Reader;
 
 class GenerateModelCommand extends Command
 {
@@ -43,13 +43,10 @@ class GenerateModelCommand extends Command
         $adapter = new Local($directoryOutput);
         $filesystem = new Filesystem($adapter);
         $io->section('Analisi di '.$baseDirectory.'/'.$path);
-        $yaml = new Parser();
-        $spec_list = array();
-        try {
-            $spec_list = $yaml->parse(file_get_contents($baseDirectory.'/'.$path));
-        } catch (ParseException $e) {
-            printf("Unable to parse the YAML string: %s", $e->getMessage());
-        }
+
+        $rym = new Reader();
+        $rym->readYaml($baseDirectory, $fileName);
+        $spec_list = $rym->getProperties();
 
         if (!array_key_exists('ddd', $spec_list)) {
             $this->logger->error('missing ddd section into yml');

@@ -70,7 +70,7 @@ class ClassGenerator
         }
     }
 
-    public function generateClassType($properties, $types_reference, $types_description, Config $config)
+    public function generateClassType($properties, $types_reference, $types_description, ClassConfig $config)
     {
         // extend class
         if (array_key_exists('extend', $properties)) {

@@ -28,7 +28,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testEmptyClassGenerator()
     {
         $g = new ClassGenerator("TestNamespace", "emptyClass");
-        $config = new Config();
+        $config = new ClassConfig();
         $config->is_enum = true;
         $properties = array();
         $types_reference = array();
@@ -42,7 +42,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testFirstClassGenerator()
     {
         $g = new ClassGenerator("TestNamespace", "FirstClass");
-        $config = new Config();
+        $config = new ClassConfig();
         $config->is_enum = true;
         $properties = array(
           "extend" => "ExtendClass",
@@ -59,7 +59,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testImplementsClassWithNamespaceGenerator()
     {
         $g = new ClassGenerator("TestNamespace", "ImplementsClassWithNamespace");
-        $config = new Config();
+        $config = new ClassConfig();
         $config->is_enum = true;
         $properties = array(
           "extend" => "ExtendClass",
@@ -76,7 +76,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testImplementsClassWithNamespaceAndFieldGenerator()
     {
         $g = new ClassGenerator("TestNamespace", "ImplementsClassWithNamespaceAndField");
-        $config = new Config();
+        $config = new ClassConfig();
         $config->is_enum = true;
         $properties = array(
           "extend" => "ExtendClass",
