@@ -1,6 +1,9 @@
 # madda
 
-[![Code Climate](https://codeclimate.com/github/yoghi/madda/badges/gpa.svg)](https://codeclimate.com/github/yoghi/madda) [![Coverage Status](https://coveralls.io/repos/github/yoghi/madda/badge.svg?branch=master)](https://coveralls.io/github/yoghi/madda?branch=master) [![Build Status](https://travis-ci.org/yoghi/madda.svg?branch=master)](https://travis-ci.org/yoghi/madda)
+[![Author](http://img.shields.io/badge/author-@yoghi-blue.svg?style=flat-square)](https://twitter.com/yoghi)
+[![Code Climate](https://codeclimate.com/github/yoghi/madda/badges/gpa.svg)](https://codeclimate.com/github/yoghi/madda)
+[![Coverage Status](https://coveralls.io/repos/github/yoghi/madda/badge.svg?branch=master)](https://coveralls.io/github/yoghi/madda?branch=master)
+[![Build Status](https://travis-ci.org/yoghi/madda.svg?branch=master)](https://travis-ci.org/yoghi/madda)
 
 Model And Domain Driven Architecture
 
@@ -17,13 +20,18 @@ composer require yoghi/madda
 ## Todo
 
  - [X] [packagist](https://packagist.org)
+ - [ ] [codecov](https://codecov.io/)
+ - [X] [coveralls](https://coveralls.io/github/yoghi/madda)
+ - [ ] controllo degli aggiornamenti delle dipendeze
+ - [ ] badge licenza
  - [ ] wiki
  - [ ] faq
  - [ ] [raml](http://raml.org) to controller
  - [ ] DomainDrivenDesign yaml descriptor to pojo and structural element
  - [ ] integration with existing bus system (for event propagation)
-    - [ ] [symfony](http://symfony.com/)
-    - [ ] [prooph](https://github.com/prooph)
+    - [ ] [Symfony](http://symfony.com/)
+    - [ ] [Prooph](https://github.com/prooph)
+    - [ ] [SimpleBus/MessageBus](https://github.com/SimpleBus/MessageBus)
  - [ ] Contrib Guide
 
 ## Contributing

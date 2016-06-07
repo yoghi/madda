@@ -95,6 +95,25 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Yoghi\Bundle\Madda\Domain\ValueObject', $testVoProperties['package'], 'package non letto corretamente');
     }
 
+    public function testReadAllClassDefinition()
+    {
+        $baseDirectory = __DIR__.'/../Resources/basemodel/';
+        $fileName = "model.yml";
+        $rym = new Reader();
+        $rym->readYaml($baseDirectory, $fileName);
+        $prop = $rym->getClassesDefinition();
+        $propExpected = array(
+        "TestEnum" => array(
+          "ddd" => array( "type" => "vo"),
+          "name" => "TestEnum",
+          "description" => "Test Enum",
+          "namespace" => 'Yoghi\Bundle\Madda\Domain\ValueObject',
+          'enum' => array('TEST')
+          )
+        );
+        $this->assertEquals($propExpected, $prop, "corretta lettura yml");
+    }
+
     public function testReadClassDefinition()
     {
         $baseDirectory = __DIR__.'/../Resources/basemodel/';
