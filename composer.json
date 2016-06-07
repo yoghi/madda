@@ -25,7 +25,8 @@
         "webpatser/laravel-uuid": "2.*",
         "nette/php-generator": "^2.3",
         "friendsofphp/php-cs-fixer": "^1.11",
-        "bocharsky-bw/arrayzy": "^0.6.0"
+        "bocharsky-bw/arrayzy": "^0.6.0",
+        "league/flysystem": "^1.0"
     },
     "require-dev" : {
         "sensiolabs/security-checker": "^3.0",

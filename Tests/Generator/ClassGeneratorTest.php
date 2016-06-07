@@ -19,6 +19,7 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 
 require_once __DIR__.'/SplFileInfo.php';
+require_once __DIR__.'/VfsAdapter.php';
 
 /**
  * @author Stefano Tamagnini <>
@@ -73,9 +74,10 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $actual, 'Classe FirstClass invalid');
     }
 
-    public function testImplementsClassWithNamespaceAndFieldGenerator()
+    public function testImplementsClassWithNamespaceAndFieldGeneratorMethod()
     {
-        $g = new ClassGenerator("TestNamespace", "ImplementsClassWithNamespaceAndField");
+        $namespace = "TestNamespace";
+        $g = new ClassGenerator($namespace, "ImplementsClassWithNamespaceAndField");
         $config = new ClassConfig();
         $config->is_enum = true;
         $properties = array(
@@ -91,19 +93,20 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $types_reference = array();
         $types_description = array();
         $g->generateClassType($properties, $types_reference, $types_description, $config);
-        $generated = $g->toString();
         $expected = file_get_contents(__DIR__.'/../Resources/ImplementsClassWithNamespaceAndField.php');
 
         $directoryV = vfsStream::setup();
         $directoryOutput = $directoryV->url().'/output';
         if (!file_exists($directoryOutput)) {
             mkdir($directoryOutput, 0700, true);
+            mkdir($directoryOutput.'/'.$namespace.'/', 0700, true);
         }
 
         $fileOutput = $directoryOutput . '/ImplementsClassWithNamespaceAndField.php';
-        file_put_contents($fileOutput, $generated);
+        $g->createFileOnDir(new VfsAdapter($directoryOutput, 0));
 
-        $iFile = new SplFileInfo($fileOutput, $directoryOutput, '/ImplementsClassWithNamespaceAndField.php');
+        $fileOutput = $directoryOutput . '/'.$namespace.'/ImplementsClassWithNamespaceAndField.php';
+        $iFile = new SplFileInfo($fileOutput, $directoryOutput, '/'.$namespace.'/ImplementsClassWithNamespaceAndField.php');
 
         $f = new Fixer();
         $f->registerBuiltInFixers();

@@ -18,6 +18,8 @@ use Nette\PhpGenerator\PhpFile;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Local;
 use Yoghi\Bundle\MaddaBundle\Model\Reader;
+use Yoghi\Bundle\MaddaBundle\Generator\ClassConfig;
+use Yoghi\Bundle\MaddaBundle\Generator\ClassGenerator;
 
 class GenerateModelCommand extends Command
 {
@@ -38,91 +40,105 @@ class GenerateModelCommand extends Command
         ;
     }
 
-    protected function generateClasses($baseDirectory, $path, $directoryOutput, $io)
+    protected function generateClasses($baseDirectory, $fileName, $directoryOutput, $io)
     {
         $adapter = new Local($directoryOutput);
         $filesystem = new Filesystem($adapter);
-        $io->section('Analisi di '.$baseDirectory.'/'.$path);
+        $io->section('Analisi di '.$baseDirectory.'/'.$fileName);
 
         $rym = new Reader();
         $rym->readYaml($baseDirectory, $fileName);
-        $spec_list = $rym->getProperties();
+        $specList = $rym->getProperties();
 
-        if (!array_key_exists('ddd', $spec_list)) {
-            $this->logger->error('missing ddd section into yml');
-            $this->errors[] = 'missing ddd section into yml';
-        } else {
-            $ddd_definition = $spec_list['ddd'];
+        // if (!array_key_exists('ddd', $specList)) {
+        //     $this->logger->error('missing ddd section into yml');
+        //     $this->errors[] = 'missing ddd section into yml';
+        // } else {
+        $ddd_definition = $specList['ddd'];
 
-            $types_reference = array();
-            $types_description = array();
-            $types_field = array();
+        $types_reference = array();
+        $types_description = array();
+        $types_field = array();
 
-            foreach ($spec_list['classes'] as $class_name => $properties) {
-                $is_constructor_enable = true;
-                if (!array_key_exists('ddd', $properties)) {
-                    $this->logger->error('missing ddd section into yml for class '.$class_name);
-                    $this->errors[] = 'missing ddd section into yml for class '.$class_name;
-                    $io->note('force '.$class_name.' to type class');
-                    $properties['ddd'] = array();
-                    $properties['ddd']['type'] = 'class';
+        foreach ($rym->getClassesDefinition() as $class_name => $properties) {
+            $is_constructor_enable = true;
+            if (!array_key_exists('ddd', $properties)) {
+                $this->logger->error('missing ddd section into yml for class '.$class_name);
+                $this->errors[] = 'missing ddd section into yml for class '.$class_name;
+                $io->note('force '.$class_name.' to type class');
+                $properties['ddd'] = array();
+                $properties['ddd']['type'] = 'class';
+            }
+            $ddd_reference = $properties['ddd']['type'];
+            $ddd_is_root_aggregate = false;
+            if (in_array($ddd_reference, array('interface', 'class'))) {
+                if (array_key_exists('namespace', $properties)) {
+                    $namespace = $properties['namespace'];
+                    // $fileInterface = new PhpFile;
+                    // $interface = $fileInterface->addInterface($namespace.'\\'.$class_name);
+                    $types_reference[$class_name] = $namespace;
+                    if (array_key_exists('fields', $properties)) {
+                        $types_field[$class_name] = $properties['fields'];
+                    }
+
+                    $g = new ClassGenerator($namespace, $class_name);
+                    $config = new ClassConfig();
+                    $config->is_enum =false;
+                    $config->is_interface = true;
+                    $config->create_getter = true;
+                    $config->create_setter = false;
+                    $config->add_constructor = false;
+                    $g->generateClassType($properties, $types_reference, $types_description, $config);
+                    //        generateClassType($file,          $class,     $properties, $types_reference, $types_description, $is_enum, $is_interface, $create_getter, $create_setter, $add_constructor, $filesystem, $io)
+                    // $this->generateClassType($fileInterface, $interface, $properties, $types_reference, $types_description, false,    true,          true,            false,         false,            $filesystem, $io);
+
+                    $g->createFileOnDir($directoryOutput);
+                } else {
+                    $this->logger->error('Missing namespace for '.$ddd_reference);
+                    $this->errors[] = 'Missing namespace for '.$ddd_reference;
                 }
-                $ddd_reference = $properties['ddd']['type'];
-                $ddd_is_root_aggregate = false;
-                if (in_array($ddd_reference, array('interface', 'class'))) {
+            } else {
+                $ddd_reference_properties = $rym->getDomainDefinitionAttributes($ddd_reference);
+
+                if (!array_key_exists($ddd_reference, $ddd_definition)) {
+                    $this->logger->error('Missing ddd reference for : '.$ddd_reference.' into '.$class_name);
+                    $this->errors[] = 'Missing ddd reference for : '.$ddd_reference.' into '.$class_name;
+                } else {
+                    // $ddd_reference_properties = $ddd_definition[$ddd_reference];
+                    $namespace = $ddd_reference_properties['package'];
+
+                    $ddd_is_root_aggregate = $ddd_reference == 'aggregate' && isset($properties['ddd']['root']) && boolval($properties['ddd']['root']) ? true : false;
+
+                    if ($ddd_is_root_aggregate) {
+                        $io->note($class_name.' is AggregateRoot');
+                    }
+
                     if (array_key_exists('namespace', $properties)) {
                         $namespace = $properties['namespace'];
-                        $fileInterface = new PhpFile;
-                        $interface = $fileInterface->addInterface($namespace.'\\'.$class_name);
-                        $types_reference[$class_name] = $namespace;
-                        if (array_key_exists('fields', $properties)) {
-                            $types_field[$class_name] = $properties['fields'];
-                        }
-                        $this->generateClassType($fileInterface, $interface, $properties, $types_reference, $types_description, false, true, true, false, false, $filesystem, $io);
-                    } else {
-                        $this->logger->error('Missing namespace for '.$ddd_reference);
-                        $this->errors[] = 'Missing namespace for '.$ddd_reference;
                     }
-                } else {
-                    if (!array_key_exists($ddd_reference, $ddd_definition)) {
-                        $this->logger->error('Missing ddd reference for : '.$ddd_reference.' into '.$class_name);
-                        $this->errors[] = 'Missing ddd reference for : '.$ddd_reference.' into '.$class_name;
-                    } else {
-                        $ddd_reference_properties = $ddd_definition[$ddd_reference];
-                        $namespace = $ddd_reference_properties['package'];
 
-                        $ddd_is_root_aggregate = $ddd_reference == 'aggregate' && isset($properties['ddd']['root']) && boolval($properties['ddd']['root']) ? true : false;
+                    $create_getter = false;
+                    $create_setter = false;
+                    if (array_key_exists('getter', $ddd_reference_properties)) {
+                        $create_getter = $ddd_reference_properties['getter'];
+                    }
+                    if (array_key_exists('setter', $ddd_reference_properties)) {
+                        $create_setter = $ddd_reference_properties['setter'];
+                    }
 
-                        if ($ddd_is_root_aggregate) {
-                            $io->note($class_name.' is AggregateRoot');
+                    if (array_key_exists('extend', $ddd_reference_properties)) {
+                        $ddd_extend = $ddd_reference_properties['extend'];
+                        if (!array_key_exists('extend', $properties)) {
+                            $properties['extend'] = $ddd_extend; //No multi-inheritance
                         }
+                    }
 
-                        if (array_key_exists('namespace', $properties)) {
-                            $namespace = $properties['namespace'];
+                    $ddd_reference_fields = array();
+                    if (array_key_exists('fields', $ddd_reference_properties)) {
+                        foreach ($ddd_reference_properties['fields'] as $key => $value) {
+                            $ddd_reference_fields[$key] = $value;
                         }
-
-                        $create_getter = false;
-                        $create_setter = false;
-                        if (array_key_exists('getter', $ddd_reference_properties)) {
-                            $create_getter = $ddd_reference_properties['getter'];
-                        }
-                        if (array_key_exists('setter', $ddd_reference_properties)) {
-                            $create_setter = $ddd_reference_properties['setter'];
-                        }
-
-                        if (array_key_exists('extend', $ddd_reference_properties)) {
-                            $ddd_extend = $ddd_reference_properties['extend'];
-                            if (!array_key_exists('extend', $properties)) {
-                                $properties['extend'] = $ddd_extend; //No multi-inheritance
-                            }
-                        }
-
-                        $ddd_reference_fields = array();
-                        if (array_key_exists('fields', $ddd_reference_properties)) {
-                            foreach ($ddd_reference_properties['fields'] as $key => $value) {
-                                $ddd_reference_fields[$key] = $value;
-                            }
-                        }
+                    }
 
                         //TODO: gestire gli [] dentro la definizione del modello se serve...
 
@@ -211,73 +227,73 @@ class GenerateModelCommand extends Command
                         } //proprieta di field -> events
 
                         $file = new PhpFile;
-                        $class = $file->addClass($namespace.'\\'.$class_name);
+                    $class = $file->addClass($namespace.'\\'.$class_name);
 
-                        $types_reference[$class_name] = $namespace;
+                    $types_reference[$class_name] = $namespace;
 
-                        if (array_key_exists('description', $properties)) {
-                            $types_description[$class_name] = $properties['description'];
-                        }
+                    if (array_key_exists('description', $properties)) {
+                        $types_description[$class_name] = $properties['description'];
+                    }
 
-                        if (array_key_exists('traits', $properties)) {
-                            if (is_array($properties['traits'])) {
-                                foreach ($properties['traits'] as $trait) {
-                                    $class->getNamespace()->addUse($trait);
-                                    $class->addTrait($trait);
-                                    $io->note('Add trait '.$trait);
-                                }
-                            } else {
-                                $traitObject = $properties['traits'];
-                                $class->getNamespace()->addUse($traitObject);
-                                $class->addTrait($traitObject);
+                    if (array_key_exists('traits', $properties)) {
+                        if (is_array($properties['traits'])) {
+                            foreach ($properties['traits'] as $trait) {
+                                $class->getNamespace()->addUse($trait);
+                                $class->addTrait($trait);
+                                $io->note('Add trait '.$trait);
                             }
+                        } else {
+                            $traitObject = $properties['traits'];
+                            $class->getNamespace()->addUse($traitObject);
+                            $class->addTrait($traitObject);
                         }
+                    }
 
-                        $is_enum = false;
-                        if (array_key_exists('enum', $properties)) {
-                            $class->setAbstract(true);
-                            $is_enum = true;
-                            $create_setter = false;
-                            $is_constructor_enable = false; //ENUM quindi verra creato nelle specializzazioni.
+                    $is_enum = false;
+                    if (array_key_exists('enum', $properties)) {
+                        $class->setAbstract(true);
+                        $is_enum = true;
+                        $create_setter = false;
+                        $is_constructor_enable = false; //ENUM quindi verra creato nelle specializzazioni.
 
                             if (!array_key_exists('fields', $properties)) {
                                 $properties['fields']= array();
                             }
 
-                            $properties['fields']['name'] = array(
+                        $properties['fields']['name'] = array(
                               'primitive' => 'string',
                               'description' => 'nome esplicativo della enum'
                             );
 
-                            $properties['fields']['instance'] = array(
+                        $properties['fields']['instance'] = array(
                               'class' => $class_name,
                               'description' => 'singleton',
                               'getter' => false,
                               'static' => true
                             );
 
-                            $maskedFields = array();
-                            $maskedFields['name'] = array();
-                            $maskedFields['instance'] = array();
-                            $arguments = array_diff_key($properties['fields'], $maskedFields);
+                        $maskedFields = array();
+                        $maskedFields['name'] = array();
+                        $maskedFields['instance'] = array();
+                        $arguments = array_diff_key($properties['fields'], $maskedFields);
 
-                            $m = $class->addMethod('parseString');
-                            $m->setStatic(true);
-                            $m->addDocument('@return '.$namespace.'\\'.$class_name.'|null')->setFinal(true);
-                            $m->addParameter("parseString");
-                            $setting = '';
-                            foreach ($arguments as $argument_key => $argument_value) {
-                                if (array_key_exists('class', $argument_value)) {
-                                    $classRef = $argument_value['class'];
-                                    $namespace = $types_reference[$classRef];
-                                    $class->getNamespace()->addUse($namespace.'\\'.$classRef);
-                                    $m->addParameter($argument_key)->setTypeHint($namespace.'\\'.$classRef);
-                                    $setting .= '$'.$argument_key.',';
-                                } else {
-                                    $m->addParameter($argument_key);
-                                }
+                        $m = $class->addMethod('parseString');
+                        $m->setStatic(true);
+                        $m->addDocument('@return '.$namespace.'\\'.$class_name.'|null')->setFinal(true);
+                        $m->addParameter("parseString");
+                        $setting = '';
+                        foreach ($arguments as $argument_key => $argument_value) {
+                            if (array_key_exists('class', $argument_value)) {
+                                $classRef = $argument_value['class'];
+                                $namespace = $types_reference[$classRef];
+                                $class->getNamespace()->addUse($namespace.'\\'.$classRef);
+                                $m->addParameter($argument_key)->setTypeHint($namespace.'\\'.$classRef);
+                                $setting .= '$'.$argument_key.',';
+                            } else {
+                                $m->addParameter($argument_key);
                             }
-                            $m->setBody('$class_name = ?.\'\\\\\'.$parseString;
+                        }
+                        $m->setBody('$class_name = ?.\'\\\\\'.$parseString;
                                         if (class_exists($class_name)) {
                                             $x = $class_name::instance('.rtrim($setting, ",").');
                                             return $x;
@@ -286,72 +302,72 @@ class GenerateModelCommand extends Command
                             //base enum class
                             $types_field[$class_name] = $properties['fields'];
 
-                            $elementiEnum = $properties['enum'];
-                            $namespaceEnum = $namespace.'\\'.$class_name;
-                            foreach ($elementiEnum as $enumValue) {
-                                $fileEnum = new PhpFile;
-                                $enumClass = $fileEnum->addClass($namespaceEnum.'\\'.$enumValue);
-                                $enumClass->setFinal(true);
+                        $elementiEnum = $properties['enum'];
+                        $namespaceEnum = $namespace.'\\'.$class_name;
+                        foreach ($elementiEnum as $enumValue) {
+                            $fileEnum = new PhpFile;
+                            $enumClass = $fileEnum->addClass($namespaceEnum.'\\'.$enumValue);
+                            $enumClass->setFinal(true);
 
-                                $properties_enumClass = array();
-                                $properties_enumClass['extend'] = $namespace.'\\'.$class_name;
+                            $properties_enumClass = array();
+                            $properties_enumClass['extend'] = $namespace.'\\'.$class_name;
 
-                                $m = $enumClass->addMethod('instance');
-                                $m->setStatic(true);
-                                $m->addDocument('@return '.$namespaceEnum.'\\'.$enumValue)->setFinal(true);
+                            $m = $enumClass->addMethod('instance');
+                            $m->setStatic(true);
+                            $m->addDocument('@return '.$namespaceEnum.'\\'.$enumValue)->setFinal(true);
 
-                                $setting = '';
-                                if (count($arguments) > 0) {
-                                    foreach ($arguments as $argument_key => $argument_value) {
-                                        if (array_key_exists('class', $argument_value)) {
-                                            $classRef = $argument_value['class'];
-                                            $namespace = $types_reference[$classRef];
-                                            $enumClass->getNamespace()->addUse($namespace.'\\'.$classRef);
-                                            $m->addParameter($argument_key)->setTypeHint($namespace.'\\'.$classRef);
-                                            $setting .= '$'.$argument_key.',';
-                                        } else {
-                                            $m->addParameter($argument_key);
-                                        }
-                                    }
-                                    $m->setBody('self::$instance = new '.$enumValue.'('.rtrim($setting, ",").'); return self::$instance;', []);
-                                } else {
-                                    $m->setBody('self::$instance = new '.$enumValue.'(); return self::$instance;', []);
-                                }
-
-                                $m2 = $enumClass->addMethod('__construct');
-                                $m2->setStatic(false);
-                                $m2->setVisibility('private');
-                                $m2->addDocument('costruttore')->setFinal(true);
-
-                                $setting = '';
-                                if (count($arguments) > 0) {
-                                    foreach ($arguments as $argument_key => $argument_value) {
-                                        if (array_key_exists('class', $argument_value)) {
-                                            $classRef = $argument_value['class'];
-                                            $namespace = $types_reference[$classRef];
-                                            $enumClass->getNamespace()->addUse($namespace.'\\'.$classRef);
-                                            $m2->addParameter($argument_key)->setTypeHint($namespace.'\\'.$classRef);
-                                            $setting .= '$this->'.$argument_key.' = $'.$argument_key.';';
-                                        } else {
-                                            $m2->addParameter($argument_key);
-                                        }
+                            $setting = '';
+                            if (count($arguments) > 0) {
+                                foreach ($arguments as $argument_key => $argument_value) {
+                                    if (array_key_exists('class', $argument_value)) {
+                                        $classRef = $argument_value['class'];
+                                        $namespace = $types_reference[$classRef];
+                                        $enumClass->getNamespace()->addUse($namespace.'\\'.$classRef);
+                                        $m->addParameter($argument_key)->setTypeHint($namespace.'\\'.$classRef);
+                                        $setting .= '$'.$argument_key.',';
+                                    } else {
+                                        $m->addParameter($argument_key);
                                     }
                                 }
+                                $m->setBody('self::$instance = new '.$enumValue.'('.rtrim($setting, ",").'); return self::$instance;', []);
+                            } else {
+                                $m->setBody('self::$instance = new '.$enumValue.'(); return self::$instance;', []);
+                            }
 
-                                $m2->setBody('$this->name = ?; '.$setting, [$enumValue]);
+                            $m2 = $enumClass->addMethod('__construct');
+                            $m2->setStatic(false);
+                            $m2->setVisibility('private');
+                            $m2->addDocument('costruttore')->setFinal(true);
 
-                                $this->generateClassType($fileEnum, $enumClass, $properties_enumClass, $types_reference, $types_description, false, false, false, false, false, $filesystem, $io);
-                            } //for enum foglie
-                        } else { //else not enum!
+                            $setting = '';
+                            if (count($arguments) > 0) {
+                                foreach ($arguments as $argument_key => $argument_value) {
+                                    if (array_key_exists('class', $argument_value)) {
+                                        $classRef = $argument_value['class'];
+                                        $namespace = $types_reference[$classRef];
+                                        $enumClass->getNamespace()->addUse($namespace.'\\'.$classRef);
+                                        $m2->addParameter($argument_key)->setTypeHint($namespace.'\\'.$classRef);
+                                        $setting .= '$this->'.$argument_key.' = $'.$argument_key.';';
+                                    } else {
+                                        $m2->addParameter($argument_key);
+                                    }
+                                }
+                            }
+
+                            $m2->setBody('$this->name = ?; '.$setting, [$enumValue]);
+
+                            $this->generateClassType($fileEnum, $enumClass, $properties_enumClass, $types_reference, $types_description, false, false, false, false, false, $filesystem, $io);
+                        } //for enum foglie
+                    } else { //else not enum!
                             $class->setFinal(true);
-                        }
-
-                        $types_field[$class_name] = $properties['fields'];
-
-                        $this->generateClassType($file, $class, $properties, $types_reference, $types_description, $is_enum, false, $create_getter, $create_setter, $is_constructor_enable, $filesystem, $io);
                     }
+
+                    $types_field[$class_name] = $properties['fields'];
+
+                    $this->generateClassType($file, $class, $properties, $types_reference, $types_description, $is_enum, false, $create_getter, $create_setter, $is_constructor_enable, $filesystem, $io);
                 }
             }
+            // }
         } //for
     }
 

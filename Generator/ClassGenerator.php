@@ -15,6 +15,8 @@ namespace Yoghi\Bundle\MaddaBundle\Generator;
  use Nette\PhpGenerator\PhpLiteral;
  use Nette\PhpGenerator\Method;
  use Nette\PhpGenerator\PhpFile;
+ use League\Flysystem\Filesystem;
+ use League\Flysystem\Adapter\Local;
 
  /**
  * @author Stefano Tamagnini <>
@@ -233,9 +235,8 @@ class ClassGenerator
         return (string)$this->currentFile;
     }
 
-    public function createFile($directory)
+    public function createFileOnDir(Local $adapter)
     {
-        $adapter = new Local($directory);
         $filesystem = new Filesystem($adapter);
         $outFile = str_replace('\\', '/', $this->currentClass->getNamespace()->getName().'\\'.$this->currentClass->getName()).'.php';
         if ($filesystem->has($outFile)) {

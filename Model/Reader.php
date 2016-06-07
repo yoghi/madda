@@ -21,14 +21,19 @@ namespace Yoghi\Bundle\MaddaBundle\Model;
  */
 class Reader
 {
-
-    private $specList = array(
-      'ddd' => array(),
-      'classes' => array()
-    );
+    /**
+     * Array delle definizioni
+     * @var \Arrayzy\ArrayImitator
+     */
+    private $specList;
 
     public function __construct()
     {
+        $specListArray = array(
+          'ddd' => array(),
+          'classes' => array()
+        );
+        $this->specList = new A($specListArray);
     }
 
     public function readYaml($baseDirectory, $fileName)
@@ -39,20 +44,39 @@ class Reader
         }
         $yaml = new Parser();
         try {
-            $specListArray = new A($this->specList);
             $parsed = $yaml->parse(file_get_contents($fullPath));
             if (null != $parsed) {
                 /** @see https://github.com/bocharsky-bw/Arrayzy#merge*/
-                $specListArray = $specListArray->merge($parsed, true);
+                $this->specList = $this->specList->merge($parsed, true);
             }
-            $this->specList = $specListArray->toArray();
         } catch (ParseException $e) {
             throw new MaddaException($e->getMessage());
         }
     }
 
+    /**
+     * @deprecated
+     * @return array proprietà definite via yaml
+     */
     public function getProperties()
     {
-        return $this->specList;
+        return $this->specList->toArray();
+    }
+
+    public function getClassesDefinition()
+    {
+        return $this->specList['classes'];
+    }
+
+    public function getClassDefinitionAttributes($key)
+    {
+        $x = new A($this->specList->offsetGet('classes'));
+        return $x->offsetGet($key);
+    }
+
+    public function getDomainDefinitionAttributes($key)
+    {
+        $x = new A($this->specList->offsetGet('ddd'));
+        return $x->offsetGet($key);
     }
 }
