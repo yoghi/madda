@@ -3,6 +3,7 @@
 [![Author](http://img.shields.io/badge/author-@yoghi-blue.svg?style=flat)](https://twitter.com/yoghi)
 [![Code Climate](https://codeclimate.com/github/yoghi/madda/badges/gpa.svg)](https://codeclimate.com/github/yoghi/madda)
 [![Coverage Status](https://coveralls.io/repos/github/yoghi/madda/badge.svg?branch=master)](https://coveralls.io/github/yoghi/madda?branch=master)
+[![Codecov](https://codecov.io/gh/yoghi/madda/branch/master/graph/badge.svg)](https://codecov.io/gh/yoghi/madda)
 [![VersionEye](https://www.versioneye.com/user/projects/5759ce3f7757a0003bd4bd0f/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5759ce3f7757a0003bd4bd0f)
 [![Build Status](https://travis-ci.org/yoghi/madda.svg?branch=master)](https://travis-ci.org/yoghi/madda)
 [![license](https://img.shields.io/aur/license/yaourt.svg?maxAge=2592000&style=flat)](https://github.com/yoghi/madda/blob/master/LICENSE)
