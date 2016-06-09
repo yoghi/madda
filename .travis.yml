@@ -63,6 +63,7 @@ script:
 
 after_success:
   - travis_retry php vendor/bin/coveralls -v
+  - bash <(curl -s https://codecov.io/bash)
 
 # notifications:
 #   slack: liip:3QOs1QKt3aCFxpJvRzpJCbVZ
