@@ -10,5 +10,14 @@ class ImplementsClassWithNamespaceAndField extends ExtendClass implements IClass
      * identificativo univoco della sessione
      * @var int
      */
-    protected $prova;
+    private $prova;
+
+
+    /**
+     * costruttore
+     */
+    final public function __construct($prova)
+    {
+        $this->prova = $prova;
+    }
 }

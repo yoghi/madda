@@ -17,6 +17,10 @@ use Symfony\CS\FileCacheManager;
 use org\bovigo\vfs\vfsStream;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use Monolog\Formatter\LineFormatter;
+use Yoghi\Bundle\MaddaBundle\Generator\ClassGenerator;
 
 require_once __DIR__.'/SplFileInfo.php';
 require_once __DIR__.'/VfsAdapter.php';
@@ -26,14 +30,56 @@ require_once __DIR__.'/VfsAdapter.php';
  */
 class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
 {
+
+    private static $directoryV;
+    private $logger;
+
+    public static function setUpBeforeClass()
+    {
+        self::$directoryV = vfsStream::setup();
+    }
+
+    public function setUp()
+    {
+        $this->logger = new Logger('phpunit-logger');
+        $directoryLogOutput = self::$directoryV->url().'/log';
+        if (!file_exists($directoryLogOutput)) {
+            mkdir($directoryLogOutput, 0700, true);
+        }
+        $output = "%level_name% > %message% %context% %extra%\n";
+        $formatter = new LineFormatter($output);
+        $handler = new StreamHandler($directoryLogOutput.'/phpunit.log', Logger::DEBUG, true, null, false);
+        touch($directoryLogOutput.'/phpunit.log');
+        $handler->setFormatter($formatter);
+        $this->logger->pushHandler($handler);
+        $this->logger->info('Avviato test -> '.$this->getName());
+    }
+
+    public function tearDown()
+    {
+        $fileLog = self::$directoryV->url().'/log/phpunit.log';
+        if ($this->hasFailed()) {
+            echo "\n---- LOG ----\n";
+            if (is_readable($fileLog)) {
+                echo file_get_contents($fileLog);
+            }
+            echo "------------\n";
+        }
+        if (file_exists($fileLog)) {
+            unlink($fileLog);
+        }
+        $this->logger = null;
+    }
+
     public function testEmptyClassGenerator()
     {
         $g = new ClassGenerator("TestNamespace", "emptyClass");
+        $g->setLogger($this->logger);
         $config = new ClassConfig();
         $config->is_enum = true;
-        $properties = array();
-        $types_reference = array();
-        $types_description = array();
+        $properties = array(); // 'fields', 'extend', 'implements'
+        $types_reference = array(); //dipendenza dei field da altre classi
+        $types_description = array(); //descrizione delle classi da cui dipendono i field
         $g->generateClassType($properties, $types_reference, $types_description, $config);
         $actual = $g->toString();
         $expected = file_get_contents(__DIR__.'/../Resources/EmptyClass.php');
@@ -43,6 +89,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testFirstClassGenerator()
     {
         $g = new ClassGenerator("TestNamespace", "FirstClass");
+        $g->setLogger($this->logger);
         $config = new ClassConfig();
         $config->is_enum = true;
         $properties = array(
@@ -59,9 +106,11 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testImplementsClassWithNamespaceGenerator()
     {
-        $g = new ClassGenerator("TestNamespace", "ImplementsClassWithNamespace");
+        $namespace = "TestNamespace";
+        $className = "ImplementsClassWithNamespace";
+        $g = new ClassGenerator($namespace, $className);
+        $g->setLogger($this->logger);
         $config = new ClassConfig();
-        $config->is_enum = true;
         $properties = array(
           "extend" => "ExtendClass",
           "implements" => "NS\IClass"
@@ -69,17 +118,19 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $types_reference = array();
         $types_description = array();
         $g->generateClassType($properties, $types_reference, $types_description, $config);
-        $actual = $g->toString();
-        $expected = file_get_contents(__DIR__.'/../Resources/ImplementsClassWithNamespace.php');
-        $this->assertSame($expected, $actual, 'Classe FirstClass invalid');
+        $resourcesDir = __DIR__.'/../Resources';
+
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
     }
 
     public function testImplementsClassWithNamespaceAndFieldGeneratorMethod()
     {
         $namespace = "TestNamespace";
-        $g = new ClassGenerator($namespace, "ImplementsClassWithNamespaceAndField");
+        $className = "ImplementsClassWithNamespaceAndField";
+        $g = new ClassGenerator($namespace, $className);
+        $g->setLogger($this->logger);
         $config = new ClassConfig();
-        $config->is_enum = true;
+        $config->add_constructor = true;
         $properties = array(
           "extend" => "ExtendClass",
           "implements" => "NS\IClass",
@@ -93,21 +144,147 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $types_reference = array();
         $types_description = array();
         $g->generateClassType($properties, $types_reference, $types_description, $config);
-        $expected = file_get_contents(__DIR__.'/../Resources/ImplementsClassWithNamespaceAndField.php');
+        $resourcesDir = __DIR__.'/../Resources';
 
-        $directoryV = vfsStream::setup();
-        $directoryOutput = $directoryV->url().'/output';
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+    }
+
+    public function testImplementsClassWithNamespaceAndFieldGeneratorMethodWithDependency()
+    {
+        $namespace = "TestNamespace";
+        $className = "ImplementsClassWithNamespaceAndFieldWithDependency";
+        $g = new ClassGenerator($namespace, $className);
+        $g->setLogger($this->logger);
+        $config = new ClassConfig();
+        $config->add_constructor = true;
+        $properties = array(
+          "extend" => "ExtendClass",
+          "implements" => "NS\IClass",
+          "fields" => array(
+            "prova" => array(
+              "primitive" => "int",
+              "description" => "session unique identifier"
+            ),
+            "dependency" => array(
+              "class" => "classDep"
+            )
+          )
+        );
+        $types_reference = array(
+          "classDep" => "NamespaceDep"
+        );
+        $types_description = array(
+          "classDep" => "comment classDep"
+        );
+        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $resourcesDir = __DIR__.'/../Resources';
+
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+    }
+
+    public function testImplementsClassWithNamespaceAndFieldGeneratorMethodWithDependencyAutoInizialize()
+    {
+        $namespace = "TestNamespace";
+        $className = "ImplementsClassWithNamespaceAndFieldWithDependencyAutoInitialize";
+        $g = new ClassGenerator($namespace, $className);
+        $g->setLogger($this->logger);
+        $config = new ClassConfig();
+        $config->add_constructor = true;
+        $properties = array(
+          "extend" => "ExtendClass",
+          "implements" => "NS\IClass",
+          "fields" => array(
+            "prova" => array(
+              "primitive" => "int",
+              "description" => "session unique identifier",
+              "autoinizialize" => true,
+              "default" => 0
+            ),
+            "dependency" => array(
+              "class" => "classDep"
+            )
+          )
+        );
+        $types_reference = array(
+          "classDep" => "NamespaceDep"
+        );
+        $types_description = array(
+          "classDep" => "comment classDep"
+        );
+        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $resourcesDir = __DIR__.'/../Resources';
+
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+    }
+
+    public function testImplementsClassWithNamespaceAndFieldGeneratorMethodWithDependencyAutoInizializeClass()
+    {
+        $namespace = "TestNamespace";
+        $className = "ImplementsClassWithNamespaceAndFieldWithDependencyAutoInitializeClass";
+        $g = new ClassGenerator($namespace, $className);
+        $g->setLogger($this->logger);
+        $config = new ClassConfig();
+        $config->add_constructor = true;
+        $properties = array(
+          "extend" => "ExtendClass",
+          "implements" => "NS\IClass",
+          "fields" => array(
+            "prova" => array(
+              "primitive" => "int",
+              "description" => "session unique identifier"
+            ),
+            "dependency" => array(
+              "class" => "classDep",
+              "autoinizialize" => true,
+              "default" => "new classDep()"
+            )
+          )
+        );
+        $types_reference = array(
+          "classDep" => "NamespaceDep"
+        );
+        $types_description = array(
+          "classDep" => "comment classDep"
+        );
+        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $resourcesDir = __DIR__.'/../Resources';
+
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+    }
+
+    /**
+     * [generateDestDir description]
+     * @param  string $namespace [description]
+     * @return string            [description]
+     */
+    private function generateDestDir($namespace)
+    {
+        $directoryOutput = self::$directoryV->url().'/output';
         if (!file_exists($directoryOutput)) {
             mkdir($directoryOutput, 0700, true);
             mkdir($directoryOutput.'/'.$namespace.'/', 0700, true);
         }
+        return $directoryOutput;
+    }
 
-        $fileOutput = $directoryOutput . '/ImplementsClassWithNamespaceAndField.php';
+    /**
+     * Compare generated class with expected class into resource dir
+     * @param  string         $resourcesDir fullPath resources dir
+     * @param  string         $namespace    namespace of class
+     * @param  string         $className    class name
+     * @param  ClassGenerator $g            class generator object to test
+     */
+    private function compareFileGenerated($resourcesDir, $namespace, $className, ClassGenerator $g)
+    {
+        $fileInput = $resourcesDir.'/'.$className.'.php';
+        $directoryOutput = $this->generateDestDir($namespace);
+        $fileName = $className.'.php';
+        $fileOutput = $directoryOutput . '/'.$namespace. '/'. $fileName;
+
         $g->createFileOnDir(new VfsAdapter($directoryOutput, 0));
 
-        $fileOutput = $directoryOutput . '/'.$namespace.'/ImplementsClassWithNamespaceAndField.php';
-        $iFile = new SplFileInfo($fileOutput, $directoryOutput, '/'.$namespace.'/ImplementsClassWithNamespaceAndField.php');
-
+        $expected = file_get_contents($fileInput);
+        $iFile = new SplFileInfo($fileOutput, $directoryOutput.'/'.$namespace, $fileName);
         $f = new Fixer();
         $f->registerBuiltInFixers();
         $f->registerBuiltInConfigs();
@@ -124,6 +301,6 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $fileOutput2 = $iFile->getPathname();
         $actual = file_get_contents($fileOutput2);
 
-        $this->assertSame($expected, $actual, 'Classe FirstClass invalid');
+        $this->assertSame($expected, $actual, 'Classe '.$className.' invalid');
     }
 }
