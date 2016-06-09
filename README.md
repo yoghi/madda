@@ -3,6 +3,7 @@
 [![Author](http://img.shields.io/badge/author-@yoghi-blue.svg?style=flat-square)](https://twitter.com/yoghi)
 [![Code Climate](https://codeclimate.com/github/yoghi/madda/badges/gpa.svg)](https://codeclimate.com/github/yoghi/madda)
 [![Coverage Status](https://coveralls.io/repos/github/yoghi/madda/badge.svg?branch=master)](https://coveralls.io/github/yoghi/madda?branch=master)
+[![VersionEye](https://www.versioneye.com/user/projects/5759ce3f7757a0003bd4bd0f/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5759ce3f7757a0003bd4bd0f)
 [![Build Status](https://travis-ci.org/yoghi/madda.svg?branch=master)](https://travis-ci.org/yoghi/madda)
 
 Model And Domain Driven Architecture
@@ -14,15 +15,15 @@ Model And Domain Driven Architecture
 ## Installation
 
 ```
-composer require yoghi/madda
+composer install yoghi/madda
 ```
 
 ## Todo
 
- - [X] [packagist](https://packagist.org)
- - [ ] [codecov](https://codecov.io/)
- - [X] [coveralls](https://coveralls.io/github/yoghi/madda)
- - [ ] controllo degli aggiornamenti delle dipendeze
+ - [X] [Packagist](https://packagist.org)
+ - [ ] [Codecov](https://codecov.io/)
+ - [X] [Coveralls](https://coveralls.io/github/yoghi/madda)
+ - [X] [VersionEye](https://www.versioneye.com) -> controllo degli aggiornamenti delle dipendeze
  - [ ] badge licenza
  - [ ] wiki
  - [ ] faq
