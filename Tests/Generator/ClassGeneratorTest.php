@@ -149,10 +149,37 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
     }
 
+    public function testImplementsClassWithNamespaceAndFieldGeneratorMethodStatic()
+    {
+        $namespace = "TestNamespace";
+        $className = "ImplementsClassWithNamespaceAndFieldStatic";
+        $g = new ClassGenerator($namespace, $className);
+        $g->setLogger($this->logger);
+        $config = new ClassConfig();
+        $config->add_constructor = true;
+        $properties = array(
+          "extend" => "ExtendClass",
+          "implements" => "NS\IClass",
+          "fields" => array(
+            "prova" => array(
+              "primitive" => "int",
+              "description" => "identificativo univoco della sessione",
+              "static" => true
+            )
+          )
+        );
+        $types_reference = array();
+        $types_description = array();
+        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $resourcesDir = __DIR__.'/../Resources';
+
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+    }
+
     public function testImplementsClassWithNamespaceAndFieldGeneratorMethodWithDependency()
     {
         $namespace = "TestNamespace";
-        $className = "ImplementsClassWithNamespaceAndFieldWithDependency";
+        $className = "ICWNAFWD";
         $g = new ClassGenerator($namespace, $className);
         $g->setLogger($this->logger);
         $config = new ClassConfig();
@@ -185,7 +212,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testImplementsClassWithNamespaceAndFieldGeneratorMethodWithDependencyAutoInizialize()
     {
         $namespace = "TestNamespace";
-        $className = "ImplementsClassWithNamespaceAndFieldWithDependencyAutoInitialize";
+        $className = "ICWNAFWDA";
         $g = new ClassGenerator($namespace, $className);
         $g->setLogger($this->logger);
         $config = new ClassConfig();
@@ -220,7 +247,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testImplementsClassWithNamespaceAndFieldGeneratorMethodWithDependencyAutoInizializeClass()
     {
         $namespace = "TestNamespace";
-        $className = "ImplementsClassWithNamespaceAndFieldWithDependencyAutoInitializeClass";
+        $className = "ICWNAFWDAC";
         $g = new ClassGenerator($namespace, $className);
         $g->setLogger($this->logger);
         $config = new ClassConfig();
@@ -246,6 +273,230 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $types_description = array(
           "classDep" => "comment classDep"
         );
+        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $resourcesDir = __DIR__.'/../Resources';
+
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+    }
+
+    public function testImplementsClassWithNamespaceAndFieldGeneratorMethodWithDependencyAutoInizializeClassWithGetter()
+    {
+        $namespace = "TestNamespace";
+        $className = "ICWNAFWDACG";
+        $g = new ClassGenerator($namespace, $className);
+        $g->setLogger($this->logger);
+        $config = new ClassConfig();
+        $config->add_constructor = true;
+        $properties = array(
+          "extend" => "ExtendClass",
+          "implements" => "NS\IClass",
+          "fields" => array(
+            "prova" => array(
+              "primitive" => "int",
+              "description" => "session unique identifier",
+              "getter" => true
+            ),
+            "dependency" => array(
+              "class" => "classDep",
+              "autoinizialize" => true,
+              "default" => "new classDep()"
+            )
+          )
+        );
+        $types_reference = array(
+          "classDep" => "NamespaceDep"
+        );
+        $types_description = array(
+          "classDep" => "comment classDep"
+        );
+        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $resourcesDir = __DIR__.'/../Resources';
+
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+    }
+
+    public function testImplementsClassWithNamespaceAndFieldGeneratorMethodWithDependencyAutoInizializeClassWithGetterAll()
+    {
+        $namespace = "TestNamespace";
+        $className = "ICWNAFWDACGA";
+        $g = new ClassGenerator($namespace, $className);
+        $g->setLogger($this->logger);
+        $config = new ClassConfig();
+        $config->add_constructor = true;
+        $config->create_getter = true;
+        $properties = array(
+          "extend" => "ExtendClass",
+          "implements" => "NS\IClass",
+          "fields" => array(
+            "prova" => array(
+              "primitive" => "int",
+              "description" => "session unique identifier"
+            ),
+            "dependency" => array(
+              "class" => "classDep",
+              "autoinizialize" => true,
+              "default" => "new classDep()"
+            )
+          )
+        );
+        $types_reference = array(
+          "classDep" => "NamespaceDep"
+        );
+        $types_description = array(
+          "classDep" => "comment classDep"
+        );
+        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $resourcesDir = __DIR__.'/../Resources';
+
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+    }
+
+    public function testImplementsClassWithNamespaceAndFieldGeneratorMethodWithDependencyAutoInizializeClassWithGetterAndSetterAll()
+    {
+        $namespace = "TestNamespace";
+        $className = "ICWNAFWDACGSA";
+        $g = new ClassGenerator($namespace, $className);
+        $g->setLogger($this->logger);
+        $config = new ClassConfig();
+        $config->add_constructor = true;
+        $config->create_getter = true;
+        $config->create_setter = true;
+        $properties = array(
+          "extend" => "ExtendClass",
+          "implements" => "NS\IClass",
+          "fields" => array(
+            "prova" => array(
+              "primitive" => "int",
+              "description" => "session unique identifier"
+            ),
+            "dependency" => array(
+              "class" => "classDep",
+              "autoinizialize" => true,
+              "default" => "new classDep()"
+            )
+          )
+        );
+        $types_reference = array(
+          "classDep" => "NamespaceDep"
+        );
+        $types_description = array(
+          "classDep" => "comment classDep"
+        );
+        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $resourcesDir = __DIR__.'/../Resources';
+
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+    }
+
+    public function testImplementsClassWithNamespaceAndFieldGeneratorMethodWithDependencyAutoInizializeClassWithGetterAndSetterAllStatic()
+    {
+        $namespace = "TestNamespace";
+        $className = "ICWNAFWDACGSAS";
+        $g = new ClassGenerator($namespace, $className);
+        $g->setLogger($this->logger);
+        $config = new ClassConfig();
+        $config->add_constructor = true;
+        $config->create_getter = true;
+        $config->create_setter = true;
+        $properties = array(
+          "extend" => "ExtendClass",
+          "implements" => "NS\IClass",
+          "fields" => array(
+            "prova" => array(
+              "primitive" => "int",
+              "description" => "session unique identifier",
+              "static" => true
+            ),
+            "dependency" => array(
+              "class" => "classDep",
+              "autoinizialize" => true,
+              "default" => "new classDep()",
+              "static" => true
+            )
+          )
+        );
+        $types_reference = array(
+          "classDep" => "NamespaceDep"
+        );
+        $types_description = array(
+          "classDep" => "comment classDep"
+        );
+        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $resourcesDir = __DIR__.'/../Resources';
+
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+    }
+
+    public function testInterface()
+    {
+        $namespace = "TestNamespace";
+        $className = "Itest";
+        $g = new ClassGenerator($namespace, $className);
+        $g->setLogger($this->logger);
+        $config = new ClassConfig();
+        $config->add_constructor = true;
+        $config->is_interface = true;
+        $properties = array(
+          "fields" => array(
+            "prova" => array(
+              "primitive" => "int",
+              "description" => "session unique identifier"
+            )
+          )
+        );
+        $types_reference = array();
+        $types_description = array();
+        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $resourcesDir = __DIR__.'/../Resources';
+
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+    }
+
+    public function testInterfaceWithGetter()
+    {
+        $namespace = "TestNamespace";
+        $className = "ItestWithGetter";
+        $g = new ClassGenerator($namespace, $className);
+        $g->setLogger($this->logger);
+        $config = new ClassConfig();
+        $config->create_getter = true;
+        $config->is_interface = true;
+        $properties = array(
+          "fields" => array(
+            "prova" => array(
+              "primitive" => "int",
+              "description" => "session unique identifier"
+            )
+          )
+        );
+        $types_reference = array();
+        $types_description = array();
+        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $resourcesDir = __DIR__.'/../Resources';
+
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+    }
+
+    public function testInterfaceWithGetterAndSetter()
+    {
+        $namespace = "TestNamespace";
+        $className = "ItestWithGetterSetter";
+        $g = new ClassGenerator($namespace, $className);
+        $g->setLogger($this->logger);
+        $config = new ClassConfig();
+        $config->create_getter = true;
+        $config->create_setter = true;
+        $config->is_interface = true;
+        $properties = array(
+          "fields" => array(
+            "prova" => array(
+              "primitive" => "int",
+              "description" => "session unique identifier"
+            )
+          )
+        );
+        $types_reference = array();
+        $types_description = array();
         $g->generateClassType($properties, $types_reference, $types_description, $config);
         $resourcesDir = __DIR__.'/../Resources';
 

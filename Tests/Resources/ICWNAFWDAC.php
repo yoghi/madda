@@ -5,7 +5,7 @@ use ExtendClass;
 use NS\IClass;
 use NamespaceDep\classDep;
 
-class ImplementsClassWithNamespaceAndFieldWithDependencyAutoInitialize extends ExtendClass implements IClass
+class ICWNAFWDAC extends ExtendClass implements IClass
 {
     /**
      * session unique identifier
@@ -25,7 +25,7 @@ class ImplementsClassWithNamespaceAndFieldWithDependencyAutoInitialize extends E
      */
     final public function __construct($prova, classDep $dependency)
     {
-        $this->prova = 0;
-        $this->dependency = $dependency;
+        $this->prova = $prova;
+        $this->dependency = new classDep();
     }
 }
