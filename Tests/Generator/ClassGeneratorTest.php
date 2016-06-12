@@ -104,6 +104,53 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $actual, 'Classe FirstClass invalid');
     }
 
+    public function testTraitsGenerator()
+    {
+        $namespace = "TestNamespace";
+        $className = "TraitsTestClass";
+        $g = new ClassGenerator($namespace, $className);
+        $g->setLogger($this->logger);
+        $config = new ClassConfig();
+        $properties = array(
+          "extend" => "ExtendClass",
+          "implements" => "NS\IClass",
+          "traits" => "TraitsClass"
+        );
+        $types_reference = array(
+          'TraitsClass' => 'TraitNamespace'
+        );
+        $types_description = array();
+        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $resourcesDir = __DIR__.'/../Resources';
+
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+    }
+
+    public function testMultiTraitsGenerator()
+    {
+        $namespace = "TestNamespace";
+        $className = "MultiTraitsTestClass";
+        $g = new ClassGenerator($namespace, $className);
+        $g->setLogger($this->logger);
+        $config = new ClassConfig();
+        $properties = array(
+          "extend" => "ExtendClass",
+          "implements" => "NS\IClass",
+          "traits" => array("TraitsClass","TraitsClass2")
+        );
+        $types_reference = array(
+          'TraitsClass' => 'TraitNamespace',
+          'TraitsClass2' => 'TraitNamespace'
+        );
+        $types_description = array();
+        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $resourcesDir = __DIR__.'/../Resources';
+
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+    }
+
+
+
     public function testImplementsClassWithNamespaceGenerator()
     {
         $namespace = "TestNamespace";
@@ -193,15 +240,15 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
               "description" => "session unique identifier"
             ),
             "dependency" => array(
-              "class" => "classDep"
+              "class" => "ClassDep"
             )
           )
         );
         $types_reference = array(
-          "classDep" => "NamespaceDep"
+          "ClassDep" => "NamespaceDep"
         );
         $types_description = array(
-          "classDep" => "comment classDep"
+          "ClassDep" => "comment ClassDep"
         );
         $g->generateClassType($properties, $types_reference, $types_description, $config);
         $resourcesDir = __DIR__.'/../Resources';
@@ -228,15 +275,15 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
               "default" => 0
             ),
             "dependency" => array(
-              "class" => "classDep"
+              "class" => "ClassDep"
             )
           )
         );
         $types_reference = array(
-          "classDep" => "NamespaceDep"
+          "ClassDep" => "NamespaceDep"
         );
         $types_description = array(
-          "classDep" => "comment classDep"
+          "ClassDep" => "comment ClassDep"
         );
         $g->generateClassType($properties, $types_reference, $types_description, $config);
         $resourcesDir = __DIR__.'/../Resources';
@@ -261,17 +308,17 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
               "description" => "session unique identifier"
             ),
             "dependency" => array(
-              "class" => "classDep",
+              "class" => "ClassDep",
               "autoinizialize" => true,
-              "default" => "new classDep()"
+              "default" => "new ClassDep();"
             )
           )
         );
         $types_reference = array(
-          "classDep" => "NamespaceDep"
+          "ClassDep" => "NamespaceDep"
         );
         $types_description = array(
-          "classDep" => "comment classDep"
+          "ClassDep" => "comment ClassDep"
         );
         $g->generateClassType($properties, $types_reference, $types_description, $config);
         $resourcesDir = __DIR__.'/../Resources';
@@ -297,17 +344,17 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
               "getter" => true
             ),
             "dependency" => array(
-              "class" => "classDep",
+              "class" => "ClassDep",
               "autoinizialize" => true,
-              "default" => "new classDep()"
+              "default" => "new ClassDep()"
             )
           )
         );
         $types_reference = array(
-          "classDep" => "NamespaceDep"
+          "ClassDep" => "NamespaceDep"
         );
         $types_description = array(
-          "classDep" => "comment classDep"
+          "ClassDep" => "comment ClassDep"
         );
         $g->generateClassType($properties, $types_reference, $types_description, $config);
         $resourcesDir = __DIR__.'/../Resources';
@@ -333,17 +380,17 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
               "description" => "session unique identifier"
             ),
             "dependency" => array(
-              "class" => "classDep",
+              "class" => "ClassDep",
               "autoinizialize" => true,
-              "default" => "new classDep()"
+              "default" => "new ClassDep()"
             )
           )
         );
         $types_reference = array(
-          "classDep" => "NamespaceDep"
+          "ClassDep" => "NamespaceDep"
         );
         $types_description = array(
-          "classDep" => "comment classDep"
+          "ClassDep" => "comment ClassDep"
         );
         $g->generateClassType($properties, $types_reference, $types_description, $config);
         $resourcesDir = __DIR__.'/../Resources';
@@ -370,17 +417,58 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
               "description" => "session unique identifier"
             ),
             "dependency" => array(
-              "class" => "classDep",
+              "class" => "ClassDep",
               "autoinizialize" => true,
-              "default" => "new classDep()"
+              "default" => "new ClassDep()"
             )
           )
         );
         $types_reference = array(
-          "classDep" => "NamespaceDep"
+          "ClassDep" => "NamespaceDep"
         );
         $types_description = array(
-          "classDep" => "comment classDep"
+          "ClassDep" => "comment ClassDep"
+        );
+        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $resourcesDir = __DIR__.'/../Resources';
+
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+    }
+
+    public function testImplementsClassWithNamespaceAndFieldGeneratorMethodWithDependencyAutoInizializeClassWithGetterAndSetterAllStaticExplicit()
+    {
+        $namespace = "TestNamespace";
+        $className = "ICWNAFWDACGSAS";
+        $g = new ClassGenerator($namespace, $className);
+        $g->setLogger($this->logger);
+        $config = new ClassConfig();
+        $config->add_constructor = true;
+        $properties = array(
+          "extend" => "ExtendClass",
+          "implements" => "NS\IClass",
+          "fields" => array(
+            "prova" => array(
+              "primitive" => "int",
+              "description" => "session unique identifier",
+              "static" => true,
+              "getter" => true,
+              "setter" => true
+            ),
+            "dependency" => array(
+              "class" => "ClassDep",
+              "autoinizialize" => true,
+              "default" => "new ClassDep()",
+              "static" => true,
+              "getter" => true,
+              "setter" => true
+            )
+          )
+        );
+        $types_reference = array(
+          "ClassDep" => "NamespaceDep"
+        );
+        $types_description = array(
+          "ClassDep" => "comment ClassDep"
         );
         $g->generateClassType($properties, $types_reference, $types_description, $config);
         $resourcesDir = __DIR__.'/../Resources';
@@ -408,19 +496,82 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
               "static" => true
             ),
             "dependency" => array(
-              "class" => "classDep",
+              "class" => "ClassDep",
               "autoinizialize" => true,
-              "default" => "new classDep()",
+              "default" => "new ClassDep()",
               "static" => true
             )
           )
         );
         $types_reference = array(
-          "classDep" => "NamespaceDep"
+          "ClassDep" => "NamespaceDep"
         );
         $types_description = array(
-          "classDep" => "comment classDep"
+          "ClassDep" => "comment ClassDep"
         );
+        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $resourcesDir = __DIR__.'/../Resources';
+
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+    }
+
+    public function testSameNamespaceClassDependency()
+    {
+        $namespace = "TestNamespace";
+        $className = "SNCD";
+        $g = new ClassGenerator($namespace, $className);
+        $g->setLogger($this->logger);
+        $config = new ClassConfig();
+        $config->add_constructor = true;
+        $config->create_getter = true;
+        $config->create_setter = true;
+        $properties = array(
+          "extend" => "ExtendClass",
+          "implements" => "NS\IClass",
+          "fields" => array(
+            "prova" => array(
+              "primitive" => "int",
+              "autoinizialize" => true,
+              "default" => 0,
+              "description" => "session unique identifier"
+            ),
+            "dependency" => array(
+              "class" => "ClassDep",
+              "autoinizialize" => true,
+              "default" => "new ClassDep()"
+            )
+          )
+        );
+        $types_reference = array(
+          "ClassDep" => "TestNamespace"
+        );
+        $types_description = array(
+          "ClassDep" => "comment ClassDep"
+        );
+        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $resourcesDir = __DIR__.'/../Resources';
+
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+    }
+
+    public function testEnum()
+    {
+        $namespace = "TestNamespace";
+        $className = "EnumTest";
+        $g = new ClassGenerator($namespace, $className);
+        $g->setLogger($this->logger);
+        $config = new ClassConfig();
+        $config->is_enum = true;
+        $properties = array(
+        "fields" => array(
+          "name" => array(
+            "primitive" => "string",
+            "description" => "campo testuale"
+          )
+        )
+      );
+        $types_reference = array();
+        $types_description = array();
         $g->generateClassType($properties, $types_reference, $types_description, $config);
         $resourcesDir = __DIR__.'/../Resources';
 

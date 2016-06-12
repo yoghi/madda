@@ -3,7 +3,7 @@ namespace TestNamespace;
 
 use ExtendClass;
 use NS\IClass;
-use NamespaceDep\classDep;
+use NamespaceDep\ClassDep;
 
 class ICWNAFWDACGA extends ExtendClass implements IClass
 {
@@ -14,8 +14,8 @@ class ICWNAFWDACGA extends ExtendClass implements IClass
     private $prova;
 
     /**
-     * comment classDep
-     * @var NamespaceDep\classDep
+     * comment ClassDep
+     * @var NamespaceDep\ClassDep
      */
     private $dependency;
 
@@ -23,10 +23,12 @@ class ICWNAFWDACGA extends ExtendClass implements IClass
     /**
      * costruttore
      */
-    final public function __construct($prova, classDep $dependency)
+    final public function __construct($prova, ClassDep $dependency = null)
     {
         $this->prova = $prova;
-        $this->dependency = new classDep();
+        if (is_null($dependency)) {
+            $this->dependency = new ClassDep();
+        }
     }
 
 
@@ -40,7 +42,7 @@ class ICWNAFWDACGA extends ExtendClass implements IClass
 
 
     /**
-     * @return NamespaceDep\classDep
+     * @return NamespaceDep\ClassDep
      */
     final public function getDependency()
     {

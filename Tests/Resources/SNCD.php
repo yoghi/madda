@@ -3,9 +3,8 @@ namespace TestNamespace;
 
 use ExtendClass;
 use NS\IClass;
-use NamespaceDep\ClassDep;
 
-class ICWNAFWDACGSA extends ExtendClass implements IClass
+class SNCD extends ExtendClass implements IClass
 {
     /**
      * session unique identifier
@@ -15,7 +14,7 @@ class ICWNAFWDACGSA extends ExtendClass implements IClass
 
     /**
      * comment ClassDep
-     * @var NamespaceDep\ClassDep
+     * @var TestNamespace\ClassDep
      */
     private $dependency;
 
@@ -25,7 +24,9 @@ class ICWNAFWDACGSA extends ExtendClass implements IClass
      */
     final public function __construct($prova, ClassDep $dependency = null)
     {
-        $this->prova = $prova;
+        if (is_null($prova)) {
+            $this->prova = 0;
+        }
         if (is_null($dependency)) {
             $this->dependency = new ClassDep();
         }
@@ -51,7 +52,7 @@ class ICWNAFWDACGSA extends ExtendClass implements IClass
 
 
     /**
-     * @return NamespaceDep\ClassDep
+     * @return TestNamespace\ClassDep
      */
     final public function getDependency()
     {
@@ -60,7 +61,7 @@ class ICWNAFWDACGSA extends ExtendClass implements IClass
 
 
     /**
-     * @var dependency NamespaceDep\ClassDep
+     * @var dependency TestNamespace\ClassDep
      */
     final public function setDependency(ClassDep $dependency)
     {

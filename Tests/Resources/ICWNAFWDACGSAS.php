@@ -3,7 +3,7 @@ namespace TestNamespace;
 
 use ExtendClass;
 use NS\IClass;
-use NamespaceDep\classDep;
+use NamespaceDep\ClassDep;
 
 class ICWNAFWDACGSAS extends ExtendClass implements IClass
 {
@@ -14,8 +14,8 @@ class ICWNAFWDACGSAS extends ExtendClass implements IClass
     private static $prova;
 
     /**
-     * comment classDep
-     * @var NamespaceDep\classDep
+     * comment ClassDep
+     * @var NamespaceDep\ClassDep
      */
     private static $dependency;
 
@@ -47,7 +47,7 @@ class ICWNAFWDACGSAS extends ExtendClass implements IClass
 
 
     /**
-     * @return NamespaceDep\classDep
+     * @return NamespaceDep\ClassDep
      */
     final public static function getDependency()
     {
@@ -56,9 +56,9 @@ class ICWNAFWDACGSAS extends ExtendClass implements IClass
 
 
     /**
-     * @var dependency NamespaceDep\classDep
+     * @var dependency NamespaceDep\ClassDep
      */
-    final public static function setDependency(classDep $dependency)
+    final public static function setDependency(ClassDep $dependency)
     {
         self::$dependency = $dependency;
     }
