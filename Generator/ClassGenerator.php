@@ -67,7 +67,26 @@ class ClassGenerator
         return $mc;
     }
 
-    //FIXME: manca il caso di implementazione Singleton!
+    private function addSingleton($comment, $createGetter)
+    {
+        if (isset($this->logger)) {
+            $this->logger->info('Aggiungo supporto singleton', array(
+              'class' => $this->currentClass->getName()
+            ));
+        }
+        if ($createGetter) {
+            $m = $this->currentClass->addMethod('getInstance');
+            $m->setStatic(true);
+            $m->setVisibility('public');
+            $m->addDocument('Signleton');
+            $m->setFinal(true);
+            $m->setBody();
+        }
+        $field = $this->currentClass->addProperty('instance');
+        $field->setVisibility('protected');
+        $field->setStatic(true);
+        $field->addDocument($comment)->addDocument('@var '.$this->currentClass->getNamespace()->getName().'\\'.$this->currentClass->getName());
+    }
 
     private function addGetter($field_name, $field_class_full, $is_static, $is_concrete)
     {
@@ -140,6 +159,32 @@ class ClassGenerator
             }
             $m->addParameter($field_name)->setTypeHint($field_class_full);
         }
+    }
+
+    private function addParseString()
+    {
+        $field_class_full = $this->currentClass->getNamespace()->getName().'\\'.$this->currentClass->getName();
+
+        if (isset($this->logger)) {
+            $this->logger->info('Aggiungo parseString', array(
+              'class' => $this->currentClass->getName()
+          ));
+        }
+
+        /** $m @var \Nette\PhpGenerator\Method */
+        $m = $this->currentClass->addMethod('parseString');
+        $m->setFinal(true);
+        $m->setStatic(true);
+        $m->addDocument('@return '.$field_class_full.'|null');
+        $m->addParameter('parseString');
+        $body = '$class_name = \'TestNamespace\EnumTest\'.\'\\\\\'.$parseString;'."\n";
+        $body .= 'if (class_exists($class_name)) {';
+        $body .= "\t".'$x = $class_name::instance();';
+        $body .= "\t".'return $x;';
+        $body .= '}';
+        $body .= 'return null;';
+        //$m->setBody('self::$? = $?;', [$field_name, $field_name]);
+        $m->setBody($body);
     }
 
     /**
@@ -412,6 +457,12 @@ class ClassGenerator
             if ($config->add_constructor) {
                 $mc_constructor->setBody($body, []);
             }
+        }
+
+        if ($config->is_enum) {
+            $this->currentClass->setAbstract(true);
+            $this->addSingleton('singleton for enum', false);
+            $this->addParseString();
         }
     }
 

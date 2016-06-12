@@ -76,7 +76,6 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $g = new ClassGenerator("TestNamespace", "emptyClass");
         $g->setLogger($this->logger);
         $config = new ClassConfig();
-        $config->is_enum = true;
         $properties = array(); // 'fields', 'extend', 'implements'
         $types_reference = array(); //dipendenza dei field da altre classi
         $types_description = array(); //descrizione delle classi da cui dipendono i field
@@ -91,7 +90,6 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $g = new ClassGenerator("TestNamespace", "FirstClass");
         $g->setLogger($this->logger);
         $config = new ClassConfig();
-        $config->is_enum = true;
         $properties = array(
           "extend" => "ExtendClass",
           "implements" => "IClass"
@@ -585,13 +583,14 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $config = new ClassConfig();
         $config->is_enum = true;
         $properties = array(
-        "fields" => array(
-          "name" => array(
-            "primitive" => "string",
-            "description" => "campo testuale"
+          "fields" => array(
+            "name" => array(
+              "primitive" => "string",
+              "description" => "nome esplicativo della enum",
+              "getter" => true
+            )
           )
-        )
-      );
+        );
         $types_reference = array();
         $types_description = array();
         $g->generateClassType($properties, $types_reference, $types_description, $config);
