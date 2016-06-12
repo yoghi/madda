@@ -325,21 +325,6 @@ class ClassGenerator
                     } else {
                         $this->errors[] = ' Missing class '.$field_class_name.' on '.$this->currentClass->getName();
                     }
-                    // } else {
-                    //     if (isset($this->logger)) {
-                    //         $this->logger->info('Add field type class without namespace', array(
-                    //         'class' => $this->currentClass->getName(),
-                    //         'field' => $name,
-                    //         'className' => $field_class_name,
-                    //         'posizioneSeparatore' => $pos_separatore
-                    //       ));
-                    //     }
-                    //     $field_class_full = $field_class_name;
-                    //     if ($config->add_constructor && !$is_autoinizialize && !$is_static) {
-                    //         $mc_constructor->addParameter($name)->setTypeHint($field_class_full);
-                    //         $this->currentClass->getNamespace()->addUse($field_class_full);
-                    //     }
-                    // }
                 } else {
                     $field_class_name = $field_properties['primitive'];
                     $field_namespace = null;

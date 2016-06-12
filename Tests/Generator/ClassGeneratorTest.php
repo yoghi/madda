@@ -170,6 +170,28 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
     }
 
+    public function testMultiImplementsClassWithNamespaceGenerator()
+    {
+        $namespace = "TestNamespace";
+        $className = "MultiImplementsClassWithNamespace";
+        $g = new ClassGenerator($namespace, $className);
+        $g->setLogger($this->logger);
+        $config = new ClassConfig();
+        $properties = array(
+          "extend" => "ExtendClass",
+          "implements" => array(
+            "NS\IClass",
+            "NS\IClass2"
+          )
+        );
+        $types_reference = array();
+        $types_description = array();
+        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $resourcesDir = __DIR__.'/../Resources';
+
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+    }
+
     public function testImplementsClassWithNamespaceAndFieldGeneratorMethod()
     {
         $namespace = "TestNamespace";
