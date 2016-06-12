@@ -5,6 +5,9 @@ use ExtendClass;
 use NS\IClass;
 use NamespaceDep\ClassDep;
 
+/**
+ *
+ */
 class ICWNAFWDAC extends ExtendClass implements IClass
 {
     /**

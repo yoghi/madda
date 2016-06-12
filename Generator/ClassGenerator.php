@@ -38,10 +38,11 @@ class ClassGenerator
      */
     private $logger;
 
-    public function __construct($namespace, $class_name)
+    public function __construct($namespace, $class_name, $document = '')
     {
         $this->currentFile = new PhpFile;
         $this->currentClass = $this->currentFile->addClass($namespace.'\\'.ucfirst($class_name));
+        $this->currentClass->addDocument($document);
     }
 
     public function setLogger(LoggerInterface $logger)
@@ -201,7 +202,9 @@ class ClassGenerator
             if (isset($this->logger)) {
                 $this->logger->info('Passo a interfaccia', array($this->currentClass->getName()));
             }
+            $docs = $this->currentClass->getDocuments();
             $this->currentClass = $this->currentFile->addInterface($phpNamespace->getName().'\\'.ucfirst($this->currentClass->getName()));
+            $this->currentClass->setDocuments($docs);
             if (isset($this->logger)) {
                 $this->logger->info('Check add_constructor, in caso metto a false', array($config->add_constructor));
             }

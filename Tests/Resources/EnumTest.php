@@ -1,6 +1,9 @@
 <?php
 namespace TestNamespace;
 
+/**
+ *
+ */
 abstract class EnumTest
 {
     /**

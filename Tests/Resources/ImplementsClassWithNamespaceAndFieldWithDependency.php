@@ -5,6 +5,9 @@ use ExtendClass;
 use NS\IClass;
 use NamespaceDep\classDep;
 
+/**
+ *
+ */
 class ImplementsClassWithNamespaceAndFieldWithDependency extends ExtendClass implements IClass
 {
     /**

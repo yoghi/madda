@@ -4,6 +4,9 @@ namespace TestNamespace;
 use ExtendClass;
 use NS\IClass;
 
+/**
+ *
+ */
 class ImplementsClassWithNamespaceAndFieldStatic extends ExtendClass implements IClass
 {
     /**
