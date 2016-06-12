@@ -3,7 +3,6 @@ namespace TestNamespace;
 
 use ExtendClass;
 use NS\IClass;
-use NamespaceDep\ClassDep;
 
 /**
  *
@@ -18,7 +17,7 @@ class ICWNAFWDACG extends ExtendClass implements IClass
 
     /**
      * comment ClassDep
-     * @var NamespaceDep\ClassDep
+     * @var TestNamespace\ClassDep
      */
     private $dependency;
 

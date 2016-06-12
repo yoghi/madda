@@ -138,7 +138,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         );
         $types_reference = array(
           'TraitsClass' => 'TraitNamespace',
-          'TraitsClass2' => 'TraitNamespace'
+          'TraitsClass2' => 'TestNamespace'
         );
         $types_description = array();
         $g->generateClassType($properties, $types_reference, $types_description, $config);
@@ -370,9 +370,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
             )
           )
         );
-        $types_reference = array(
-          "ClassDep" => "NamespaceDep"
-        );
+        $types_reference = array();
         $types_description = array(
           "ClassDep" => "comment ClassDep"
         );

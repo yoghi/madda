@@ -348,6 +348,31 @@ class ClassGenerator
                         }
                     } else {
                         $field_class_full = $phpNamespace->getName().'\\'.$field_class_name;
+                        if (isset($this->logger)) {
+                            $this->logger->info('Uso class for field same namespace', array(
+                            'class' => $this->currentClass->getName(),
+                            'field' => $field_class_name,
+                            'className' => $field_class_full
+                          ));
+                        }
+                    }
+
+                    if ($config->add_constructor && !$is_static) {
+                        if (isset($this->logger)) {
+                            $this->logger->info('Aggiungo parametro al costruttore', array(
+                              'class' => $this->currentClass->getName(),
+                              'parameter' => $name,
+                              'className' => $field_class_full,
+                              'default' => $default_value
+                            ));
+                        }
+                        $parameter = null;
+                        if (!$first) {
+                            $parameter = $mc_constructor->addParameter($name, null); //solo i primitivi hanno un default, gli altri null come object
+                        } else {
+                            $parameter = $mc_constructor->addParameter($name);
+                        }
+                        $parameter->setTypeHint($field_class_full);
                     }
 
                     if (array_key_exists($field_class_name, $types_reference)) {
@@ -358,26 +383,7 @@ class ClassGenerator
                             'className' => $field_class_full
                           ));
                         }
-                        if ($config->add_constructor && !$is_static) {
-                            if (isset($this->logger)) {
-                                $this->logger->info('Aggiungo parametro al costruttore', array(
-                                  'class' => $this->currentClass->getName(),
-                                  'parameter' => $name,
-                                  'className' => $field_class_full,
-                                  'default' => $default_value
-                                ));
-                            }
-                            $parameter = null;
-                            if (!$first) {
-                                $parameter = $mc_constructor->addParameter($name, null); //solo i primitivi hanno un default, gli altri null come object
-                            } else {
-                                $parameter = $mc_constructor->addParameter($name);
-                            }
-                            $parameter->setTypeHint($field_class_full);
-                        }
                         $this->currentClass->getNamespace()->addUse($field_class_full);
-                    } else {
-                        $this->errors[] = ' Missing class '.$field_class_name.' on '.$this->currentClass->getName();
                     }
                 } else {
                     $field_class_name = $field_properties['primitive'];

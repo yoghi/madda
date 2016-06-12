@@ -4,7 +4,6 @@ namespace TestNamespace;
 use ExtendClass;
 use NS\IClass;
 use TraitNamespace\TraitsClass;
-use TraitNamespace\TraitsClass2;
 
 /**
  *
