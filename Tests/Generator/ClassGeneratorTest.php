@@ -599,6 +599,23 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
     }
 
+    public function testSingleton()
+    {
+        $namespace = "TestNamespace";
+        $className = "SingletonClass";
+        $g = new ClassGenerator($namespace, $className);
+        $g->setLogger($this->logger);
+        $config = new ClassConfig();
+        $config->is_singleton = true;
+        $properties = array();
+        $types_reference = array();
+        $types_description = array();
+        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $resourcesDir = __DIR__.'/../Resources';
+
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+    }
+
     public function testInterface()
     {
         $namespace = "TestNamespace";

@@ -13,7 +13,7 @@ abstract class EnumTest
     protected $name;
 
     /**
-     * singleton for enum
+     * Singleton instance for enum
      * @var TestNamespace\EnumTest
      */
     protected static $instance;

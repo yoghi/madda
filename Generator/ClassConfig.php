@@ -19,6 +19,7 @@ class ClassConfig
 {
     public $is_enum;
     public $is_interface;
+    public $is_singleton;
     public $create_getter;
     public $create_setter;
     public $add_constructor;

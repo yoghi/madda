@@ -75,18 +75,24 @@ class ClassGenerator
               'class' => $this->currentClass->getName()
             ));
         }
+        $full_class_name = $this->currentClass->getNamespace()->getName().'\\'.$this->currentClass->getName();
         if ($createGetter) {
             $m = $this->currentClass->addMethod('getInstance');
             $m->setStatic(true);
             $m->setVisibility('public');
-            $m->addDocument('Signleton');
+            $m->addDocument('Singleton NO THREAD SAFE!');
+            $m->addDocument('@return '.$full_class_name.'|null');
             $m->setFinal(true);
-            $m->setBody();
+            $body = 'if ( is_null(self::$instance) ) {';
+            $body .= ' self::$instance = new '.$this->currentClass->getName().'();';
+            $body .= '}';
+            $body .= 'return self::$instance;';
+            $m->setBody($body);
         }
         $field = $this->currentClass->addProperty('instance');
         $field->setVisibility('protected');
         $field->setStatic(true);
-        $field->addDocument($comment)->addDocument('@var '.$this->currentClass->getNamespace()->getName().'\\'.$this->currentClass->getName());
+        $field->addDocument($comment)->addDocument('@var '.$full_class_name);
     }
 
     private function addGetter($field_name, $field_class_full, $is_static, $is_concrete)
@@ -464,8 +470,12 @@ class ClassGenerator
 
         if ($config->is_enum) {
             $this->currentClass->setAbstract(true);
-            $this->addSingleton('singleton for enum', false);
+            $this->addSingleton('Singleton instance for enum', false);
             $this->addParseString();
+        }
+
+        if ($config->is_singleton) {
+            $this->addSingleton('Singleton instance', true);
         }
     }
 
