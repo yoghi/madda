@@ -3,23 +3,23 @@
 namespace Yoghi\Bundle\MaddaBundle\Generator;
 
 /*
- * This file is part of the MADDA project.
- *
- * (c) Stefano Tamagnini <>
- *
- * This source file is subject to the GPLv3 license that is bundled
- * with this source code in the file LICENSE.
- */
+* This file is part of the MADDA project.
+*
+* (c) Stefano Tamagnini <>
+*
+* This source file is subject to the GPLv3 license that is bundled
+* with this source code in the file LICENSE.
+*/
 
- use Nette\PhpGenerator\ClassType;
- use Nette\PhpGenerator\PhpLiteral;
- use Nette\PhpGenerator\Method;
- use Nette\PhpGenerator\PhpFile;
- use League\Flysystem\Filesystem;
- use League\Flysystem\Adapter\Local;
- use Psr\Log\LoggerInterface;
+use Nette\PhpGenerator\ClassType;
+use Nette\PhpGenerator\PhpLiteral;
+use Nette\PhpGenerator\Method;
+use Nette\PhpGenerator\PhpFile;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Adapter\Local;
+use Psr\Log\LoggerInterface;
 
- /**
+/**
  * @author Stefano Tamagnini <>
  */
 class ClassGenerator

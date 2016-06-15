@@ -1,6 +1,6 @@
 <?php
 
-namespace Yoghi\Bundle\MaddaBundle\Generator;
+namespace Yoghi\Bundle\MaddaBundleTest\Utils;
 
 class SplFileInfo extends \Symfony\Component\Finder\SplFileInfo
 {

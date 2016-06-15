@@ -28,6 +28,7 @@ composer install yoghi/madda
  - [X] [Coveralls](https://coveralls.io/github/yoghi/madda)
  - [X] [VersionEye](https://www.versioneye.com) -> controllo degli aggiornamenti delle dipendeze
  - [X] badge licenza
+ - [ ] changelog / release workflow
  - [ ] wiki
  - [ ] faq
  - [ ] [raml](http://raml.org) to controller
@@ -36,6 +37,8 @@ composer install yoghi/madda
     - [ ] [Symfony](http://symfony.com/)
     - [ ] [Prooph](https://github.com/prooph)
     - [ ] [SimpleBus/MessageBus](https://github.com/SimpleBus/MessageBus)
+    - [ ] [Broadway](https://github.com/qandidate-labs/broadway)
+    - [ ] [Tactician](http://tactician.thephpleague.com/)
  - [ ] Contrib Guide
 
 ## Contributing

@@ -14,62 +14,17 @@ namespace Yoghi\Bundle\MaddaBundle\Generator;
 use Symfony\CS\Fixer;
 use Symfony\CS\ConfigurationResolver;
 use Symfony\CS\FileCacheManager;
-use org\bovigo\vfs\vfsStream;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\BufferedOutput;
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
-use Monolog\Formatter\LineFormatter;
 use Yoghi\Bundle\MaddaBundle\Generator\ClassGenerator;
-
-require_once __DIR__.'/SplFileInfo.php';
-require_once __DIR__.'/VfsAdapter.php';
+use Yoghi\Bundle\MaddaBundleTest\Utils\VfsAdapter;
+use Yoghi\Bundle\MaddaBundleTest\Utils\SplFileInfo;
+use Yoghi\Bundle\MaddaBundleTest\Utils\AbstractCommonLogTest;
 
 /**
  * @author Stefano Tamagnini <>
  */
 class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
 {
-
-    private static $directoryV;
-    private $logger;
-
-    public static function setUpBeforeClass()
-    {
-        self::$directoryV = vfsStream::setup();
-    }
-
-    public function setUp()
-    {
-        $this->logger = new Logger('phpunit-logger');
-        $directoryLogOutput = self::$directoryV->url().'/log';
-        if (!file_exists($directoryLogOutput)) {
-            mkdir($directoryLogOutput, 0700, true);
-        }
-        $output = "%level_name% > %message% %context% %extra%\n";
-        $formatter = new LineFormatter($output);
-        $handler = new StreamHandler($directoryLogOutput.'/phpunit.log', Logger::DEBUG, true, null, false);
-        touch($directoryLogOutput.'/phpunit.log');
-        $handler->setFormatter($formatter);
-        $this->logger->pushHandler($handler);
-        $this->logger->info('Avviato test -> '.$this->getName());
-    }
-
-    public function tearDown()
-    {
-        $fileLog = self::$directoryV->url().'/log/phpunit.log';
-        if ($this->hasFailed()) {
-            echo "\n---- LOG ----\n";
-            if (is_readable($fileLog)) {
-                echo file_get_contents($fileLog);
-            }
-            echo "------------\n";
-        }
-        if (file_exists($fileLog)) {
-            unlink($fileLog);
-        }
-        $this->logger = null;
-    }
+    use AbstractCommonLogTest;
 
     public function testEmptyClassGenerator()
     {

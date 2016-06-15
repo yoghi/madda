@@ -36,9 +36,8 @@ class Reader
         $this->specList = new A($specListArray);
     }
 
-    public function readYaml($baseDirectory, $fileName)
+    public function readYaml($fullPath)
     {
-        $fullPath = $baseDirectory.'/'.$fileName;
         if (!file_exists($fullPath)) {
             throw new MaddaException("File $fullPath di configurazione inesistente");
         }

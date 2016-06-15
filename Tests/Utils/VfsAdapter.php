@@ -1,5 +1,5 @@
 <?php
-namespace Yoghi\Bundle\MaddaBundle\Generator;
+namespace Yoghi\Bundle\MaddaBundleTest\Utils;
 
 use League\Flysystem\Adapter\Local;
 
