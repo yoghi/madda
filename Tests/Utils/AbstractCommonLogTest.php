@@ -40,6 +40,12 @@ trait AbstractCommonLogTest
         $this->logger->info('Avviato test -> '.$this->getName());
     }
 
+    protected function readLog()
+    {
+        $fileLog = self::$directoryV->url().'/log/phpunit.log';
+        return file_get_contents($fileLog);
+    }
+
     public function tearDown()
     {
         $fileLog = self::$directoryV->url().'/log/phpunit.log';

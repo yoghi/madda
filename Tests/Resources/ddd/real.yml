@@ -1,0 +1,186 @@
+ddd:
+  usecases:
+    package: BitPrepared\Bundle\FormazioneBundle\Domain\UseCases
+    #TODO: dagli use cases dovrei generare comandi e controller ???
+  events:
+    package: BitPrepared\Bundle\FormazioneBundle\Domain\Events
+    implement: DomainEvent
+    # fields:
+    #   occurredOn:
+    #     class: \DateTime
+    #     autoinizialize: true
+    #     description: quando accade l'evento
+    #     getter: true
+  vo:
+    package: BitPrepared\Bundle\FormazioneBundle\Domain\ValueObject
+    getter: true
+  entity:
+    package: BitPrepared\Bundle\FormazioneBundle\Domain\Entity
+    getter: true
+  aggregate:
+    package: BitPrepared\Bundle\FormazioneBundle\Domain\Aggregate
+    getter: true
+    events:
+      - create
+      - delete
+    # Domain Events are applied on Entities/Aggregate Roots
+    # "Event Class Shortname" => "applyEventClassShortname"
+    # In questo modo è piu semplice la ricostruzione dall'evento store,
+    # perchè io chiamo il metodo apply dell'evento e lui fa la modifica sull'entita
+    # presente in memoria
+    # l'altro metodo che creo che genera l'evento è perchè l'aggregato è factory quindi
+    # deve gestire lui quando ci sono le condizioni per l'evento!
+    #TODO: OGNI EVENTO HA l'ID DELL'AGGREGATO e I DATI RELATIVI ALL'EVENTO args
+  query:
+    package: BitPrepared\Bundle\FormazioneBundle\Domain\Service\QueryRequest
+    getter: true
+    extend: BitPrepared\Bundle\FormazioneBundle\Domain\Service\Request
+  command:
+    package: BitPrepared\Bundle\FormazioneBundle\Domain\Service\CommandRequest
+    getter: true
+    extend: BitPrepared\Bundle\FormazioneBundle\Domain\Service\Request
+
+classes:
+    # Branca:
+    #   ddd: vo
+    #   name: Branca
+    #   description: "Branca"
+    #   enum: [ LC, EG, RS, CG ]
+
+    DomainEvent:
+      ddd:
+        type: interface
+      name: DomainEvent
+      description: interface domain events
+      namespace: BitPrepared\Bundle\FormazioneBundle\Domain\Events
+      fields:
+        occurredOn:
+          class: \DateTime
+          autoinizialize: true #viene settato automaticamente nel costruttore
+          default: new \DateTime()
+          description: quando accade l'evento
+          getter: true
+        aggregateId:
+          primitive: int
+          autoinizialize: false
+          description: id dell'aggregato root relativo all'evento
+          getter: true
+        properties:
+          primitive: array
+          autoinizialize: false
+          description: proprietà dell'evento
+          getter: true
+
+    TipologiaCampo:
+        ddd:
+          type: vo
+        name: TipologiaCampo
+        description: "Tipologia di campo CFM/CFT/CCG/CAM"
+        namespace: BitPrepared\Bundle\FormazioneBundle\Domain\ValueObject #OVERRIDE, in questo caso superfluo
+        enum: [ CFMLC, CFMEG, CFMRS, CFT, CAMLC, CAMEG, CAMRS, CCG ]
+
+    Sessione:
+        ddd:
+          type: vo
+        name: Sessione
+        description: "Sessione generica utilizzabile in un campo"
+        traits:
+          - BitPrepared\Bundle\FormazioneBundle\Domain\ValueObject\SessioneTrait
+        fields:
+          title:
+            primitive: string
+            description: "titolo della sessione"
+          description:
+            primitive: string
+            description: "Descrizione completa della sessione"
+
+    #Lo creo sempre? come aggiro il problema del deserializzatore di array? forse lo posso meglio mascherare come un RESULT!
+    SessioniArray:
+        ddd:
+          type: vo
+        name: SessioniArray
+        description: "Sessioni utilizzabili in un campo"
+        fields:
+          sessioni:
+            primitive: array
+            description: "array di sessione/sessioneCampo"
+
+    SessioneCampo:
+        ddd:
+          type: entity
+        name: SessioneCampo
+        traits:
+          - BitPrepared\Bundle\FormazioneBundle\Domain\Entity\SessioneCampoTrait
+        fields:
+          id :
+            primitive: int
+            description: "identificativo univoco della sessione"
+          sessione:
+            class: Sessione # NOTA BENE LA CLASSE DEVE ESSERE GIA DEFINITIA!
+          tipologiaCampo:
+            class: TipologiaCampo
+          documentiCorrelati:
+            primitive: array
+            description: "Documenti correlati alla sessione al campo"
+
+    SpiegazioneSessioneCampo:
+        ddd:
+          type: aggregate
+          root: true
+        name: SpiegazioneSessioneCampo
+        fields:
+          id :
+            primitive: int
+            description: "identificativo univoco della sessione come aggregato root"
+          sessione:
+            class: SessioneCampo
+          # lo dovrei legare ad un utente
+          # user:
+          #   class: User
+        events:
+          - add_document # usare _ per il camel case
+        validationRule:
+          events:
+            create:
+              fields: [ id, sessione, tipologiaCampo]
+            delete:
+              fields: [ id ]
+            addDocument:
+              fields: [ id, documentoCorrelato ]
+
+
+    # PRIVA VANNO FATTI ENTITY,AGGREGATE E AGGREGATE ROOT
+
+    DettagliSessioneRequest:
+        ddd:
+          type: query #posso considerarli dei generici VO
+        fields:
+            id :
+              primitive: int
+              description: "identificativo univoco della sessione richiesta"
+        namespace: BitPrepared\Bundle\FormazioneBundle\Domain\Service\QueryRequest #in caso lo eredita
+        extend: BitPrepared\Bundle\FormazioneBundle\Domain\Service\Request
+
+    ElencoSessioniForTipologiaRequest:
+        ddd:
+          type: query
+        fields:
+            tipoCampo :
+              class: TipologiaCampo
+
+    ElencoSessioniRequest:
+        ddd:
+          type: query
+
+    NewSessioneRequest:
+        ddd:
+          type: command
+        fields:
+            title:
+              primitive: string
+              description: "titolo della sessione"
+            description:
+              primitive: string
+              description: "descrizione della sessione"
+            tipoCampo:
+              class: TipologiaCampo

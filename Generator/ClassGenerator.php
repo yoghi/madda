@@ -347,13 +347,19 @@ class ClassGenerator
                           ));
                         }
                     } else {
-                        $field_class_full = $phpNamespace->getName().'\\'.$field_class_name;
-                        if (isset($this->logger)) {
-                            $this->logger->info('Uso class for field same namespace', array(
-                            'class' => $this->currentClass->getName(),
-                            'field' => $field_class_name,
-                            'className' => $field_class_full
-                          ));
+                        //FIXME: strpos is better 
+                        if ($field_class_name[0] == '\\') {
+                            //Class: \DateTime
+                          $field_class_full = $field_class_name;
+                        } else {
+                            $field_class_full = $phpNamespace->getName().'\\'.$field_class_name;
+                            if (isset($this->logger)) {
+                                $this->logger->info('Uso class for field same namespace', array(
+                              'class' => $this->currentClass->getName(),
+                              'field' => $field_class_name,
+                              'className' => $field_class_full
+                            ));
+                            }
                         }
                     }
 
@@ -494,6 +500,13 @@ class ClassGenerator
     {
         $filesystem = new Filesystem($adapter);
         $outFile = str_replace('\\', '/', $this->currentClass->getNamespace()->getName().'\\'.$this->currentClass->getName()).'.php';
+
+        $dir = pathinfo($adapter->getPathPrefix().$outFile, PATHINFO_DIRNAME).'/';
+        if (!is_dir($dir)) {
+            $this->logger->info('Creo directory mancante: '.$dir);
+            mkdir($dir, 0700, true);
+        }
+
         if ($filesystem->has($outFile)) {
             $filesystem->put($outFile, (string)$this->currentFile);
         } else {

@@ -30,7 +30,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testEmptyReadFile()
     {
-        $baseDirectory = __DIR__.'/../Resources/';
+        $baseDirectory = __DIR__.'/../Resources/finder';
         $fileName = "emptyModel.yml";
         $rym = new Reader();
         $rym->readYaml($baseDirectory.'/'.$fileName);
@@ -58,7 +58,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testReadFile()
     {
-        $baseDirectory = __DIR__.'/../Resources/basemodel/';
+        $baseDirectory = __DIR__.'/../Resources/finder/basemodel';
         $fileName = "model.yml";
         $rym = new Reader();
         $rym->readYaml($baseDirectory.'/'.$fileName);
@@ -87,7 +87,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testReadDomainDefinition()
     {
-        $baseDirectory = __DIR__.'/../Resources/basemodel/';
+        $baseDirectory = __DIR__.'/../Resources/finder/basemodel';
         $fileName = "model.yml";
         $rym = new Reader();
         $rym->readYaml($baseDirectory.'/'.$fileName);
@@ -97,7 +97,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testReadAllClassDefinition()
     {
-        $baseDirectory = __DIR__.'/../Resources/basemodel/';
+        $baseDirectory = __DIR__.'/../Resources/finder/basemodel';
         $fileName = "model.yml";
         $rym = new Reader();
         $rym->readYaml($baseDirectory.'/'.$fileName);
@@ -116,7 +116,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testReadClassDefinition()
     {
-        $baseDirectory = __DIR__.'/../Resources/basemodel/';
+        $baseDirectory = __DIR__.'/../Resources/finder/basemodel';
         $fileName = "model.yml";
         $rym = new Reader();
         $rym->readYaml($baseDirectory.'/'.$fileName);

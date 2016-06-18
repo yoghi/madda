@@ -11,13 +11,11 @@ namespace Yoghi\Bundle\MaddaBundle\Generator;
  * with this source code in the file LICENSE.
  */
 
-use Symfony\CS\Fixer;
-use Symfony\CS\ConfigurationResolver;
-use Symfony\CS\FileCacheManager;
 use Yoghi\Bundle\MaddaBundle\Generator\ClassGenerator;
 use Yoghi\Bundle\MaddaBundleTest\Utils\VfsAdapter;
 use Yoghi\Bundle\MaddaBundleTest\Utils\SplFileInfo;
 use Yoghi\Bundle\MaddaBundleTest\Utils\AbstractCommonLogTest;
+use Yoghi\Bundle\MaddaBundleTest\Utils\FileCompare;
 
 /**
  * @author Stefano Tamagnini <>
@@ -25,6 +23,7 @@ use Yoghi\Bundle\MaddaBundleTest\Utils\AbstractCommonLogTest;
 class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     use AbstractCommonLogTest;
+    use FileCompare;
 
     public function testEmptyClassGenerator()
     {
@@ -36,7 +35,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $types_description = array(); //descrizione delle classi da cui dipendono i field
         $g->generateClassType($properties, $types_reference, $types_description, $config);
         $actual = $g->toString();
-        $expected = file_get_contents(__DIR__.'/../Resources/EmptyClass.php');
+        $expected = file_get_contents(__DIR__.'/../Resources/php/EmptyClass.php');
         $this->assertSame($actual, $expected, 'Classe EmptyClass invalid');
     }
 
@@ -53,7 +52,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $types_description = array();
         $g->generateClassType($properties, $types_reference, $types_description, $config);
         $actual = $g->toString();
-        $expected = file_get_contents(__DIR__.'/../Resources/FirstClass.php');
+        $expected = file_get_contents(__DIR__.'/../Resources/php/FirstClass.php');
         $this->assertSame($expected, $actual, 'Classe FirstClass invalid');
     }
 
@@ -74,7 +73,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         );
         $types_description = array();
         $g->generateClassType($properties, $types_reference, $types_description, $config);
-        $resourcesDir = __DIR__.'/../Resources';
+        $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
     }
@@ -97,7 +96,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         );
         $types_description = array();
         $g->generateClassType($properties, $types_reference, $types_description, $config);
-        $resourcesDir = __DIR__.'/../Resources';
+        $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
     }
@@ -118,7 +117,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $types_reference = array();
         $types_description = array();
         $g->generateClassType($properties, $types_reference, $types_description, $config);
-        $resourcesDir = __DIR__.'/../Resources';
+        $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
     }
@@ -140,7 +139,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $types_reference = array();
         $types_description = array();
         $g->generateClassType($properties, $types_reference, $types_description, $config);
-        $resourcesDir = __DIR__.'/../Resources';
+        $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
     }
@@ -166,7 +165,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $types_reference = array();
         $types_description = array();
         $g->generateClassType($properties, $types_reference, $types_description, $config);
-        $resourcesDir = __DIR__.'/../Resources';
+        $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
     }
@@ -193,7 +192,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $types_reference = array();
         $types_description = array();
         $g->generateClassType($properties, $types_reference, $types_description, $config);
-        $resourcesDir = __DIR__.'/../Resources';
+        $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
     }
@@ -226,7 +225,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
           "ClassDep" => "comment ClassDep"
         );
         $g->generateClassType($properties, $types_reference, $types_description, $config);
-        $resourcesDir = __DIR__.'/../Resources';
+        $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
     }
@@ -261,7 +260,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
           "ClassDep" => "comment ClassDep"
         );
         $g->generateClassType($properties, $types_reference, $types_description, $config);
-        $resourcesDir = __DIR__.'/../Resources';
+        $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
     }
@@ -296,7 +295,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
           "ClassDep" => "comment ClassDep"
         );
         $g->generateClassType($properties, $types_reference, $types_description, $config);
-        $resourcesDir = __DIR__.'/../Resources';
+        $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
     }
@@ -330,7 +329,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
           "ClassDep" => "comment ClassDep"
         );
         $g->generateClassType($properties, $types_reference, $types_description, $config);
-        $resourcesDir = __DIR__.'/../Resources';
+        $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
     }
@@ -366,7 +365,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
           "ClassDep" => "comment ClassDep"
         );
         $g->generateClassType($properties, $types_reference, $types_description, $config);
-        $resourcesDir = __DIR__.'/../Resources';
+        $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
     }
@@ -403,7 +402,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
           "ClassDep" => "comment ClassDep"
         );
         $g->generateClassType($properties, $types_reference, $types_description, $config);
-        $resourcesDir = __DIR__.'/../Resources';
+        $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
     }
@@ -444,7 +443,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
           "ClassDep" => "comment ClassDep"
         );
         $g->generateClassType($properties, $types_reference, $types_description, $config);
-        $resourcesDir = __DIR__.'/../Resources';
+        $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
     }
@@ -483,7 +482,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
           "ClassDep" => "comment ClassDep"
         );
         $g->generateClassType($properties, $types_reference, $types_description, $config);
-        $resourcesDir = __DIR__.'/../Resources';
+        $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
     }
@@ -522,7 +521,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
           "ClassDep" => "comment ClassDep"
         );
         $g->generateClassType($properties, $types_reference, $types_description, $config);
-        $resourcesDir = __DIR__.'/../Resources';
+        $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
     }
@@ -547,7 +546,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $types_reference = array();
         $types_description = array();
         $g->generateClassType($properties, $types_reference, $types_description, $config);
-        $resourcesDir = __DIR__.'/../Resources';
+        $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
     }
@@ -564,7 +563,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $types_reference = array();
         $types_description = array();
         $g->generateClassType($properties, $types_reference, $types_description, $config);
-        $resourcesDir = __DIR__.'/../Resources';
+        $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
     }
@@ -589,7 +588,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $types_reference = array();
         $types_description = array();
         $g->generateClassType($properties, $types_reference, $types_description, $config);
-        $resourcesDir = __DIR__.'/../Resources';
+        $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
     }
@@ -614,7 +613,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $types_reference = array();
         $types_description = array();
         $g->generateClassType($properties, $types_reference, $types_description, $config);
-        $resourcesDir = __DIR__.'/../Resources';
+        $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
     }
@@ -640,7 +639,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $types_reference = array();
         $types_description = array();
         $g->generateClassType($properties, $types_reference, $types_description, $config);
-        $resourcesDir = __DIR__.'/../Resources';
+        $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
     }
@@ -660,40 +659,10 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         return $directoryOutput;
     }
 
-    /**
-     * Compare generated class with expected class into resource dir
-     * @param  string         $resourcesDir fullPath resources dir
-     * @param  string         $namespace    namespace of class
-     * @param  string         $className    class name
-     * @param  ClassGenerator $g            class generator object to test
-     */
     private function compareFileGenerated($resourcesDir, $namespace, $className, ClassGenerator $g)
     {
-        $fileInput = $resourcesDir.'/'.$className.'.php';
         $directoryOutput = $this->generateDestDir($namespace);
-        $fileName = $className.'.php';
-        $fileOutput = $directoryOutput . '/'.$namespace. '/'. $fileName;
-
         $g->createFileOnDir(new VfsAdapter($directoryOutput, 0));
-
-        $expected = file_get_contents($fileInput);
-        $iFile = new SplFileInfo($fileOutput, $directoryOutput.'/'.$namespace, $fileName);
-        $f = new Fixer();
-        $f->registerBuiltInFixers();
-        $f->registerBuiltInConfigs();
-
-        $cr = new ConfigurationResolver();
-        $cr->setAllFixers($f->getFixers());
-        $cr->setOption('level', 'psr2');
-        $cr->setOption('fixers', 'eof_ending,strict_param,short_array_syntax,trailing_spaces,indentation,line_after_namespace,php_closing_tag');
-        $cr->resolve();
-
-        $fileCacheManager = new FileCacheManager(false, $directoryOutput, $cr->getFixers());
-        $f->fixFile($iFile, $cr->getFixers(), false, false, $fileCacheManager);
-
-        $fileOutput2 = $iFile->getPathname();
-        $actual = file_get_contents($fileOutput2);
-
-        $this->assertSame($expected, $actual, 'Classe '.$className.' invalid');
+        $this->compareFilePhp($resourcesDir, $namespace, $className, $directoryOutput);
     }
 }

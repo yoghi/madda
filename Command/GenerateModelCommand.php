@@ -88,7 +88,7 @@ class GenerateModelCommand extends Command
                     $dddGenerator = new DDDGenerator();
                     $dddGenerator->setLogger($this->logger);
                     $dddGenerator->analyze($file);
-                    $dddGenerator->generate();
+                    $dddGenerator->generate($directoryOutput);
                 }
             }
 
