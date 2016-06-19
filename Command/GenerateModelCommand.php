@@ -82,7 +82,7 @@ class GenerateModelCommand extends Command
         if (is_dir($directory)) {
             $finder = new Finder();
             $finder->search($directory);
-            foreach ($finder->getYmlFiles() as $file) {
+            foreach ($finder->getFindedFiles() as $file) {
                 if (pathinfo($file, PATHINFO_FILENAME) == 'model.yml') {
                     $io->text("Analizzo model.yml in ".pathinfo($file, PATHINFO_DIRNAME));
                     $dddGenerator = new DDDGenerator();

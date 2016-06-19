@@ -2,7 +2,7 @@
 namespace TestNamespace;
 
 /**
- *
+ * Generated Class
  */
 abstract class EnumTest
 {

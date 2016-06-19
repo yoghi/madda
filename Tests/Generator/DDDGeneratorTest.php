@@ -26,7 +26,7 @@ class DDDGeneratorTest extends \PHPUnit_Framework_TestCase
     use AbstractCommonLogTest;
     use FileCompare;
 
-    public function testFindYmlOnVfs()
+    public function testGenerateDDDOnVfs()
     {
         $directoryOutput = self::$directoryV->url().'/output';
         $directorySrcGen = self::$directoryV->url().'/src-gen';
@@ -45,20 +45,43 @@ class DDDGeneratorTest extends \PHPUnit_Framework_TestCase
         $dg->analyze($directoryOutput.'/test.yml');
         $dg->generate(new VfsAdapter($directorySrcGen));
 
-        // $finder = new Finder();
-        // $finder->setLogger($this->logger);
-        // $finder->search($directoryOutput, 'yml');
-        // $actual = $finder->getYmlFiles();
-        // $this->assertCount(1, $actual, 'yml file not found');
-        // echo $this->readLog();
         // $data = file_get_contents("vfs://root/src-gen/BitPrepared/Bundle/FormazioneBundle/Domain/Events/DomainEvent.php");
         // echo $data;
 
-        $namespace = 'BitPrepared/Bundle/FormazioneBundle/Domain/Events';
-        $className = 'DomainEvent';
-        $this->compareFilePhp($resourcesDir.'/ddd/generated/'.$namespace, $namespace, $className, $directorySrcGen);
+        // $finderV = new Finder();
+        // $finderV->search($directorySrcGen, 'php');
+        // foreach ($finderV->getFindedFiles() as $file) {
+        //     $namespace = str_replace('vfs://root/src-gen/', '', pathinfo($file, PATHINFO_DIRNAME));
+        //     $name = str_replace('.php', '', pathinfo($file, PATHINFO_FILENAME));
+        //     $this->logger->info('$mappaToCheck[\''.$namespace.'\'] = \''.$name.'\';');
+        // }
 
-        // $errors = $dg->getErrors();
-        // $this->assertCount(0, $errors, 'errori durante la generazione');
+        // echo $this->readLog();
+
+        $mappaToCheck = [];
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Events'] = 'DomainEvent';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/ValueObject'] = 'TipologiaCampo';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/ValueObject'] = 'Sessione';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/ValueObject'] = 'SessioniArray';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Entity'] = 'SessioneCampo';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Aggregate'] = 'SpiegazioneSessioneCampo';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Service/QueryRequest'] = 'DettagliSessioneRequest';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Service/QueryRequest'] = 'ElencoSessioniForTipologiaRequest';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Service/QueryRequest'] = 'ElencoSessioniRequest';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Service/CommandRequest'] = 'NewSessioneRequest';
+        foreach ($mappaToCheck as $namespace => $className) {
+            $this->compareFilePhp($resourcesDir.'/ddd/generated/'.$namespace, $namespace, $className, $directorySrcGen);
+        }
+
+        // $namespace = 'BitPrepared/Bundle/FormazioneBundle/Domain/ValueObject';
+        // $className = 'Sessione';
+        // $this->compareFilePhp($resourcesDir.'/ddd/generated/'.$namespace, $namespace, $className, $directorySrcGen);
+        //
+        // $namespace = 'BitPrepared/Bundle/FormazioneBundle/Domain/ValueObject';
+        // $className = 'SessioniArray';
+        // $this->compareFilePhp($resourcesDir.'/ddd/generated/'.$namespace, $namespace, $className, $directorySrcGen);
+
+        $errors = $dg->getErrors();
+        $this->assertCount(0, $errors, 'errori durante la generazione');
     }
 }

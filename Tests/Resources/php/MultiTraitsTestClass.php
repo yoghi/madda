@@ -6,7 +6,7 @@ use NS\IClass;
 use TraitNamespace\TraitsClass;
 
 /**
- *
+ * Generated Class
  */
 class MultiTraitsTestClass extends ExtendClass implements IClass
 {

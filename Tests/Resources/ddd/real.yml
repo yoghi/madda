@@ -108,7 +108,7 @@ classes:
     SessioneCampo:
         ddd:
           type: entity
-        name: SessioneCampo
+        name: SessioneCampo 
         traits:
           - BitPrepared\Bundle\FormazioneBundle\Domain\Entity\SessioneCampoTrait
         fields:

@@ -5,7 +5,7 @@ use ExtendClass;
 use NS\IClass;
 
 /**
- *
+ * Generated Class
  */
 class SNCD extends ExtendClass implements IClass
 {

@@ -6,7 +6,7 @@ use NS\IClass;
 use NamespaceDep\ClassDep;
 
 /**
- *
+ * Generated Class
  */
 class ICWNAFWDACGA extends ExtendClass implements IClass
 {

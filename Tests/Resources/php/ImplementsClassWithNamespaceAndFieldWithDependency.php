@@ -6,7 +6,7 @@ use NS\IClass;
 use NamespaceDep\classDep;
 
 /**
- *
+ * Generated Class
  */
 class ImplementsClassWithNamespaceAndFieldWithDependency extends ExtendClass implements IClass
 {

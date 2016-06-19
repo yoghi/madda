@@ -27,7 +27,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase
         $finder = new Finder();
         $finder->setLogger($this->logger);
         $finder->search(__DIR__.'/../Resources/finder', 'yml');
-        $actual = $finder->getYmlFiles();
+        $actual = $finder->getFindedFiles();
         $this->logger->info('File trovati '.count($actual));
         $this->assertCount(3, $actual, 'yml file not found');
 
@@ -53,7 +53,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase
         $finder = new Finder();
         $finder->setLogger($this->logger);
         $finder->search($directoryOutput, 'yml');
-        $actual = $finder->getYmlFiles();
+        $actual = $finder->getFindedFiles();
         $this->assertCount(1, $actual, 'yml file not found');
     }
 }

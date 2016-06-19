@@ -38,17 +38,16 @@ class ClassGenerator
      */
     private $logger;
 
-    public function __construct($namespace, $class_name, $document = '')
+    public function __construct($namespace, $class_name, $document = 'Generated Class')
     {
         $this->currentFile = new PhpFile;
         $this->currentClass = $this->currentFile->addClass($namespace.'\\'.ucfirst($class_name));
-        $this->currentClass->addDocument($document);
+        $this->currentClass->addComment($document);
     }
 
     public function setLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
-        $this->logger->info('Creazione classe', array( $this->currentClass->getName()));
     }
 
     /**
@@ -63,7 +62,7 @@ class ClassGenerator
         $mc = $this->currentClass->addMethod('__construct');
         $mc->setStatic(false);
         $mc->setVisibility('public');
-        $mc->addDocument('costruttore');
+        $mc->addComment('costruttore');
         $mc->setFinal(true);
         return $mc;
     }
@@ -80,8 +79,8 @@ class ClassGenerator
             $m = $this->currentClass->addMethod('getInstance');
             $m->setStatic(true);
             $m->setVisibility('public');
-            $m->addDocument('Singleton NO THREAD SAFE!');
-            $m->addDocument('@return '.$full_class_name.'|null');
+            $m->addComment('Singleton NO THREAD SAFE!');
+            $m->addComment('@return '.$full_class_name.'|null');
             $m->setFinal(true);
             $body = 'if ( is_null(self::$instance) ) {';
             $body .= ' self::$instance = new '.$this->currentClass->getName().'();';
@@ -92,7 +91,7 @@ class ClassGenerator
         $field = $this->currentClass->addProperty('instance');
         $field->setVisibility('protected');
         $field->setStatic(true);
-        $field->addDocument($comment)->addDocument('@var '.$full_class_name);
+        $field->addComment($comment)->addComment('@var '.$full_class_name);
     }
 
     private function addGetter($field_name, $field_class_full, $is_static, $is_concrete)
@@ -110,7 +109,7 @@ class ClassGenerator
         /** $m @var \Nette\PhpGenerator\Method */
         $m = $this->currentClass->addMethod('get'.ucfirst($field_name));
         $m->setStatic($is_static);
-        $m->addDocument('@return '.$field_class_full);
+        $m->addComment('@return '.$field_class_full);
         if ($is_concrete) {
             $m->setFinal(true);
             if ($is_static) {
@@ -132,7 +131,7 @@ class ClassGenerator
         $this->currentClass->getNamespace()->addUse($trait_full);
         $this->currentClass->addTrait($trait_full);
         if (isset($this->logger)) {
-            $this->logger->info('add trait', array(
+            $this->logger->info('Add trait', array(
           'class' => $this->currentClass->getName(),
           'trait' => $trait_full
         ));
@@ -154,7 +153,7 @@ class ClassGenerator
         /** $m @var \Nette\PhpGenerator\Method */
         $m = $this->currentClass->addMethod('set'.ucfirst($field_name));
         $m->setStatic($is_static);
-        $m->addDocument('@var '.$field_name.' '.$field_class_full);
+        $m->addComment('@var '.$field_name.' '.$field_class_full);
         $m->addParameter($field_name)->setTypeHint($field_class_full);
 
         if ($is_concrete) {
@@ -182,7 +181,7 @@ class ClassGenerator
         $m = $this->currentClass->addMethod('parseString');
         $m->setFinal(true);
         $m->setStatic(true);
-        $m->addDocument('@return '.$field_class_full.'|null');
+        $m->addComment('@return '.$field_class_full.'|null');
         $m->addParameter('parseString');
         $body = '$class_name = \'TestNamespace\EnumTest\'.\'\\\\\'.$parseString;'."\n";
         $body .= 'if (class_exists($class_name)) {';
@@ -208,14 +207,16 @@ class ClassGenerator
             if (isset($this->logger)) {
                 $this->logger->info('Passo a interfaccia', array($this->currentClass->getName()));
             }
-            $docs = $this->currentClass->getDocuments();
+            $docs = $this->currentClass->getComment();
             $this->currentClass = $this->currentFile->addInterface($phpNamespace->getName().'\\'.ucfirst($this->currentClass->getName()));
-            $this->currentClass->setDocuments($docs);
+            $this->currentClass->setComment($docs);
             if (isset($this->logger)) {
                 $this->logger->info('Check add_constructor, in caso metto a false', array($config->add_constructor));
             }
             $config->add_constructor = false;
         }
+
+        $this->logger->info('Generate', array( 'class' => $this->currentClass->getName(), 'namespace' => $phpNamespace->getName(), 'comment' => $this->currentClass->getComment() ));
 
         // extend class
         if (array_key_exists('extend', $properties)) {
@@ -260,6 +261,10 @@ class ClassGenerator
                 $traitObject = $properties['traits'];
                 $this->addTrait($traitObject, $types_reference);
             }
+        }
+
+        if ($config->is_final) {
+            $this->currentClass->setFinal(true);
         }
 
         $first = true;
@@ -347,7 +352,7 @@ class ClassGenerator
                           ));
                         }
                     } else {
-                        //FIXME: strpos is better 
+                        //FIXME: strpos is better
                         if ($field_class_name[0] == '\\') {
                             //Class: \DateTime
                           $field_class_full = $field_class_name;
@@ -443,7 +448,7 @@ class ClassGenerator
                     } else {
                         $field->setVisibility('private');
                     }
-                    $field->addDocument($comment)->addDocument('@var '.$field_class_full);
+                    $field->addComment($comment)->addComment('@var '.$field_class_full);
                 }
 
                 $create_setter = $config->create_setter;

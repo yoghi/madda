@@ -5,7 +5,7 @@ use ExtendClass;
 use NS\IClass;
 
 /**
- *
+ * Generated Class
  */
 class ImplementsClassWithNamespaceAndFieldStatic extends ExtendClass implements IClass
 {

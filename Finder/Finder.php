@@ -26,12 +26,16 @@ class Finder
      */
     public function search($dir, $extension)
     {
-        $this->logger->info("Finder invocato su directory : ".$dir);
+        if (isset($this->logger)) {
+            $this->logger->info("Finder invocato su directory : ".$dir);
+        }
         $di = new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS);
         $it = new \RecursiveIteratorIterator($di);
 
         foreach ($it as $file) {
-            $this->logger->debug("Valuto file", array('filename' => $file));
+            if (isset($this->logger)) {
+                $this->logger->debug("Valuto file", array('filename' => $file));
+            }
             if (pathinfo($file, PATHINFO_EXTENSION) == $extension) {
                 $this->files[] = $file;
             }
@@ -43,7 +47,7 @@ class Finder
         $this->logger = $logger;
     }
 
-    public function getYmlFiles()
+    public function getFindedFiles()
     {
         return $this->files;
     }

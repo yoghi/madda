@@ -5,7 +5,7 @@ use ExtendClass;
 use NS\IClass;
 
 /**
- *
+ * Generated Class
  */
 class ICWNAFWDACG extends ExtendClass implements IClass
 {
