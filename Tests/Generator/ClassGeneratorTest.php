@@ -31,9 +31,9 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $gClassgenClassgen->setLogger($this->logger);
         $config = new ClassConfig();
         $properties = array(); // 'fields', 'extend', 'implements'
-        $types_reference = array(); //dipendenza dei field da altre classi
-        $types_description = array(); //descrizione delle classi da cui dipendono i field
-        $gClassgenClassgen->generateClassType($properties, $types_reference, $types_description, $config);
+        $typesReferenceArray = array(); //dipendenza dei field da altre classi
+        $typesDescriptionArray = array(); //descrizione delle classi da cui dipendono i field
+        $gClassgenClassgen->generateClassType($properties, $typesReferenceArray, $typesDescriptionArray, $config);
         $actual = $gClassgenClassgen->toString();
         $expected = file_get_contents(__DIR__.'/../Resources/php/EmptyClass.php');
         $this->assertSame($actual, $expected, 'Classe EmptyClass invalid');
@@ -48,9 +48,9 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
           "extend" => "ExtendClass",
           "implements" => "IClass"
         );
-        $types_reference = array();
-        $types_description = array();
-        $gClassgenClassgen->generateClassType($properties, $types_reference, $types_description, $config);
+        $typesReferenceArray = array();
+        $typesDescriptionArray = array();
+        $gClassgenClassgen->generateClassType($properties, $typesReferenceArray, $typesDescriptionArray, $config);
         $actual = $gClassgenClassgen->toString();
         $expected = file_get_contents(__DIR__.'/../Resources/php/FirstClass.php');
         $this->assertSame($expected, $actual, 'Classe FirstClass invalid');
@@ -68,11 +68,11 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
           "implements" => "NS\IClass",
           "traits" => "TraitsClass"
         );
-        $types_reference = array(
+        $typesReferenceArray = array(
           'TraitsClass' => 'TraitNamespace'
         );
-        $types_description = array();
-        $gClassgenClassgen->generateClassType($properties, $types_reference, $types_description, $config);
+        $typesDescriptionArray = array();
+        $gClassgenClassgen->generateClassType($properties, $typesReferenceArray, $typesDescriptionArray, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgenClassgen);
@@ -90,12 +90,12 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
           "implements" => "NS\IClass",
           "traits" => array("TraitsClass","TraitsClass2")
         );
-        $types_reference = array(
+        $typesReferenceArray = array(
           'TraitsClass' => 'TraitNamespace',
           'TraitsClass2' => 'TestNamespace'
         );
-        $types_description = array();
-        $gClassgenClassgen->generateClassType($properties, $types_reference, $types_description, $config);
+        $typesDescriptionArray = array();
+        $gClassgenClassgen->generateClassType($properties, $typesReferenceArray, $typesDescriptionArray, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgenClassgen);
@@ -114,9 +114,9 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
           "extend" => "ExtendClass",
           "implements" => "NS\IClass"
         );
-        $types_reference = array();
-        $types_description = array();
-        $gClassgenClassgen->generateClassType($properties, $types_reference, $types_description, $config);
+        $typesReferenceArray = array();
+        $typesDescriptionArray = array();
+        $gClassgenClassgen->generateClassType($properties, $typesReferenceArray, $typesDescriptionArray, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgenClassgen);
@@ -136,9 +136,9 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
             "NS\IClass2"
           )
         );
-        $types_reference = array();
-        $types_description = array();
-        $gClassgenClassgen->generateClassType($properties, $types_reference, $types_description, $config);
+        $typesReferenceArray = array();
+        $typesDescriptionArray = array();
+        $gClassgenClassgen->generateClassType($properties, $typesReferenceArray, $typesDescriptionArray, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgenClassgen);
@@ -162,9 +162,9 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
             )
           )
         );
-        $types_reference = array();
-        $types_description = array();
-        $gClassgen->generateClassType($properties, $types_reference, $types_description, $config);
+        $typesReferenceArray = array();
+        $typesDescriptionArray = array();
+        $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescriptionArray, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
@@ -189,9 +189,9 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
             )
           )
         );
-        $types_reference = array();
-        $types_description = array();
-        $gClassgen->generateClassType($properties, $types_reference, $types_description, $config);
+        $typesReferenceArray = array();
+        $typesDescriptionArray = array();
+        $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescriptionArray, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
@@ -218,13 +218,13 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
             )
           )
         );
-        $types_reference = array(
+        $typesReferenceArray = array(
           "ClassDep" => "NamespaceDep"
         );
-        $types_description = array(
+        $typesDescriptionArray = array(
           "ClassDep" => "comment ClassDep"
         );
-        $gClassgen->generateClassType($properties, $types_reference, $types_description, $config);
+        $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescriptionArray, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
@@ -253,13 +253,13 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
             )
           )
         );
-        $types_reference = array(
+        $typesReferenceArray = array(
           "ClassDep" => "NamespaceDep"
         );
-        $types_description = array(
+        $typesDescriptionArray = array(
           "ClassDep" => "comment ClassDep"
         );
-        $gClassgen->generateClassType($properties, $types_reference, $types_description, $config);
+        $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescriptionArray, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
@@ -288,13 +288,13 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
             )
           )
         );
-        $types_reference = array(
+        $typesReferenceArray = array(
           "ClassDep" => "NamespaceDep"
         );
-        $types_description = array(
+        $typesDescriptionArray = array(
           "ClassDep" => "comment ClassDep"
         );
-        $gClassgen->generateClassType($properties, $types_reference, $types_description, $config);
+        $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescriptionArray, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
@@ -324,11 +324,11 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
             )
           )
         );
-        $types_reference = array();
-        $types_description = array(
+        $typesReferenceArray = array();
+        $typesDescriptionArray = array(
           "ClassDep" => "comment ClassDep"
         );
-        $gClassgen->generateClassType($properties, $types_reference, $types_description, $config);
+        $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescriptionArray, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
@@ -358,13 +358,13 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
             )
           )
         );
-        $types_reference = array(
+        $typesReferenceArray = array(
           "ClassDep" => "NamespaceDep"
         );
-        $types_description = array(
+        $typesDescriptionArray = array(
           "ClassDep" => "comment ClassDep"
         );
-        $gClassgen->generateClassType($properties, $types_reference, $types_description, $config);
+        $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescriptionArray, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
@@ -395,13 +395,13 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
             )
           )
         );
-        $types_reference = array(
+        $typesReferenceArray = array(
           "ClassDep" => "NamespaceDep"
         );
-        $types_description = array(
+        $typesDescriptionArray = array(
           "ClassDep" => "comment ClassDep"
         );
-        $gClassgen->generateClassType($properties, $types_reference, $types_description, $config);
+        $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescriptionArray, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
@@ -436,13 +436,13 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
             )
           )
         );
-        $types_reference = array(
+        $typesReferenceArray = array(
           "ClassDep" => "NamespaceDep"
         );
-        $types_description = array(
+        $typesDescriptionArray = array(
           "ClassDep" => "comment ClassDep"
         );
-        $gClassgen->generateClassType($properties, $types_reference, $types_description, $config);
+        $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescriptionArray, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
@@ -475,13 +475,13 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
             )
           )
         );
-        $types_reference = array(
+        $typesReferenceArray = array(
           "ClassDep" => "NamespaceDep"
         );
-        $types_description = array(
+        $typesDescriptionArray = array(
           "ClassDep" => "comment ClassDep"
         );
-        $gClassgen->generateClassType($properties, $types_reference, $types_description, $config);
+        $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescriptionArray, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
@@ -514,13 +514,13 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
             )
           )
         );
-        $types_reference = array(
+        $typesReferenceArray = array(
           "ClassDep" => "TestNamespace"
         );
-        $types_description = array(
+        $typesDescriptionArray = array(
           "ClassDep" => "comment ClassDep"
         );
-        $gClassgen->generateClassType($properties, $types_reference, $types_description, $config);
+        $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescriptionArray, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
@@ -543,9 +543,9 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
             )
           )
         );
-        $types_reference = array();
-        $types_description = array();
-        $gClassgen->generateClassType($properties, $types_reference, $types_description, $config);
+        $typesReferenceArray = array();
+        $typesDescriptionArray = array();
+        $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescriptionArray, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
@@ -560,9 +560,9 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $config = new ClassConfig();
         $config->is_singleton = true;
         $properties = array();
-        $types_reference = array();
-        $types_description = array();
-        $gClassgen->generateClassType($properties, $types_reference, $types_description, $config);
+        $typesReferenceArray = array();
+        $typesDescriptionArray = array();
+        $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescriptionArray, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
@@ -585,9 +585,9 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
             )
           )
         );
-        $types_reference = array();
-        $types_description = array();
-        $gClassgen->generateClassType($properties, $types_reference, $types_description, $config);
+        $typesReferenceArray = array();
+        $typesDescriptionArray = array();
+        $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescriptionArray, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
@@ -610,9 +610,9 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
             )
           )
         );
-        $types_reference = array();
-        $types_description = array();
-        $gClassgen->generateClassType($properties, $types_reference, $types_description, $config);
+        $typesReferenceArray = array();
+        $typesDescriptionArray = array();
+        $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescriptionArray, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
@@ -636,9 +636,9 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
             )
           )
         );
-        $types_reference = array();
-        $types_description = array();
-        $gClassgen->generateClassType($properties, $types_reference, $types_description, $config);
+        $typesReferenceArray = array();
+        $typesDescriptionArray = array();
+        $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescriptionArray, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
