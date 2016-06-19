@@ -27,22 +27,22 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testEmptyClassGenerator()
     {
-        $g = new ClassGenerator("TestNamespace", "emptyClass");
-        $g->setLogger($this->logger);
+        $gClassgenClassgen = new ClassGenerator("TestNamespace", "emptyClass");
+        $gClassgenClassgen->setLogger($this->logger);
         $config = new ClassConfig();
         $properties = array(); // 'fields', 'extend', 'implements'
         $types_reference = array(); //dipendenza dei field da altre classi
         $types_description = array(); //descrizione delle classi da cui dipendono i field
-        $g->generateClassType($properties, $types_reference, $types_description, $config);
-        $actual = $g->toString();
+        $gClassgenClassgen->generateClassType($properties, $types_reference, $types_description, $config);
+        $actual = $gClassgenClassgen->toString();
         $expected = file_get_contents(__DIR__.'/../Resources/php/EmptyClass.php');
         $this->assertSame($actual, $expected, 'Classe EmptyClass invalid');
     }
 
     public function testFirstClassGenerator()
     {
-        $g = new ClassGenerator("TestNamespace", "FirstClass");
-        $g->setLogger($this->logger);
+        $gClassgenClassgen = new ClassGenerator("TestNamespace", "FirstClass");
+        $gClassgenClassgen->setLogger($this->logger);
         $config = new ClassConfig();
         $properties = array(
           "extend" => "ExtendClass",
@@ -50,8 +50,8 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         );
         $types_reference = array();
         $types_description = array();
-        $g->generateClassType($properties, $types_reference, $types_description, $config);
-        $actual = $g->toString();
+        $gClassgenClassgen->generateClassType($properties, $types_reference, $types_description, $config);
+        $actual = $gClassgenClassgen->toString();
         $expected = file_get_contents(__DIR__.'/../Resources/php/FirstClass.php');
         $this->assertSame($expected, $actual, 'Classe FirstClass invalid');
     }
@@ -60,8 +60,8 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $namespace = "TestNamespace";
         $className = "TraitsTestClass";
-        $g = new ClassGenerator($namespace, $className);
-        $g->setLogger($this->logger);
+        $gClassgenClassgen = new ClassGenerator($namespace, $className);
+        $gClassgenClassgen->setLogger($this->logger);
         $config = new ClassConfig();
         $properties = array(
           "extend" => "ExtendClass",
@@ -72,18 +72,18 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
           'TraitsClass' => 'TraitNamespace'
         );
         $types_description = array();
-        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $gClassgenClassgen->generateClassType($properties, $types_reference, $types_description, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
-        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgenClassgen);
     }
 
     public function testMultiTraitsGenerator()
     {
         $namespace = "TestNamespace";
         $className = "MultiTraitsTestClass";
-        $g = new ClassGenerator($namespace, $className);
-        $g->setLogger($this->logger);
+        $gClassgenClassgen = new ClassGenerator($namespace, $className);
+        $gClassgenClassgen->setLogger($this->logger);
         $config = new ClassConfig();
         $properties = array(
           "extend" => "ExtendClass",
@@ -95,10 +95,10 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
           'TraitsClass2' => 'TestNamespace'
         );
         $types_description = array();
-        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $gClassgenClassgen->generateClassType($properties, $types_reference, $types_description, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
-        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgenClassgen);
     }
 
 
@@ -107,8 +107,8 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $namespace = "TestNamespace";
         $className = "ImplementsClassWithNamespace";
-        $g = new ClassGenerator($namespace, $className);
-        $g->setLogger($this->logger);
+        $gClassgenClassgen = new ClassGenerator($namespace, $className);
+        $gClassgenClassgen->setLogger($this->logger);
         $config = new ClassConfig();
         $properties = array(
           "extend" => "ExtendClass",
@@ -116,18 +116,18 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         );
         $types_reference = array();
         $types_description = array();
-        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $gClassgenClassgen->generateClassType($properties, $types_reference, $types_description, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
-        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgenClassgen);
     }
 
     public function testMultiImplementsClassWithNamespaceGenerator()
     {
         $namespace = "TestNamespace";
         $className = "MultiImplementsClassWithNamespace";
-        $g = new ClassGenerator($namespace, $className);
-        $g->setLogger($this->logger);
+        $gClassgenClassgen = new ClassGenerator($namespace, $className);
+        $gClassgenClassgen->setLogger($this->logger);
         $config = new ClassConfig();
         $properties = array(
           "extend" => "ExtendClass",
@@ -138,18 +138,18 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         );
         $types_reference = array();
         $types_description = array();
-        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $gClassgenClassgen->generateClassType($properties, $types_reference, $types_description, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
-        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgenClassgen);
     }
 
     public function testImplementsClassWithNamespaceAndFieldGeneratorMethod()
     {
         $namespace = "TestNamespace";
         $className = "ImplementsClassWithNamespaceAndField";
-        $g = new ClassGenerator($namespace, $className);
-        $g->setLogger($this->logger);
+        $gClassgen = new ClassGenerator($namespace, $className);
+        $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
         $config->add_constructor = true;
         $properties = array(
@@ -164,18 +164,18 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         );
         $types_reference = array();
         $types_description = array();
-        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $gClassgen->generateClassType($properties, $types_reference, $types_description, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
-        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
     }
 
     public function testImplementsClassWithNamespaceAndFieldGeneratorMethodStatic()
     {
         $namespace = "TestNamespace";
         $className = "ImplementsClassWithNamespaceAndFieldStatic";
-        $g = new ClassGenerator($namespace, $className);
-        $g->setLogger($this->logger);
+        $gClassgen = new ClassGenerator($namespace, $className);
+        $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
         $config->add_constructor = true;
         $properties = array(
@@ -191,18 +191,18 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         );
         $types_reference = array();
         $types_description = array();
-        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $gClassgen->generateClassType($properties, $types_reference, $types_description, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
-        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
     }
 
     public function testImplementsClassWithNamespaceAndFieldGeneratorMethodWithDependency()
     {
         $namespace = "TestNamespace";
         $className = "ICWNAFWD";
-        $g = new ClassGenerator($namespace, $className);
-        $g->setLogger($this->logger);
+        $gClassgen = new ClassGenerator($namespace, $className);
+        $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
         $config->add_constructor = true;
         $properties = array(
@@ -224,18 +224,18 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $types_description = array(
           "ClassDep" => "comment ClassDep"
         );
-        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $gClassgen->generateClassType($properties, $types_reference, $types_description, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
-        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
     }
 
     public function testImplementsClassWithNamespaceAndFieldGeneratorMethodWithDependencyAutoInizialize()
     {
         $namespace = "TestNamespace";
         $className = "ICWNAFWDA";
-        $g = new ClassGenerator($namespace, $className);
-        $g->setLogger($this->logger);
+        $gClassgen = new ClassGenerator($namespace, $className);
+        $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
         $config->add_constructor = true;
         $properties = array(
@@ -259,18 +259,18 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $types_description = array(
           "ClassDep" => "comment ClassDep"
         );
-        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $gClassgen->generateClassType($properties, $types_reference, $types_description, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
-        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
     }
 
     public function testImplementsClassWithNamespaceAndFieldGeneratorMethodWithDependencyAutoInizializeClass()
     {
         $namespace = "TestNamespace";
         $className = "ICWNAFWDAC";
-        $g = new ClassGenerator($namespace, $className);
-        $g->setLogger($this->logger);
+        $gClassgen = new ClassGenerator($namespace, $className);
+        $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
         $config->add_constructor = true;
         $properties = array(
@@ -294,18 +294,18 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $types_description = array(
           "ClassDep" => "comment ClassDep"
         );
-        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $gClassgen->generateClassType($properties, $types_reference, $types_description, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
-        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
     }
 
     public function testImplementsClassWithNamespaceAndFieldGeneratorMethodWithDependencyAutoInizializeClassWithGetter()
     {
         $namespace = "TestNamespace";
         $className = "ICWNAFWDACG";
-        $g = new ClassGenerator($namespace, $className);
-        $g->setLogger($this->logger);
+        $gClassgen = new ClassGenerator($namespace, $className);
+        $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
         $config->add_constructor = true;
         $properties = array(
@@ -328,18 +328,18 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $types_description = array(
           "ClassDep" => "comment ClassDep"
         );
-        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $gClassgen->generateClassType($properties, $types_reference, $types_description, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
-        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
     }
 
     public function testImplementsClassWithNamespaceAndFieldGeneratorMethodWithDependencyAutoInizializeClassWithGetterAll()
     {
         $namespace = "TestNamespace";
         $className = "ICWNAFWDACGA";
-        $g = new ClassGenerator($namespace, $className);
-        $g->setLogger($this->logger);
+        $gClassgen = new ClassGenerator($namespace, $className);
+        $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
         $config->add_constructor = true;
         $config->create_getter = true;
@@ -364,18 +364,18 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $types_description = array(
           "ClassDep" => "comment ClassDep"
         );
-        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $gClassgen->generateClassType($properties, $types_reference, $types_description, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
-        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
     }
 
     public function testImplementsClassWithNamespaceAndFieldGeneratorMethodWithDependencyAutoInizializeClassWithGetterAndSetterAll()
     {
         $namespace = "TestNamespace";
         $className = "ICWNAFWDACGSA";
-        $g = new ClassGenerator($namespace, $className);
-        $g->setLogger($this->logger);
+        $gClassgen = new ClassGenerator($namespace, $className);
+        $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
         $config->add_constructor = true;
         $config->create_getter = true;
@@ -401,18 +401,18 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $types_description = array(
           "ClassDep" => "comment ClassDep"
         );
-        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $gClassgen->generateClassType($properties, $types_reference, $types_description, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
-        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
     }
 
     public function testImplementsClassWithNamespaceAndFieldGeneratorMethodWithDependencyAutoInizializeClassWithGetterAndSetterAllStaticExplicit()
     {
         $namespace = "TestNamespace";
         $className = "ICWNAFWDACGSAS";
-        $g = new ClassGenerator($namespace, $className);
-        $g->setLogger($this->logger);
+        $gClassgen = new ClassGenerator($namespace, $className);
+        $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
         $config->add_constructor = true;
         $properties = array(
@@ -442,18 +442,18 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $types_description = array(
           "ClassDep" => "comment ClassDep"
         );
-        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $gClassgen->generateClassType($properties, $types_reference, $types_description, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
-        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
     }
 
     public function testImplementsClassWithNamespaceAndFieldGeneratorMethodWithDependencyAutoInizializeClassWithGetterAndSetterAllStatic()
     {
         $namespace = "TestNamespace";
         $className = "ICWNAFWDACGSAS";
-        $g = new ClassGenerator($namespace, $className);
-        $g->setLogger($this->logger);
+        $gClassgen = new ClassGenerator($namespace, $className);
+        $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
         $config->add_constructor = true;
         $config->create_getter = true;
@@ -481,18 +481,18 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $types_description = array(
           "ClassDep" => "comment ClassDep"
         );
-        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $gClassgen->generateClassType($properties, $types_reference, $types_description, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
-        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
     }
 
     public function testSameNamespaceClassDependency()
     {
         $namespace = "TestNamespace";
         $className = "SNCD";
-        $g = new ClassGenerator($namespace, $className);
-        $g->setLogger($this->logger);
+        $gClassgen = new ClassGenerator($namespace, $className);
+        $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
         $config->add_constructor = true;
         $config->create_getter = true;
@@ -520,18 +520,18 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $types_description = array(
           "ClassDep" => "comment ClassDep"
         );
-        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $gClassgen->generateClassType($properties, $types_reference, $types_description, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
-        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
     }
 
     public function testEnum()
     {
         $namespace = "TestNamespace";
         $className = "EnumTest";
-        $g = new ClassGenerator($namespace, $className);
-        $g->setLogger($this->logger);
+        $gClassgen = new ClassGenerator($namespace, $className);
+        $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
         $config->is_enum = true;
         $properties = array(
@@ -545,35 +545,35 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         );
         $types_reference = array();
         $types_description = array();
-        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $gClassgen->generateClassType($properties, $types_reference, $types_description, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
-        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
     }
 
     public function testSingleton()
     {
         $namespace = "TestNamespace";
         $className = "SingletonClass";
-        $g = new ClassGenerator($namespace, $className);
-        $g->setLogger($this->logger);
+        $gClassgen = new ClassGenerator($namespace, $className);
+        $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
         $config->is_singleton = true;
         $properties = array();
         $types_reference = array();
         $types_description = array();
-        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $gClassgen->generateClassType($properties, $types_reference, $types_description, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
-        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
     }
 
     public function testInterface()
     {
         $namespace = "TestNamespace";
         $className = "Itest";
-        $g = new ClassGenerator($namespace, $className);
-        $g->setLogger($this->logger);
+        $gClassgen = new ClassGenerator($namespace, $className);
+        $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
         $config->add_constructor = true;
         $config->is_interface = true;
@@ -587,18 +587,18 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         );
         $types_reference = array();
         $types_description = array();
-        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $gClassgen->generateClassType($properties, $types_reference, $types_description, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
-        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
     }
 
     public function testInterfaceWithGetter()
     {
         $namespace = "TestNamespace";
         $className = "ItestWithGetter";
-        $g = new ClassGenerator($namespace, $className);
-        $g->setLogger($this->logger);
+        $gClassgen = new ClassGenerator($namespace, $className);
+        $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
         $config->create_getter = true;
         $config->is_interface = true;
@@ -612,18 +612,18 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         );
         $types_reference = array();
         $types_description = array();
-        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $gClassgen->generateClassType($properties, $types_reference, $types_description, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
-        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
     }
 
     public function testInterfaceWithGetterAndSetter()
     {
         $namespace = "TestNamespace";
         $className = "ItestWithGetterSetter";
-        $g = new ClassGenerator($namespace, $className);
-        $g->setLogger($this->logger);
+        $gClassgen = new ClassGenerator($namespace, $className);
+        $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
         $config->create_getter = true;
         $config->create_setter = true;
@@ -638,10 +638,10 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         );
         $types_reference = array();
         $types_description = array();
-        $g->generateClassType($properties, $types_reference, $types_description, $config);
+        $gClassgen->generateClassType($properties, $types_reference, $types_description, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
-        $this->compareFileGenerated($resourcesDir, $namespace, $className, $g);
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
     }
 
     /**
@@ -659,10 +659,10 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         return $directoryOutput;
     }
 
-    private function compareFileGenerated($resourcesDir, $namespace, $className, ClassGenerator $g)
+    private function compareFileGenerated($resourcesDir, $namespace, $className, ClassGenerator $gClassgen)
     {
         $directoryOutput = $this->generateDestDir($namespace);
-        $g->createFileOnDir(new VfsAdapter($directoryOutput, 0));
+        $gClassgen->createFileOnDir(new VfsAdapter($directoryOutput, 0));
         $this->compareFilePhp($resourcesDir, $namespace, $className, $directoryOutput);
     }
 }
