@@ -59,7 +59,7 @@ before_script:
 script:
 #   - phpunit --configuration $DB.phpunit.xml
 #   - phpunit --coverage-text
-  - phpunit -c phpunit.xml.dist
+  - phpunit --process-isolation -c phpunit.xml.dist
 
 after_success:
   - travis_retry php vendor/bin/coveralls -v
