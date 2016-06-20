@@ -38,10 +38,10 @@ class ClassGenerator
      */
     private $logger;
 
-    public function __construct($namespace, $class_name, $document = 'Generated Class')
+    public function __construct($namespace, $className, $document = 'Generated Class')
     {
         $this->currentFile = new PhpFile;
-        $this->currentClass = $this->currentFile->addClass($namespace.'\\'.ucfirst($class_name));
+        $this->currentClass = $this->currentFile->addClass($namespace.'\\'.ucfirst($className));
         $this->currentClass->addComment($document);
     }
 
@@ -74,102 +74,101 @@ class ClassGenerator
               'class' => $this->currentClass->getName()
             ));
         }
-        $full_class_name = $this->currentClass->getNamespace()->getName().'\\'.$this->currentClass->getName();
+        $fullClassName = $this->currentClass->getNamespace()->getName().'\\'.$this->currentClass->getName();
         if ($createGetter) {
-            $m = $this->currentClass->addMethod('getInstance');
-            $m->setStatic(true);
-            $m->setVisibility('public');
-            $m->addComment('Singleton NO THREAD SAFE!');
-            $m->addComment('@return '.$full_class_name.'|null');
-            $m->setFinal(true);
+            $mSingleton = $this->currentClass->addMethod('getInstance');
+            $mSingleton->setStatic(true);
+            $mSingleton->setVisibility('public');
+            $mSingleton->addComment('Singleton NO THREAD SAFE!');
+            $mSingleton->addComment('@return '.$fullClassName.'|null');
+            $mSingleton->setFinal(true);
             $body = 'if ( is_null(self::$instance) ) {';
             $body .= ' self::$instance = new '.$this->currentClass->getName().'();';
             $body .= '}';
             $body .= 'return self::$instance;';
-            $m->setBody($body);
+            $mSingleton->setBody($body);
         }
         $field = $this->currentClass->addProperty('instance');
         $field->setVisibility('protected');
         $field->setStatic(true);
-        $field->addComment($comment)->addComment('@var '.$full_class_name);
+        $field->addComment($comment)->addComment('@var '.$fullClassName);
     }
 
-    private function addGetter($field_name, $field_class_full, $is_static, $is_concrete)
+    private function addGetter($fieldName, $fieldClassFull, $isStatic, $isConcrete)
     {
         if (isset($this->logger)) {
             $this->logger->info('Aggiungo getter', array(
               'class' => $this->currentClass->getName(),
-              'field' => $field_name,
-              'type' => $field_class_full,
-              'static' => $is_static,
-              'concrete' => $is_concrete
+              'field' => $fieldName,
+              'type' => $fieldClassFull,
+              'static' => $isStatic,
+              'concrete' => $isConcrete
           ));
         }
 
-        /** $m @var \Nette\PhpGenerator\Method */
-        $m = $this->currentClass->addMethod('get'.ucfirst($field_name));
-        $m->setStatic($is_static);
-        $m->addComment('@return '.$field_class_full);
-        if ($is_concrete) {
-            $m->setFinal(true);
-            if ($is_static) {
-                $m->setBody('return self::$?;', [$field_name]);
+        /** $methodGetter @var \Nette\PhpGenerator\Method */
+        $methodGetter = $this->currentClass->addMethod('get'.ucfirst($fieldName));
+        $methodGetter->setStatic($isStatic);
+        $methodGetter->addComment('@return '.$fieldClassFull);
+        if ($isConcrete) {
+            $methodGetter->setFinal(true);
+            if ($isStatic) {
+                $methodGetter->setBody('return self::$?;', [$fieldName]);
             } else {
-                $m->setBody('return $this->?;', [$field_name]);
+                $methodGetter->setBody('return $this->?;', [$fieldName]);
             }
         }
     }
 
-    private function addTrait($trait, $types_reference)
+    private function addTrait($trait, $typesReference)
     {
-        if (array_key_exists($trait, $types_reference)) {
-            $trait_namespace = $types_reference[$trait];
-            $trait_full = $trait_namespace.'\\'.$trait;
-        } else {
-            $trait_full = $trait;
+        $traitFull = $trait;
+        if (array_key_exists($trait, $typesReference)) {
+            $traitNamespace = $typesReference[$trait];
+            $traitFull = $traitNamespace.'\\'.$trait;
         }
-        $this->currentClass->getNamespace()->addUse($trait_full);
-        $this->currentClass->addTrait($trait_full);
+        $this->currentClass->getNamespace()->addUse($traitFull);
+        $this->currentClass->addTrait($traitFull);
         if (isset($this->logger)) {
             $this->logger->info('Add trait', array(
           'class' => $this->currentClass->getName(),
-          'trait' => $trait_full
+          'trait' => $traitFull
         ));
         }
     }
 
-    private function addSetter($field_name, $field_class_full, $is_static, $is_concrete)
+    private function addSetter($fieldName, $fieldClassFull, $isStatic, $isConcrete)
     {
         if (isset($this->logger)) {
             $this->logger->info('Aggiungo setter', array(
               'class' => $this->currentClass->getName(),
-              'field' => $field_name,
-              'type' => $field_class_full,
-              'static' => $is_static,
-              'concrete' => $is_concrete
+              'field' => $fieldName,
+              'type' => $fieldClassFull,
+              'static' => $isStatic,
+              'concrete' => $isConcrete
           ));
         }
 
-        /** $m @var \Nette\PhpGenerator\Method */
-        $m = $this->currentClass->addMethod('set'.ucfirst($field_name));
-        $m->setStatic($is_static);
-        $m->addComment('@var '.$field_name.' '.$field_class_full);
-        $m->addParameter($field_name)->setTypeHint($field_class_full);
+        /** $methodSetter @var \Nette\PhpGenerator\Method */
+        $methodSetter = $this->currentClass->addMethod('set'.ucfirst($fieldName));
+        $methodSetter->setStatic($isStatic);
+        $methodSetter->addComment('@var '.$fieldName.' '.$fieldClassFull);
+        $methodSetter->addParameter($fieldName)->setTypeHint($fieldClassFull);
 
-        if ($is_concrete) {
-            $m->setFinal(true);
-            if ($is_static) {
-                $m->setBody('self::$? = $?;', [$field_name, $field_name]);
+        if ($isConcrete) {
+            $methodSetter->setFinal(true);
+            if ($isStatic) {
+                $methodSetter->setBody('self::$? = $?;', [$fieldName, $fieldName]);
             } else {
-                $m->setBody('$this->? = $?;', [$field_name, $field_name]);
+                $methodSetter->setBody('$this->? = $?;', [$fieldName, $fieldName]);
             }
-            $m->addParameter($field_name)->setTypeHint($field_class_full);
+            $methodSetter->addParameter($fieldName)->setTypeHint($fieldClassFull);
         }
     }
 
     private function addParseString()
     {
-        $field_class_full = $this->currentClass->getNamespace()->getName().'\\'.$this->currentClass->getName();
+        $fieldClassFull = $this->currentClass->getNamespace()->getName().'\\'.$this->currentClass->getName();
 
         if (isset($this->logger)) {
             $this->logger->info('Aggiungo parseString', array(
@@ -177,30 +176,30 @@ class ClassGenerator
           ));
         }
 
-        /** $m @var \Nette\PhpGenerator\Method */
-        $m = $this->currentClass->addMethod('parseString');
-        $m->setFinal(true);
-        $m->setStatic(true);
-        $m->addComment('@return '.$field_class_full.'|null');
-        $m->addParameter('parseString');
+        /** $methodParseString @var \Nette\PhpGenerator\Method */
+        $methodParseString = $this->currentClass->addMethod('parseString');
+        $methodParseString->setFinal(true);
+        $methodParseString->setStatic(true);
+        $methodParseString->addComment('@return '.$fieldClassFull.'|null');
+        $methodParseString->addParameter('parseString');
         $body = '$class_name = \'TestNamespace\EnumTest\'.\'\\\\\'.$parseString;'."\n";
         $body .= 'if (class_exists($class_name)) {';
         $body .= "\t".'$x = $class_name::instance();';
         $body .= "\t".'return $x;';
         $body .= '}';
         $body .= 'return null;';
-        //$m->setBody('self::$? = $?;', [$field_name, $field_name]);
-        $m->setBody($body);
+        //$methodParseString->setBody('self::$? = $?;', [$field_name, $field_name]);
+        $methodParseString->setBody($body);
     }
 
     /**
      * [generateClassType description]
      * @param  string      $properties        elementi possibili 'fields', 'extend', 'implements'
-     * @param  array       $types_reference   [description]
-     * @param  array       $types_description [description]
+     * @param  array       $typesReference   [description]
+     * @param  array       $typesDescription [description]
      * @param  ClassConfig $config            [description]
      */
-    public function generateClassType($properties, $types_reference, $types_description, ClassConfig $config)
+    public function generateClassType($properties, $typesReference, $typesDescription, ClassConfig $config)
     {
         $phpNamespace = $this->currentClass->getNamespace();
         if ($config->isInterface) {
@@ -240,14 +239,14 @@ class ClassGenerator
                 $implementsList = array_merge($implementsList, $properties['implements']);
             }
             $this->currentClass->setImplements($implementsList);
-            foreach ($implementsList as $implement_use) {
+            foreach ($implementsList as $implementUse) {
                 if (isset($this->logger)) {
                     $this->logger->info('Aggiungo implement', array(
                     'class' => $this->currentClass->getName(),
-                    'implements' => $implement_use
+                    'implements' => $implementUse
                   ));
                 }
-                $this->currentClass->getNamespace()->addUse($implement_use);
+                $this->currentClass->getNamespace()->addUse($implementUse);
             }
         }
 
@@ -255,11 +254,11 @@ class ClassGenerator
         if (array_key_exists('traits', $properties)) {
             if (is_array($properties['traits'])) {
                 foreach ($properties['traits'] as $trait) {
-                    $this->addTrait($trait, $types_reference);
+                    $this->addTrait($trait, $typesReference);
                 }
             } else {
                 $traitObject = $properties['traits'];
-                $this->addTrait($traitObject, $types_reference);
+                $this->addTrait($traitObject, $typesReference);
             }
         }
 
@@ -269,44 +268,44 @@ class ClassGenerator
 
         $first = true;
         if (array_key_exists('fields', $properties)) {
-            /** @var $mc_constructor Nette\PhpGenerator\Method */
-            $mc_constructor = null;
+            /** @var $methodConstructor Nette\PhpGenerator\Method */
+            $methodConstructor = null;
             if ($config->haveConstructor) {
-                $mc_constructor = $this->addConstructor();
+                $methodConstructor = $this->addConstructor();
             }
 
             $body = '';
 
-            foreach ($properties['fields'] as $name => $field_properties) {
-                $is_static = false;
-                $is_autoinizialize = false;
-                $default_value = null;
-                if (array_key_exists('static', $field_properties)) {
-                    $is_static = $field_properties['static'];
+            foreach ($properties['fields'] as $name => $fieldProperties) {
+                $isStatic = false;
+                $isAutoinizialize = false;
+                $defaultValue = null;
+                if (array_key_exists('static', $fieldProperties)) {
+                    $isStatic = $fieldProperties['static'];
                 }
 
-                if (array_key_exists('autoinizialize', $field_properties)) {
-                    $is_autoinizialize = boolval($field_properties['autoinizialize']);
+                if (array_key_exists('autoinizialize', $fieldProperties)) {
+                    $isAutoinizialize = boolval($fieldProperties['autoinizialize']);
                 }
 
-                if (array_key_exists('default', $field_properties)) {
-                    $default_value = $field_properties['default'];
+                if (array_key_exists('default', $fieldProperties)) {
+                    $defaultValue = $fieldProperties['default'];
                 }
 
-                if (!$is_autoinizialize) {
-                    if (null !=  $default_value) {
+                if (!$isAutoinizialize) {
+                    if (null !=  $defaultValue) {
                         //TODO: usare "primitive type per determinare il corretto IF"
                         //FARE UN TEST PER I BOOLEAN
                         //@see https://www.virendrachandak.com/techtalk/php-isset-vs-empty-vs-is_null/
                         $body .= 'if ( empty($'.$name.') ) { ';
-                        if ($is_static) {
+                        if ($isStatic) {
                             $body .= ' self::$';
                         } else {
                             $body .= ' $this->';
                         }
-                        $body .= $name.' = '.$default_value.';';
+                        $body .= $name.' = '.$defaultValue.';';
                         $body .= '} else {';
-                        if ($is_static) {
+                        if ($isStatic) {
                             $body .= ' self::$';
                         } else {
                             $body .= ' $this->';
@@ -314,108 +313,108 @@ class ClassGenerator
                         $body .= $name.' = $'.$name.';';
                         $body .= '}';
                     } else {
-                        if (!$is_static) {
+                        if (!$isStatic) {
                             $body .= ' $this->'.$name.' = $'.$name.';';
                         }
                     }
                 } else {
-                    if (!empty($default_value) || is_int($default_value)) {
-                        if (substr(rtrim($default_value), -1) == ";") {
-                            $this->logger->error('autoinizialize for '.$field_class_full.' on class '.$this->currentClass->getName().' have default with ";" please remove!');
-                            $default_value = substr($default_value, 0, strlen($default_value)-1);
+                    if (!empty($defaultValue) || is_int($defaultValue)) {
+                        if (substr(rtrim($defaultValue), -1) == ";") {
+                            $this->logger->error('autoinizialize for '.$fieldClassFull.' on class '.$this->currentClass->getName().' have default with ";" please remove!');
+                            $defaultValue = substr($defaultValue, 0, strlen($defaultValue)-1);
                         }
-                        if (!$is_static) {
+                        if (!$isStatic) {
                             $body .= 'if ( is_null($'.$name.') ) {';
-                            $body .= ' $this->'.$name.' = '.$default_value.';';
+                            $body .= ' $this->'.$name.' = '.$defaultValue.';';
                             $body .= '}';
                         }
                     } else {
                         if (isset($this->logger)) {
-                            $this->logger->error('autoinizialize for '.$field_class_full.' not defined on element '.$this->currentClass->getName());
+                            $this->logger->error('autoinizialize for '.$fieldClassFull.' not defined on element '.$this->currentClass->getName());
                         }
-                        $this->errors[] = 'autoinizialize for '.$field_class_full.' not defined on element '.$this->currentClass->getName();
+                        $this->errors[] = 'autoinizialize for '.$fieldClassFull.' not defined on element '.$this->currentClass->getName();
                     }
                 }
 
-                $field_class_full = '';
-                if (array_key_exists('class', $field_properties)) {
-                    $field_class_name = ucfirst($field_properties['class']);
+                $fieldClassFull = '';
+                if (array_key_exists('class', $fieldProperties)) {
+                    $fieldClassName = ucfirst($fieldProperties['class']);
 
-                    if (array_key_exists($field_class_name, $types_reference)) {
-                        $field_namespace = $types_reference[$field_class_name];
-                        $field_class_full = $field_namespace.'\\'.$field_class_name;
+                    if (array_key_exists($fieldClassName, $typesReference)) {
+                        $fieldNamespace = $typesReference[$fieldClassName];
+                        $fieldClassFull = $fieldNamespace.'\\'.$fieldClassName;
                         if (isset($this->logger)) {
                             $this->logger->info('Trovato field namespace tra le reference', array(
                             'class' => $this->currentClass->getName(),
-                            'field' => $field_class_name,
-                            'className' => $field_class_full
+                            'field' => $fieldClassName,
+                            'className' => $fieldClassFull
                           ));
                         }
                     } else {
                         //FIXME: strpos is better
-                        if ($field_class_name[0] == '\\') {
+                        if ($fieldClassName[0] == '\\') {
                             //Class: \DateTime
-                          $field_class_full = $field_class_name;
+                          $fieldClassFull = $fieldClassName;
                         } else {
-                            $field_class_full = $phpNamespace->getName().'\\'.$field_class_name;
+                            $fieldClassFull = $phpNamespace->getName().'\\'.$fieldClassName;
                             if (isset($this->logger)) {
                                 $this->logger->info('Uso class for field same namespace', array(
                               'class' => $this->currentClass->getName(),
-                              'field' => $field_class_name,
-                              'className' => $field_class_full
+                              'field' => $fieldClassName,
+                              'className' => $fieldClassFull
                             ));
                             }
                         }
                     }
 
-                    if ($config->haveConstructor && !$is_static) {
+                    if ($config->haveConstructor && !$isStatic) {
                         if (isset($this->logger)) {
                             $this->logger->info('Aggiungo parametro al costruttore', array(
                               'class' => $this->currentClass->getName(),
                               'parameter' => $name,
-                              'className' => $field_class_full,
-                              'default' => $default_value
+                              'className' => $fieldClassFull,
+                              'default' => $defaultValue
                             ));
                         }
                         $parameter = null;
                         if (!$first) {
-                            $parameter = $mc_constructor->addParameter($name, null); //solo i primitivi hanno un default, gli altri null come object
+                            $parameter = $methodConstructor->addParameter($name, null); //solo i primitivi hanno un default, gli altri null come object
                         } else {
-                            $parameter = $mc_constructor->addParameter($name);
+                            $parameter = $methodConstructor->addParameter($name);
                         }
-                        $parameter->setTypeHint($field_class_full);
+                        $parameter->setTypeHint($fieldClassFull);
                     }
 
-                    if (array_key_exists($field_class_name, $types_reference)) {
+                    if (array_key_exists($fieldClassName, $typesReference)) {
                         if (isset($this->logger)) {
                             $this->logger->info('Add field type class with namespace', array(
                             'class' => $this->currentClass->getName(),
-                            'field' => $field_class_name,
-                            'className' => $field_class_full
+                            'field' => $fieldClassName,
+                            'className' => $fieldClassFull
                           ));
                         }
-                        $this->currentClass->getNamespace()->addUse($field_class_full);
+                        $this->currentClass->getNamespace()->addUse($fieldClassFull);
                     }
                 } else {
-                    $field_class_name = $field_properties['primitive'];
-                    $field_namespace = null;
-                    $field_class_full = $field_properties['primitive'];
-                    if ($config->haveConstructor && !$is_static) {
+                    $fieldClassName = $fieldProperties['primitive'];
+                    $fieldNamespace = null;
+                    $fieldClassFull = $fieldProperties['primitive'];
+                    if ($config->haveConstructor && !$isStatic) {
                         //FIXME: se sono in php7 ho anche gli altri elementi primitivi
                         //@see: http://php.net/manual/en/functions.arguments.php#functions.arguments.type-declaration
 
                         $parameter = null;
                         if ($first) {
-                            $parameter = $mc_constructor->addParameter($name);
+                            $parameter = $methodConstructor->addParameter($name);
                         } else {
-                            $parameter = $mc_constructor->addParameter($name, null);
+                            $parameter = $methodConstructor->addParameter($name, null);
                         }
 
-                        if ($field_class_full == 'array') {
+                        if ($fieldClassFull == 'array') {
                             $parameter->setTypeHint('array');
                         } else {
-                            if ($default_value != null) {
-                                $parameter->setDefaultValue($default_value);
+                            if ($defaultValue != null) {
+                                $parameter->setDefaultValue($defaultValue);
                             }
                         }
                     }
@@ -425,63 +424,63 @@ class ClassGenerator
                     $this->logger->info('Check autoinizialize field', array(
                     'class' => $this->currentClass->getName(),
                     'field' => $name,
-                    'autoinizialize' => $is_autoinizialize,
-                    'default' => $default_value
+                    'autoinizialize' => $isAutoinizialize,
+                    'default' => $defaultValue
                   ));
                 }
 
                 $comment = 'no description available';
-                if (array_key_exists('description', $field_properties)) {
-                    $comment = $field_properties['description'];
+                if (array_key_exists('description', $fieldProperties)) {
+                    $comment = $fieldProperties['description'];
                 } else {
-                    if (array_key_exists($field_class_name, $types_description)) {
-                        $comment = $types_description[$field_class_name];
+                    if (array_key_exists($fieldClassName, $typesDescription)) {
+                        $comment = $typesDescription[$fieldClassName];
                     }
                 }
 
                 if (!$config->isInterface) {
                     /** $field @var \Nette\PhpGenerator\Property */
                     $field = $this->currentClass->addProperty($name);
-                    $field->setStatic($is_static);
+                    $field->setStatic($isStatic);
                     if ($config->isEnum) {
                         $field->setVisibility('protected');
                     } else {
                         $field->setVisibility('private');
                     }
-                    $field->addComment($comment)->addComment('@var '.$field_class_full);
+                    $field->addComment($comment)->addComment('@var '.$fieldClassFull);
                 }
 
                 $createSetter = $config->haveSetter;
-                if (array_key_exists('setter', $field_properties)) {
-                    $createSetter = $field_properties['setter'];
+                if (array_key_exists('setter', $fieldProperties)) {
+                    $createSetter = $fieldProperties['setter'];
                 }
 
                 $createGetter = $config->haveGetter;
-                if (array_key_exists('getter', $field_properties)) {
-                    $createGetter = $field_properties['getter'];
+                if (array_key_exists('getter', $fieldProperties)) {
+                    $createGetter = $fieldProperties['getter'];
                 }
 
                 if ($config->isInterface) {
                     if ($createGetter) {
-                        $this->addGetter($name, $field_class_full, $is_static, false);
+                        $this->addGetter($name, $fieldClassFull, $isStatic, false);
                     }
 
                     if ($createSetter) {
-                        $this->addSetter($name, $field_class_full, $is_static, false);
+                        $this->addSetter($name, $fieldClassFull, $isStatic, false);
                     }
                 } else {
                     if ($createGetter) {
-                        $this->addGetter($name, $field_class_full, $is_static, true);
+                        $this->addGetter($name, $fieldClassFull, $isStatic, true);
                     }
 
                     if ($createSetter) {
-                        $this->addSetter($name, $field_class_full, $is_static, true);
+                        $this->addSetter($name, $fieldClassFull, $isStatic, true);
                     }
                 }
                 $first = false;
             }
             if ($config->haveConstructor) {
-                $mc_constructor->setBody($body, []);
+                $methodConstructor->setBody($body, []);
             }
         }
 
