@@ -136,7 +136,7 @@ class DDDGenerator
                 $g = new ClassGenerator($namespace, $className, $classComments);
                 $g->setLogger($this->logger);
                 $config = new ClassConfig();
-                $config->is_interface = true;
+                $config->isInterface = true;
                 $g->generateClassType($properties, $this->modelClass, $this->modelComments, $config);
                 $g->createFileOnDir($directoryOutput);
                 $generated = true; //FIXME: use $g for determinate! -> take error from generator
@@ -151,8 +151,8 @@ class DDDGenerator
                 $g = new ClassGenerator($namespace, $className, $classComments);
                 $g->setLogger($this->logger);
                 $config = new ClassConfig();
-                $config->is_interface = false;
-                $config->add_constructor = true;
+                $config->isInterface = false;
+                $config->haveConstructor = true;
                 $g->generateClassType($properties, $this->modelClass, $this->modelComments, $config);
                 $g->createFileOnDir($directoryOutput);
                 $generated = true; //FIXME: use $g for determinate! -> take error from generator
@@ -222,11 +222,11 @@ class DDDGenerator
                 $g = new ClassGenerator($namespace, $className, $classComments);
                 $g->setLogger($this->logger);
                 $config = new ClassConfig();
-                $config->is_interface = false;
-                $config->add_constructor = true;
-                $config->is_final = true; //don't wnat cycle dependency
-                $config->create_getter = $createGetter;
-                $config->create_setter = $createSetter;
+                $config->isInterface = false;
+                $config->haveConstructor = true;
+                $config->isFinalClass = true; //don't wnat cycle dependency
+                $config->haveGetter = $createGetter;
+                $config->haveSetter = $createSetter;
                 $g->generateClassType($properties, $this->modelClass, $this->modelComments, $config);
                 $g->createFileOnDir($directoryOutput);
             }

@@ -17,14 +17,14 @@ namespace Yoghi\Bundle\MaddaBundle\Generator;
  */
 class ClassConfig
 {
-    public $is_enum;
-    public $is_interface;
-    public $is_final;
+    public $isEnum;
+    public $isInterface;
+    public $isFinalClass;
 
     /** NOTE: anti-pattern! */
-    public $is_singleton;
+    public $isSingleton;
 
-    public $create_getter;
-    public $create_setter;
-    public $add_constructor;
+    public $haveGetter;
+    public $haveSetter;
+    public $haveConstructor;
 }

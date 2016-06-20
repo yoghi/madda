@@ -151,7 +151,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $gClassgen = new ClassGenerator($namespace, $className);
         $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
-        $config->add_constructor = true;
+        $config->haveConstructor = true;
         $properties = array(
           "extend" => "ExtendClass",
           "implements" => "NS\IClass",
@@ -177,7 +177,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $gClassgen = new ClassGenerator($namespace, $className);
         $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
-        $config->add_constructor = true;
+        $config->haveConstructor = true;
         $properties = array(
           "extend" => "ExtendClass",
           "implements" => "NS\IClass",
@@ -204,7 +204,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $gClassgen = new ClassGenerator($namespace, $className);
         $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
-        $config->add_constructor = true;
+        $config->haveConstructor = true;
         $properties = array(
           "extend" => "ExtendClass",
           "implements" => "NS\IClass",
@@ -237,7 +237,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $gClassgen = new ClassGenerator($namespace, $className);
         $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
-        $config->add_constructor = true;
+        $config->haveConstructor = true;
         $properties = array(
           "extend" => "ExtendClass",
           "implements" => "NS\IClass",
@@ -272,7 +272,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $gClassgen = new ClassGenerator($namespace, $className);
         $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
-        $config->add_constructor = true;
+        $config->haveConstructor = true;
         $properties = array(
           "extend" => "ExtendClass",
           "implements" => "NS\IClass",
@@ -307,7 +307,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $gClassgen = new ClassGenerator($namespace, $className);
         $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
-        $config->add_constructor = true;
+        $config->haveConstructor = true;
         $properties = array(
           "extend" => "ExtendClass",
           "implements" => "NS\IClass",
@@ -341,8 +341,8 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $gClassgen = new ClassGenerator($namespace, $className);
         $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
-        $config->add_constructor = true;
-        $config->create_getter = true;
+        $config->haveConstructor = true;
+        $config->haveGetter = true;
         $properties = array(
           "extend" => "ExtendClass",
           "implements" => "NS\IClass",
@@ -377,9 +377,9 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $gClassgen = new ClassGenerator($namespace, $className);
         $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
-        $config->add_constructor = true;
-        $config->create_getter = true;
-        $config->create_setter = true;
+        $config->haveConstructor = true;
+        $config->haveGetter = true;
+        $config->haveSetter = true;
         $properties = array(
           "extend" => "ExtendClass",
           "implements" => "NS\IClass",
@@ -414,7 +414,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $gClassgen = new ClassGenerator($namespace, $className);
         $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
-        $config->add_constructor = true;
+        $config->haveConstructor = true;
         $properties = array(
           "extend" => "ExtendClass",
           "implements" => "NS\IClass",
@@ -455,9 +455,9 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $gClassgen = new ClassGenerator($namespace, $className);
         $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
-        $config->add_constructor = true;
-        $config->create_getter = true;
-        $config->create_setter = true;
+        $config->haveConstructor = true;
+        $config->haveGetter = true;
+        $config->haveSetter = true;
         $properties = array(
           "extend" => "ExtendClass",
           "implements" => "NS\IClass",
@@ -494,9 +494,9 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $gClassgen = new ClassGenerator($namespace, $className);
         $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
-        $config->add_constructor = true;
-        $config->create_getter = true;
-        $config->create_setter = true;
+        $config->haveConstructor = true;
+        $config->haveGetter = true;
+        $config->haveSetter = true;
         $properties = array(
           "extend" => "ExtendClass",
           "implements" => "NS\IClass",
@@ -533,7 +533,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $gClassgen = new ClassGenerator($namespace, $className);
         $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
-        $config->is_enum = true;
+        $config->isEnum = true;
         $properties = array(
           "fields" => array(
             "name" => array(
@@ -558,7 +558,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $gClassgen = new ClassGenerator($namespace, $className);
         $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
-        $config->is_singleton = true;
+        $config->isSingleton = true;
         $properties = array();
         $typesReferenceArray = array();
         $typesDescArray = array();
@@ -575,8 +575,8 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $gClassgen = new ClassGenerator($namespace, $className);
         $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
-        $config->add_constructor = true;
-        $config->is_interface = true;
+        $config->haveConstructor = true;
+        $config->isInterface = true;
         $properties = array(
           "fields" => array(
             "prova" => array(
@@ -600,8 +600,8 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $gClassgen = new ClassGenerator($namespace, $className);
         $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
-        $config->create_getter = true;
-        $config->is_interface = true;
+        $config->haveGetter = true;
+        $config->isInterface = true;
         $properties = array(
           "fields" => array(
             "prova" => array(
@@ -625,9 +625,9 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $gClassgen = new ClassGenerator($namespace, $className);
         $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
-        $config->create_getter = true;
-        $config->create_setter = true;
-        $config->is_interface = true;
+        $config->haveGetter = true;
+        $config->haveSetter = true;
+        $config->isInterface = true;
         $properties = array(
           "fields" => array(
             "prova" => array(

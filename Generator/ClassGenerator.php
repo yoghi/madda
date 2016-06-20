@@ -203,7 +203,7 @@ class ClassGenerator
     public function generateClassType($properties, $types_reference, $types_description, ClassConfig $config)
     {
         $phpNamespace = $this->currentClass->getNamespace();
-        if ($config->is_interface) {
+        if ($config->isInterface) {
             if (isset($this->logger)) {
                 $this->logger->info('Passo a interfaccia', array($this->currentClass->getName()));
             }
@@ -211,9 +211,9 @@ class ClassGenerator
             $this->currentClass = $this->currentFile->addInterface($phpNamespace->getName().'\\'.ucfirst($this->currentClass->getName()));
             $this->currentClass->setComment($docs);
             if (isset($this->logger)) {
-                $this->logger->info('Check add_constructor, in caso metto a false', array($config->add_constructor));
+                $this->logger->info('Check haveConstructor, in caso metto a false', array($config->haveConstructor));
             }
-            $config->add_constructor = false;
+            $config->haveConstructor = false;
         }
 
         $this->logger->info('Generate', array( 'class' => $this->currentClass->getName(), 'namespace' => $phpNamespace->getName(), 'comment' => $this->currentClass->getComment() ));
@@ -263,7 +263,7 @@ class ClassGenerator
             }
         }
 
-        if ($config->is_final) {
+        if ($config->isFinalClass) {
             $this->currentClass->setFinal(true);
         }
 
@@ -271,7 +271,7 @@ class ClassGenerator
         if (array_key_exists('fields', $properties)) {
             /** @var $mc_constructor Nette\PhpGenerator\Method */
             $mc_constructor = null;
-            if ($config->add_constructor) {
+            if ($config->haveConstructor) {
                 $mc_constructor = $this->addConstructor();
             }
 
@@ -368,7 +368,7 @@ class ClassGenerator
                         }
                     }
 
-                    if ($config->add_constructor && !$is_static) {
+                    if ($config->haveConstructor && !$is_static) {
                         if (isset($this->logger)) {
                             $this->logger->info('Aggiungo parametro al costruttore', array(
                               'class' => $this->currentClass->getName(),
@@ -400,7 +400,7 @@ class ClassGenerator
                     $field_class_name = $field_properties['primitive'];
                     $field_namespace = null;
                     $field_class_full = $field_properties['primitive'];
-                    if ($config->add_constructor && !$is_static) {
+                    if ($config->haveConstructor && !$is_static) {
                         //FIXME: se sono in php7 ho anche gli altri elementi primitivi
                         //@see: http://php.net/manual/en/functions.arguments.php#functions.arguments.type-declaration
 
@@ -439,11 +439,11 @@ class ClassGenerator
                     }
                 }
 
-                if (!$config->is_interface) {
+                if (!$config->isInterface) {
                     /** $field @var \Nette\PhpGenerator\Property */
                     $field = $this->currentClass->addProperty($name);
                     $field->setStatic($is_static);
-                    if ($config->is_enum) {
+                    if ($config->isEnum) {
                         $field->setVisibility('protected');
                     } else {
                         $field->setVisibility('private');
@@ -451,47 +451,47 @@ class ClassGenerator
                     $field->addComment($comment)->addComment('@var '.$field_class_full);
                 }
 
-                $create_setter = $config->create_setter;
+                $createSetter = $config->haveSetter;
                 if (array_key_exists('setter', $field_properties)) {
-                    $create_setter = $field_properties['setter'];
+                    $createSetter = $field_properties['setter'];
                 }
 
-                $create_getter = $config->create_getter;
+                $createGetter = $config->haveGetter;
                 if (array_key_exists('getter', $field_properties)) {
-                    $create_getter = $field_properties['getter'];
+                    $createGetter = $field_properties['getter'];
                 }
 
-                if ($config->is_interface) {
-                    if ($create_getter) {
+                if ($config->isInterface) {
+                    if ($createGetter) {
                         $this->addGetter($name, $field_class_full, $is_static, false);
                     }
 
-                    if ($create_setter) {
+                    if ($createSetter) {
                         $this->addSetter($name, $field_class_full, $is_static, false);
                     }
                 } else {
-                    if ($create_getter) {
+                    if ($createGetter) {
                         $this->addGetter($name, $field_class_full, $is_static, true);
                     }
 
-                    if ($create_setter) {
+                    if ($createSetter) {
                         $this->addSetter($name, $field_class_full, $is_static, true);
                     }
                 }
                 $first = false;
             }
-            if ($config->add_constructor) {
+            if ($config->haveConstructor) {
                 $mc_constructor->setBody($body, []);
             }
         }
 
-        if ($config->is_enum) {
+        if ($config->isEnum) {
             $this->currentClass->setAbstract(true);
             $this->addSingleton('Singleton instance for enum', false);
             $this->addParseString();
         }
 
-        if ($config->is_singleton) {
+        if ($config->isSingleton) {
             $this->addSingleton('Singleton instance', true);
         }
     }
