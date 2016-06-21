@@ -16,6 +16,7 @@ use Yoghi\Bundle\MaddaBundleTest\Utils\VfsAdapter;
 use Yoghi\Bundle\MaddaBundleTest\Utils\SplFileInfo;
 use Yoghi\Bundle\MaddaBundleTest\Utils\AbstractCommonLogTest;
 use Yoghi\Bundle\MaddaBundleTest\Utils\FileCompare;
+use Yoghi\Bundle\MaddaBundleTest\Utils\PhpunitFatalErrorHandling;
 
 /**
  * @author Stefano Tamagnini <>
@@ -24,6 +25,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     use AbstractCommonLogTest;
     use FileCompare;
+    use PhpunitFatalErrorHandling;
 
     public function testEmptyClassGenerator()
     {

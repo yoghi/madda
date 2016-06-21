@@ -1,0 +1,15 @@
+diff -uBbw a/src/Utils/Callback.php b/src/Utils/Callback.php
+index a4e5e95..dc3cbce 100644
+--- a/src/Utils/Callback.php
++++ b/src/Utils/Callback.php
+@@ -95,7 +95,11 @@
+ 		});
+
+ 		try {
++			if (defined('HHVM_VERSION')) {
++				$res = call_user_func_array($function, $args);
++			} else {
+ 			$res = $function(...$args);
++			}
+ 			restore_error_handler();
+ 			return $res;
