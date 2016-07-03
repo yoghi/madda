@@ -2,7 +2,7 @@
 namespace BitPrepared\Bundle\FormazioneBundle\Domain\Events;
 
 /**
- * Generated Class
+ * Event for Aggregate Root SpiegazioneSessioneCampo
  */
 final class SpiegazioneSessioneCampoAddDocumentEvent implements DomainEvent
 {

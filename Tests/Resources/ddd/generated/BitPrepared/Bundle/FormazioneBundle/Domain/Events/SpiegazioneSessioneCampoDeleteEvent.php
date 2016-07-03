@@ -2,7 +2,7 @@
 namespace BitPrepared\Bundle\FormazioneBundle\Domain\Events;
 
 /**
- * Generated Class
+ * Event delete for Aggregate Root SpiegazioneSessioneCampo
  */
 final class SpiegazioneSessioneCampoDeleteEvent implements DomainEvent
 {
@@ -28,8 +28,9 @@ final class SpiegazioneSessioneCampoDeleteEvent implements DomainEvent
     /**
      * costruttore
      */
-    final public function __construct($aggregateId, array $properties)
+    final public function __construct($aggregateId, array $properties = null)
     {
+        // autoinizialize
         $this->occurredOn = new \DateTime();
         $this->aggregateId = $aggregateId;
         $this->properties = $properties;

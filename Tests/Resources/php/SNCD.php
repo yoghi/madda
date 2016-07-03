@@ -25,14 +25,12 @@ class SNCD extends ExtendClass implements IClass
     /**
      * costruttore
      */
-    final public function __construct($prova, ClassDep $dependency = null)
+    final public function __construct()
     {
-        if (is_null($prova)) {
-            $this->prova = 0;
-        }
-        if (is_null($dependency)) {
-            $this->dependency = new ClassDep();
-        }
+        // autoinizialize
+        $this->prova = 0;
+        // autoinizialize
+        $this->dependency = new ClassDep();
     }
 
 

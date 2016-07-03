@@ -29,8 +29,10 @@ class ICWNAFWDACGSA extends ExtendClass implements IClass
     final public function __construct($prova, ClassDep $dependency = null)
     {
         $this->prova = $prova;
-        if (is_null($dependency)) {
+        if (empty($dependency)) {
             $this->dependency = new ClassDep();
+        } else {
+            $this->dependency = $dependency;
         }
     }
 

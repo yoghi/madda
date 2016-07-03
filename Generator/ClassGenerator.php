@@ -215,7 +215,7 @@ class ClassGenerator
             $config->haveConstructor = false;
         }
 
-        $this->logger->info('Generate', array( 'class' => $this->currentClass->getName(), 'namespace' => $phpNamespace->getName(), 'comment' => $this->currentClass->getComment() ));
+        $this->logger->info('Generate', array( 'class' => $this->currentClass->getName(), 'namespace' => $phpNamespace->getName(), 'comment' => $this->currentClass->getComment(), 'properties' => $properties ));
 
         // extend class
         if (array_key_exists('extend', $properties)) {
@@ -268,7 +268,7 @@ class ClassGenerator
 
         $first = true;
         if (array_key_exists('fields', $properties)) {
-            /** @var $methodConstructor Nette\PhpGenerator\Method */
+            /** @var $methodConstructor \Nette\PhpGenerator\Method */
             $methodConstructor = null;
             if ($config->haveConstructor) {
                 $methodConstructor = $this->addConstructor();
@@ -297,24 +297,24 @@ class ClassGenerator
                         //TODO: usare "primitive type per determinare il corretto IF"
                         //FARE UN TEST PER I BOOLEAN
                         //@see https://www.virendrachandak.com/techtalk/php-isset-vs-empty-vs-is_null/
-                        $body .= 'if ( empty($'.$name.') ) { ';
+                        $body .= 'if ( empty($'.$name.') ) { '."\n";
                         if ($isStatic) {
                             $body .= ' self::$';
                         } else {
                             $body .= ' $this->';
                         }
-                        $body .= $name.' = '.$defaultValue.';';
+                        $body .= $name.' = '.$defaultValue.';'."\n";
                         $body .= '} else {';
                         if ($isStatic) {
                             $body .= ' self::$';
                         } else {
                             $body .= ' $this->';
                         }
-                        $body .= $name.' = $'.$name.';';
-                        $body .= '}';
+                        $body .= $name.' = $'.$name.';'."\n";
+                        $body .= '}'."\n";
                     } else {
                         if (!$isStatic) {
-                            $body .= ' $this->'.$name.' = $'.$name.';';
+                            $body .= ' $this->'.$name.' = $'.$name.';'."\n";
                         }
                     }
                 } else {
@@ -324,9 +324,23 @@ class ClassGenerator
                             $defaultValue = substr($defaultValue, 0, strlen($defaultValue)-1);
                         }
                         if (!$isStatic) {
-                            $body .= 'if ( is_null($'.$name.') ) {';
-                            $body .= ' $this->'.$name.' = '.$defaultValue.';';
-                            $body .= '}';
+                            if ($isAutoinizialize) {
+                                $body .= '// autoinizialize'."\n";
+                                $body .= '$this->'.$name.' = '.$defaultValue.';'."\n";
+                            } else {
+                                if ($defaultValue) {
+                                    $body .= 'if ( !is_null($'.$name.') ) {'."\n";
+                                    $body .= ' $this->'.$name.' = $'.$name.';'."\n";
+                                    $body .= '} else {'."\n";
+                                    $body .= ' $this->'.$name.' = '.$defaultValue.';'."\n";
+                                    $body .= '}'."\n";
+                                  // $body .= '$this->'.$name.' = '.$defaultValue.';'."\n";
+                                } else {
+                                    $body .= 'if ( is_null($'.$name.') ) {'."\n";
+                                    $body .= ' $this->'.$name.' = '.$defaultValue.';'."\n";
+                                    $body .= '}'."\n";
+                                }
+                            }
                         }
                     } else {
                         if (isset($this->logger)) {
@@ -368,21 +382,35 @@ class ClassGenerator
                     }
 
                     if ($config->haveConstructor && !$isStatic) {
-                        if (isset($this->logger)) {
-                            $this->logger->info('Aggiungo parametro al costruttore', array(
-                              'class' => $this->currentClass->getName(),
-                              'parameter' => $name,
-                              'className' => $fieldClassFull,
-                              'default' => $defaultValue
-                            ));
-                        }
                         $parameter = null;
-                        if (!$first) {
-                            $parameter = $methodConstructor->addParameter($name, null); //solo i primitivi hanno un default, gli altri null come object
+                        if (!$isAutoinizialize) {
+                            if (isset($this->logger)) {
+                                $this->logger->info('Aggiungo parametro al costruttore', array(
+                                'class' => $this->currentClass->getName(),
+                                'parameter' => $name,
+                                'className' => $fieldClassFull,
+                                'default' => $defaultValue,
+                                'autoinizialize' => $isAutoinizialize
+                              ));
+                            }
+                            if (!$first) {
+                                $parameter = $methodConstructor->addParameter($name, null); //solo i primitivi hanno un default, gli altri null come object
+                                $parameter->setTypeHint($fieldClassFull);
+                            } else {
+                                $parameter = $methodConstructor->addParameter($name);
+                                $parameter->setTypeHint($fieldClassFull);
+                            }
                         } else {
-                            $parameter = $methodConstructor->addParameter($name);
+                            if (isset($this->logger)) {
+                                $this->logger->info('Skip parametro al costruttore -> autoinizialize true', array(
+                                'class' => $this->currentClass->getName(),
+                                'parameter' => $name,
+                                'className' => $fieldClassFull,
+                                'default' => $defaultValue,
+                                'autoinizialize' => $isAutoinizialize
+                              ));
+                            }
                         }
-                        $parameter->setTypeHint($fieldClassFull);
                     }
 
                     if (array_key_exists($fieldClassName, $typesReference)) {
@@ -396,6 +424,7 @@ class ClassGenerator
                         $this->currentClass->getNamespace()->addUse($fieldClassFull);
                     }
                 } else {
+                    //tipo primitivo
                     $fieldClassName = $fieldProperties['primitive'];
                     $fieldNamespace = null;
                     $fieldClassFull = $fieldProperties['primitive'];
@@ -404,17 +433,38 @@ class ClassGenerator
                         //@see: http://php.net/manual/en/functions.arguments.php#functions.arguments.type-declaration
 
                         $parameter = null;
-                        if ($first) {
-                            $parameter = $methodConstructor->addParameter($name);
-                        } else {
-                            $parameter = $methodConstructor->addParameter($name, null);
-                        }
 
-                        if ($fieldClassFull == 'array') {
-                            $parameter->setTypeHint('array');
-                        } else {
-                            if ($defaultValue != null) {
-                                $parameter->setDefaultValue($defaultValue);
+                        if (!$isAutoinizialize) {
+                            if (is_null($defaultValue)) {
+                                if (isset($this->logger)) {
+                                    $this->logger->info('Aggiungo parametro al costruttore', array(
+                                      'class' => $this->currentClass->getName(),
+                                      'parameter' => $name,
+                                      'className' => $fieldClassFull,
+                                      'default' => $defaultValue,
+                                      'autoinizialize' => $isAutoinizialize
+                                    ));
+                                }
+
+                                //PHP7 ONLY
+                                // if ($fieldClassFull == 'int') {
+                                //     $parameter->setTypeHint('int');
+                                // }
+
+                                if (!$first) {
+                                    $parameter = $methodConstructor->addParameter($name, null);
+                                } else {
+                                    $parameter = $methodConstructor->addParameter($name);
+                                }
+
+                                if ($fieldClassFull == 'array') {
+                                    $parameter->setTypeHint('array');
+                                } else {
+                                    if ($defaultValue != null) {
+                                        /** @var $parameter \Nette\PhpGenerator\Parameter */
+                                        $parameter->setDefaultValue(''.$defaultValue);
+                                    }
+                                }
                             }
                         }
                     }
@@ -477,7 +527,9 @@ class ClassGenerator
                         $this->addSetter($name, $fieldClassFull, $isStatic, true);
                     }
                 }
-                $first = false;
+                if (!$isAutoinizialize) {
+                    $first = false;
+                }
             }
             if ($config->haveConstructor) {
                 $methodConstructor->setBody($body, []);

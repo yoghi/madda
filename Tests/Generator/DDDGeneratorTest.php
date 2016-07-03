@@ -55,11 +55,14 @@ class DDDGeneratorTest extends \PHPUnit_Framework_TestCase
         //     $name = str_replace('.php', '', pathinfo($file, PATHINFO_FILENAME));
         //     $this->logger->info('$mappaToCheck[\''.$namespace.'\'] = \''.$name.'\';');
         // }
-
         // echo $this->readLog();
+
 
         $mappaToCheck = [];
         $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Events'] = 'DomainEvent';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Events'] = 'SpiegazioneSessioneCampoAddDocumentEvent';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Events'] = 'SpiegazioneSessioneCampoCreateEvent';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Events'] = 'SpiegazioneSessioneCampoDeleteEvent';
         $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/ValueObject'] = 'TipologiaCampo';
         $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/ValueObject'] = 'Sessione';
         $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/ValueObject'] = 'SessioniArray';

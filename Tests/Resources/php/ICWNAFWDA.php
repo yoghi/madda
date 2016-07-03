@@ -26,11 +26,10 @@ class ICWNAFWDA extends ExtendClass implements IClass
     /**
      * costruttore
      */
-    final public function __construct($prova, ClassDep $dependency = null)
+    final public function __construct(ClassDep $dependency)
     {
-        if (is_null($prova)) {
-            $this->prova = 0;
-        }
+        // autoinizialize
+        $this->prova = 0;
         $this->dependency = $dependency;
     }
 }

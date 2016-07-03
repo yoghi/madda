@@ -392,7 +392,7 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
             ),
             "dependency" => array(
               "class" => "ClassDep",
-              "autoinizialize" => true,
+              "autoinizialize" => false,
               "default" => "new ClassDep()"
             )
           )
@@ -620,31 +620,74 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
     }
 
-    public function testInterfaceWithGetterAndSetter()
-    {
-        $namespace = "TestNamespace";
-        $className = "ItestWithGetterSetter";
-        $gClassgen = new ClassGenerator($namespace, $className);
-        $gClassgen->setLogger($this->logger);
-        $config = new ClassConfig();
-        $config->haveGetter = true;
-        $config->haveSetter = true;
-        $config->isInterface = true;
-        $properties = array(
-          "fields" => array(
-            "prova" => array(
-              "primitive" => "int",
-              "description" => "session unique identifier"
-            )
-          )
-        );
-        $typesReferenceArray = array();
-        $typesDescArray = array();
-        $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescArray, $config);
-        $resourcesDir = __DIR__.'/../Resources/php';
+    // public function testInterfaceWithGetterAndSetter()
+    // {
+    //     $namespace = "TestNamespace";
+    //     $className = "ItestWithGetterSetter";
+    //     $gClassgen = new ClassGenerator($namespace, $className);
+    //     $gClassgen->setLogger($this->logger);
+    //     $config = new ClassConfig();
+    //     $config->haveGetter = true;
+    //     $config->haveSetter = true;
+    //     $config->isInterface = true;
+    //     $properties = array(
+    //       "fields" => array(
+    //         "prova" => array(
+    //           "primitive" => "int",
+    //           "description" => "session unique identifier"
+    //         )
+    //       )
+    //     );
+    //     $typesReferenceArray = array();
+    //     $typesDescArray = array();
+    //     $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescArray, $config);
+    //     $resourcesDir = __DIR__.'/../Resources/php';
+    //
+    //     $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
+    // }
+    //
+    //
+    // public function testStrange()
+    // {
+    //     $namespace = "BitPrepared\\Bundle\\FormazioneBundle\\Domain\\Events";
+    //     $className = "SpiegazioneSessioneCampoDeleteEvent";
+    //     $gClassgen = new ClassGenerator($namespace, $className, 'Event delete for Aggregate Root SpiegazioneSessioneCampo');
+    //     $gClassgen->setLogger($this->logger);
+    //     $config = new ClassConfig();
+    //     $config->haveGetter = true;
+    //     $config->haveSetter = false;
+    //     $config->isInterface = false;
+    //     $config->isFinalClass = true;
+    //     $config->haveConstructor = true;
+    //     $properties = array(
+    //       "implements" => "BitPrepared\\Bundle\\FormazioneBundle\\Domain\\Events\\DomainEvent",
+    //       "fields" => array(
+    //         "occurredOn" => array(
+    //           "class" => "\\DateTime",
+    //           "description" => "quando accade l'evento",
+    //           "default" => "new \\DateTime()",
+    //           "autoinizialize" => true
+    //         ),
+    //         "aggregateId" => array(
+    //           "primitive" => "int",
+    //           "description" => "id dell'aggregato root relativo all'evento",
+    //           "autoinizialize" => false
+    //         ),
+    //         "properties" => array(
+    //           "primitive" => "array",
+    //           "description" => "proprietà dell'evento",
+    //           "autoinizialize" => false
+    //         ),
+    //       )
+    //     );
+    //     $typesReferenceArray = array();
+    //     $typesDescArray = array();
+    //     $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescArray, $config);
+    //     $resourcesDir = __DIR__.'/../Resources/php';
+    //
+    //     $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
+    // }
 
-        $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
-    }
 
     /**
      * [generateDestDir description]

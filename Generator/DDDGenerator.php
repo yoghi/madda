@@ -47,6 +47,12 @@ class DDDGenerator
     private $modelComments;
 
     /**
+     * Fields of model classes
+     * @var array
+     */
+    private $fieldsClass;
+
+    /**
      * Array process errors
      * @var array
      */
@@ -129,9 +135,10 @@ class DDDGenerator
                 $this->info('Found description :'.$classComments);
             }
 
+            //FIXME: switch with $dddType as key
+
             $generated = false;
             $dddType = $properties['ddd']['type'];
-            //FIXME: , 'class' gestito diversamente
             if (in_array($dddType, array('interface'))) {
                 $g = new ClassGenerator($namespace, $className, $classComments);
                 $g->setLogger($this->logger);
@@ -140,6 +147,9 @@ class DDDGenerator
                 $g->generateClassType($properties, $this->modelClass, $this->modelComments, $config);
                 $g->createFileOnDir($directoryOutput);
                 $generated = true; //FIXME: use $g for determinate! -> take error from generator
+                if ($generated) {
+                    $this->fieldsClass[$namespace.'\\'.$className] = $properties['fields']; //ONLY IF VALID!!!
+                }
                 // DOMANDA: perche' non passarle tutte??
                 // if (array_key_exists('fields', $properties)) {
                 //     $types_field[$className] = $properties['fields'];
@@ -156,11 +166,20 @@ class DDDGenerator
                 $g->generateClassType($properties, $this->modelClass, $this->modelComments, $config);
                 $g->createFileOnDir($directoryOutput);
                 $generated = true; //FIXME: use $g for determinate! -> take error from generator
+                if ($generated) {
+                    $this->fieldsClass[$namespace.'\\'.$className] = $properties['fields']; //ONLY IF VALID!!!
+                }
                 // DOMANDA: perche' non passarle tutte??
                 // if (array_key_exists('fields', $properties)) {
                 //     $types_field[$className] = $properties['fields'];
                 // }
                 // $this->generateClassType($fileInterface, $interface, $properties, $types_reference, $types_description, false, true, true, false, false, $filesystem, $io);
+            }
+
+            if (in_array($dddType, array('events'))) {
+                //FIXME: impossible! events exist in relation on aggregateRoot
+                $this->error('events exist in relation on aggregateRoot', array( 'class' => $className ));
+                $this->errors[] = 'events exist in relation on aggregateRoot, event class '.$className.' cannot exist!';
             }
 
             if (!$generated) {
@@ -219,6 +238,81 @@ class DDDGenerator
                 //     addDocument:
                 //       fields: [ id, documentoCorrelato ]
 
+                if (array_key_exists('events', $properties)) {
+                    //genero altre classi per ogni evento!
+                    $eventsProperties = $this->rym->getDomainDefinitionAttributes('events');
+                    $eventsNamespace = $eventsProperties['package'];
+                    $eventsImplement = '';
+                    if (array_key_exists('implement', $eventsProperties)) {
+                        $eventsImplement = $eventsProperties['implement'];
+                    }
+
+                    $eventsExtend = '';
+                    if (array_key_exists('extend', $eventsProperties)) {
+                        $eventsExtend = $eventsProperties['extend'];
+                    }
+                    $namespaceImplementClass = $this->modelClass[$eventsImplement];
+                    $eventsImplementFull = $namespaceImplementClass.'\\'.$eventsImplement;
+
+                    $eventsField = array();
+                    if (array_key_exists('fields', $eventsProperties)) {
+                        foreach ($eventsProperties['fields'] as $key => $value) {
+                            $eventsField[$key] = $value;
+                        }
+                    }
+
+                    //field's inheritance
+                    if (array_key_exists($eventsImplementFull, $this->fieldsClass)) {
+                        $fieldsImplementClass = $this->fieldsClass[$eventsImplementFull];
+                        foreach ($fieldsImplementClass as $key => $value) {
+                            $eventsField[$key] = $value;
+                        }
+                    }
+
+                    $eventsToCreate = array();
+                    if (array_key_exists('events', $properties)) {
+                        $eventsToCreate = $properties['events'];
+                    }
+
+                    if (array_key_exists('events', $dddDefinition)) {
+                        $eventsToCreate = array_merge($dddDefinition['events'], $eventsToCreate);
+                    }
+
+                    foreach ($eventsToCreate as $event) {
+                        $eventClassName = $className . str_replace('_', '', ucwords($event, '_')).'Event';
+                        $eventClassComments = 'Event '.$event.' for Aggregate Root '.$className;
+
+                        $propertiesEventClass = array();
+                        if (!empty($eventsExtend)) {
+                            $propertiesEventClass['extend'] = $eventsExtend;
+                        }
+                        if (!empty($eventsImplement)) {
+                            $propertiesEventClass['implements'] = $eventsImplementFull;
+                        }
+
+                        $propertiesEventClass['fields'] = $eventsField;
+
+                        $this->info('Create Event', array('event' => $event, 'class' => $className, 'extend' =>$eventsExtend, 'implement' => $eventsImplementFull, 'fields' => $eventsField));
+
+                        $g = new ClassGenerator($eventsNamespace, $eventClassName, $eventClassComments);
+                        $g->setLogger($this->logger);
+                        $config = new ClassConfig();
+                        $config->isInterface = false;
+                        $config->haveConstructor = true;
+                        $config->isFinalClass = true; //don't wnat cycle dependency
+                        $config->haveGetter = true;
+                        $config->haveSetter = false;
+                        $g->generateClassType($propertiesEventClass, $this->modelClass, $this->modelComments, $config);
+                        $g->createFileOnDir($directoryOutput);
+                        $generated = true;
+                    }
+
+                    if ($generated) {
+                        $this->fieldsClass[$namespace.'\\'.$className] = $eventsField; //ONLY IF VALID!!!
+                    }
+                }
+
+                //NORMAL GENERATION
                 $g = new ClassGenerator($namespace, $className, $classComments);
                 $g->setLogger($this->logger);
                 $config = new ClassConfig();
@@ -229,10 +323,13 @@ class DDDGenerator
                 $config->haveSetter = $createSetter;
                 $g->generateClassType($properties, $this->modelClass, $this->modelComments, $config);
                 $g->createFileOnDir($directoryOutput);
+                $generated = true;
             }
 
-            $this->modelClass[$className] = $namespace;
-            $this->modelComments[$className] = $classComments;
+            if ($generated) {
+                $this->modelClass[$className] = $namespace;
+                $this->modelComments[$className] = $classComments;
+            }
         } //end class generation
     }
 }
