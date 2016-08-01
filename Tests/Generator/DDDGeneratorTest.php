@@ -40,10 +40,10 @@ class DDDGeneratorTest extends \PHPUnit_Framework_TestCase
         $data = file_get_contents($resourcesDir.'/ddd/real.yml');
         file_put_contents($directoryOutput.'/test.yml', $data);
 
-        $dg = new DDDGenerator();
-        $dg->setLogger($this->logger);
-        $dg->analyze($directoryOutput.'/test.yml');
-        $dg->generate(new VfsAdapter($directorySrcGen));
+        $dddg = new DDDGenerator();
+        $dddg->setLogger($this->logger);
+        $dddg->analyze($directoryOutput.'/test.yml');
+        $dddg->generate(new VfsAdapter($directorySrcGen));
 
         // $data = file_get_contents("vfs://root/src-gen/BitPrepared/Bundle/FormazioneBundle/Domain/Events/DomainEvent.php");
         // echo $data;
@@ -56,7 +56,7 @@ class DDDGeneratorTest extends \PHPUnit_Framework_TestCase
         //     $this->logger->info('$mappaToCheck[\''.$namespace.'\'] = \''.$name.'\';');
         // }
         // echo $this->readLog();
-
+        // exit;
 
         $mappaToCheck = [];
         $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Events'] = 'DomainEvent';
@@ -72,6 +72,8 @@ class DDDGeneratorTest extends \PHPUnit_Framework_TestCase
         $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Service/QueryRequest'] = 'ElencoSessioniForTipologiaRequest';
         $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Service/QueryRequest'] = 'ElencoSessioniRequest';
         $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Service/CommandRequest'] = 'NewSessioneRequest';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Classes'] = 'SampleClassWithNamespace';
+        $mappaToCheck[''] = 'SampleClass';
         foreach ($mappaToCheck as $namespace => $className) {
             $this->compareFilePhp($resourcesDir.'/ddd/generated/'.$namespace, $namespace, $className, $directorySrcGen);
         }
@@ -84,7 +86,7 @@ class DDDGeneratorTest extends \PHPUnit_Framework_TestCase
         // $className = 'SessioniArray';
         // $this->compareFilePhp($resourcesDir.'/ddd/generated/'.$namespace, $namespace, $className, $directorySrcGen);
 
-        $errors = $dg->getErrors();
+        $errors = $dddg->getErrors();
         $this->assertCount(0, $errors, 'errori durante la generazione');
     }
 }

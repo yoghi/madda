@@ -108,7 +108,7 @@ classes:
     SessioneCampo:
         ddd:
           type: entity
-        name: SessioneCampo 
+        name: SessioneCampo
         traits:
           - BitPrepared\Bundle\FormazioneBundle\Domain\Entity\SessioneCampoTrait
         fields:
@@ -184,3 +184,20 @@ classes:
               description: "descrizione della sessione"
             tipoCampo:
               class: TipologiaCampo
+
+    SampleClass:
+        ddd:
+          type: class
+        fields:
+            sasa:
+              primitive: string
+              description: "sample string"
+
+    SampleClassWithNamespace:
+        ddd:
+          type: class
+        namespace: BitPrepared\Bundle\FormazioneBundle\Domain\Classes
+        fields:
+            sasa:
+              primitive: string
+              description: "sample string"

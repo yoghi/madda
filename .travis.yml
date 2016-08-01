@@ -68,6 +68,7 @@ after_success:
 addons:
     code_climate:
         repo_token:
+          # travis encrypt <token>
           secure: "gYSDGBvAHj5+T2XZ6CXnI/gsT5v1IEkimgANlg0jrg/IirOfbagbh2dwCdyTIhJUH2RbtElsuzN/a9KRgsSkFQbL2rTIpYQp/LOp8kic1ELp5fgwlylD96F9NpkpkV+aqY7c/GhoLdIUG3Bxe41hfnoLBE1EuMAt8mtjBgceShCnmfU3D9SOaPlFrOs29Pt4SCF1Se3ycL5ZTwJ+cD6o9WWCs5zAHigN+tXlU3C42PM8ihE802KXWQk2s8YkB1lP3O6FKlvBwZAFmWBAXqfuyoedS1N97hjOckqN9QYJk7AmGJHQKxPIu1AAuLpiTTQG4XpcRbH7o/14RmLYvIm1zNiICuWxNIClExFIaY7MDshZv5qnngKTEhajKp7cP4jMAwAhoIPFgBvh/6K03pOSeeRDFHYI8kU+virxSEticPK7SDZp5dT+9HYg8SWX2RFxugyN+aAD+NB76ow8cN2gdKU0MwqmrMqIaGaOqT4qmYRO5GccwxGrKbZThoZi+34+NXMzDoviMOMTu+NvSz2n7QXouRfhVgy+AU6YR3JRaezxnFfgIGrwnNLOc3XmHNnrNphHR3yVNbQvNOwJxgT/Tucv9lVFbunFoiuFb/z0uIYxSTdDhNXTSLjfOKOO+a8bRGw7fKrxCuJPi02t+0IjlU+iN7gWyyK0DXtOMQCeqn8="
 
 # notifications:

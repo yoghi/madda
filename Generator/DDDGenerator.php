@@ -157,6 +157,7 @@ class DDDGenerator
                 // $this->generateClassType($fileInterface, $interface, $properties, $types_reference, $types_description, false, true, true, false, false, $filesystem, $io);
             }
 
+            // NOTE: class aren't ddd type, we haven't section on ddd definition
             if (in_array($dddType, array('class'))) {
                 $g = new ClassGenerator($namespace, $className, $classComments);
                 $g->setLogger($this->logger);
