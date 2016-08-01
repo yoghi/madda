@@ -89,4 +89,76 @@ class DDDGeneratorTest extends \PHPUnit_Framework_TestCase
         $errors = $dddg->getErrors();
         $this->assertCount(0, $errors, 'errori durante la generazione');
     }
+
+    public function testGenerateDDDOnVfsBadEventsSpecific()
+    {
+        $directoryOutput = self::$directoryV->url().'/output';
+        $directorySrcGen = self::$directoryV->url().'/src-gen-bad-event';
+        $resourcesDir = __DIR__.'/../Resources';
+        if (!file_exists($directoryOutput)) {
+            mkdir($directoryOutput, 0700, true);
+        }
+        if (!file_exists($directorySrcGen)) {
+            mkdir($directorySrcGen, 0700, true);
+        }
+        $data = file_get_contents($resourcesDir.'/ddd/badEvents.yml');
+        file_put_contents($directoryOutput.'/test.yml', $data);
+
+        $dddg = new DDDGenerator();
+        $dddg->setLogger($this->logger);
+        $dddg->analyze($directoryOutput.'/test.yml');
+        $dddg->generate(new VfsAdapter($directorySrcGen));
+
+        $mappaToCheck = [];
+        foreach ($mappaToCheck as $namespace => $className) {
+            $this->compareFilePhp($resourcesDir.'/ddd/generated/'.$namespace, $namespace, $className, $directorySrcGen);
+        }
+
+        $errors = $dddg->getErrors();
+        $this->assertCount(1, $errors, 'errori non previsti durante la generazione');
+    }
+
+    public function testGenerateDDDOnVfsEventsSpecific()
+    {
+        $directoryOutput = self::$directoryV->url().'/output';
+        $directorySrcGen = self::$directoryV->url().'/src-gen-event';
+        $resourcesDir = __DIR__.'/../Resources';
+        if (!file_exists($directoryOutput)) {
+            mkdir($directoryOutput, 0700, true);
+        }
+        if (!file_exists($directorySrcGen)) {
+            mkdir($directorySrcGen, 0700, true);
+        }
+        $data = file_get_contents($resourcesDir.'/ddd/realEvents.yml');
+        file_put_contents($directoryOutput.'/test.yml', $data);
+
+        $dddg = new DDDGenerator();
+        $dddg->setLogger($this->logger);
+        $dddg->analyze($directoryOutput.'/test.yml');
+        $dddg->generate(new VfsAdapter($directorySrcGen));
+
+        // $finderV = new Finder();
+        // $finderV->search($directorySrcGen, 'php');
+        // foreach ($finderV->getFindedFiles() as $file) {
+        //     $namespace = str_replace('vfs://root/src-gen-event/', '', pathinfo($file, PATHINFO_DIRNAME));
+        //     $name = str_replace('.php', '', pathinfo($file, PATHINFO_FILENAME));
+        //     $this->logger->info('$mappaToCheck[\''.$namespace.'\'] = \''.$name.'\';');
+        // }
+        // echo $this->readLog();
+        // exit;
+
+        $mappaToCheck = [];
+        $mappaToCheck['BitPrepared/Bundle/EventBundle/Domain/Events'] = 'DomainEvent';
+        $mappaToCheck['BitPrepared/Bundle/EventBundle/Domain/Events'] = 'SpiegazioneSessioneCampoCreateEvent';
+        $mappaToCheck['BitPrepared/Bundle/EventBundle/Domain/Events'] = 'SpiegazioneSessioneCampoDeleteEvent';
+        $mappaToCheck['BitPrepared/Bundle/EventBundle/Domain/Events'] = 'SpiegazioneSessioneCampoAddDocumentEvent';
+        $mappaToCheck['BitPrepared/Bundle/EventBundle/Domain/Aggregate'] = 'SpiegazioneSessioneCampo';
+
+        foreach ($mappaToCheck as $namespace => $className) {
+            $this->compareFilePhp($resourcesDir.'/ddd/generated/'.$namespace, $namespace, $className, $directorySrcGen);
+        }
+
+        $errors = $dddg->getErrors();
+        $this->assertCount(0, $errors, 'errori durante la generazione');
+    }
 }

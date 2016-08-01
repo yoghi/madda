@@ -1,0 +1,42 @@
+ddd:
+  usecases:
+    package: BitPrepared\Bundle\FormazioneBundle\Domain\UseCases
+  events:
+    package: BitPrepared\Bundle\FormazioneBundle\Domain\Events
+    implement: DomainEvent
+    fields:
+      occurredOn:
+        class: \DateTime
+        autoinizialize: true
+        description: quando accade l'evento
+        getter: true
+  aggregate:
+    package: BitPrepared\Bundle\FormazioneBundle\Domain\Aggregate
+    getter: true
+    events:
+      - create
+      - delete
+
+classes:
+
+    SpiegazioneSessioneCampo:
+        ddd:
+          type: aggregate
+          root: true
+        name: SpiegazioneSessioneCampo
+        fields:
+          id :
+            primitive: int
+            description: "identificativo univoco della sessione come aggregato root"
+          sessione:
+            class: SessioneCampo
+        events:
+          - add_document
+        validationRule:
+          events:
+            create:
+              fields: [ id, sessione, tipologiaCampo]
+            delete:
+              fields: [ id ]
+            addDocument:
+              fields: [ id, documentoCorrelato ]

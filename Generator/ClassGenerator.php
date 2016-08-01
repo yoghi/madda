@@ -320,7 +320,7 @@ class ClassGenerator
                 } else {
                     if (!empty($defaultValue) || is_int($defaultValue)) {
                         if (substr(rtrim($defaultValue), -1) == ";") {
-                            $this->logger->error('autoinizialize for '.$fieldClassFull.' on class '.$this->currentClass->getName().' have default with ";" please remove!');
+                            $this->logger->error('autoinizialize for '.$name.' on class '.$this->currentClass->getName().' have default with ";" please remove!');
                             $defaultValue = substr($defaultValue, 0, strlen($defaultValue)-1);
                         }
                         if (!$isStatic) {
@@ -344,9 +344,9 @@ class ClassGenerator
                         }
                     } else {
                         if (isset($this->logger)) {
-                            $this->logger->error('autoinizialize for '.$fieldClassFull.' not defined on element '.$this->currentClass->getName());
+                            $this->logger->error('autoinizialize for '.$name.' not defined on element '.$this->currentClass->getName());
                         }
-                        $this->errors[] = 'autoinizialize for '.$fieldClassFull.' not defined on element '.$this->currentClass->getName();
+                        $this->errors[] = 'autoinizialize for '.$name.' not defined on element '.$this->currentClass->getName();
                     }
                 }
 

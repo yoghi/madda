@@ -252,6 +252,12 @@ class DDDGenerator
                     if (array_key_exists('extend', $eventsProperties)) {
                         $eventsExtend = $eventsProperties['extend'];
                     }
+
+                    if (!array_key_exists($eventsImplement, $this->modelClass)) {
+                        $this->error('Missing implement class '.$eventsImplement, array( 'class' => $className ));
+                        $this->errors[] = 'Missing implement '.$eventsImplement.' for '.$className;
+                        continue;
+                    }
                     $namespaceImplementClass = $this->modelClass[$eventsImplement];
                     $eventsImplementFull = $namespaceImplementClass.'\\'.$eventsImplement;
 
