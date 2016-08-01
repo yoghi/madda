@@ -2,7 +2,7 @@
 
 namespace Yoghi\Bundle\MaddaBundle\Command;
 
-use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Command\Command as Command;
 use SensioLabs\Security\SecurityChecker;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -49,10 +49,6 @@ class CheckSecurityCommand extends Command
         $checker = new SecurityChecker();
         $alerts = $checker->check('composer.lock');
 
-        if (count($alerts) > 0) {
-            $io->error($alerts);
-        } else {
-            $io->success("security checked!");
-        }
+        count($alerts) > 0 ?  $io->error($alerts) : $io->success("security checked!");
     }
 }

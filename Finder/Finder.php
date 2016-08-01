@@ -10,7 +10,7 @@ class Finder
 
     /**
      * [$logger description]
-     * @var Psr\Log\LoggerInterface
+     * @var \Psr\Log\LoggerInterface
      */
     private $logger;
 
@@ -21,7 +21,7 @@ class Finder
 
     /**
      * [search description]
-     * @param  [type] $dir       [description]
+     * @param  string $dir search directory 
      * @param  string $extension extension to find, Ex: yml, php, raml
      */
     public function search($dir, $extension)

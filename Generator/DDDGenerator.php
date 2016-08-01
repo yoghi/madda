@@ -24,13 +24,13 @@ class DDDGenerator
 
     /**
      * [$logger description]
-     * @var Psr\Log\LoggerInterface
+     * @var \Psr\Log\LoggerInterface
      */
     private $logger;
 
     /**
      * Reader model file
-     * @var Yoghi\Bundle\MaddaBundle\Model\Reader
+     * @var \Yoghi\Bundle\MaddaBundle\Model\Reader
      */
     private $rym;
 

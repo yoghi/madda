@@ -26,7 +26,7 @@ class ClassGenerator
 {
     /**
      * [$currentClass description]
-     * @var Nette\PhpGenerator\ClassType
+     * @var \Nette\PhpGenerator\ClassType
      */
     private $currentClass;
     private $currentFile;
@@ -34,7 +34,7 @@ class ClassGenerator
 
     /**
      * [$logger description]
-     * @var Psr\Log\LoggerInterface
+     * @var \Psr\Log\LoggerInterface
      */
     private $logger;
 
@@ -199,7 +199,7 @@ class ClassGenerator
      * @param  array       $typesDescription [description]
      * @param  ClassConfig $config            [description]
      */
-    public function generateClassType($properties, $typesReference, $typesDescription, ClassConfig $config)
+    public function generateClassType(array $properties, $typesReference, $typesDescription, ClassConfig $config)
     {
         $phpNamespace = $this->currentClass->getNamespace();
         if ($config->isInterface) {

@@ -62,6 +62,10 @@ class Reader
         return $this->specList->toArray();
     }
 
+    /**
+     * [getClassesDefinition description]
+     * @return array|false [description]
+     */
     public function getClassesDefinition()
     {
         return $this->specList['classes'];

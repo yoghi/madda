@@ -5,7 +5,8 @@ engines:
     config:
       file_extensions: "php"
       dead-code-detection: true
-      minimum-severity: 10 #low=0, normal=5, critical=10
+      ignore-undeclared: true #sembra ci sia un bug relativo ai fullpath
+      #minimum-severity: 10 #low=0, normal=5, critical=10 #altro bug confusione tra string e number
       backward-compatibility-checks: true
   duplication:
     enabled: true
@@ -22,5 +23,7 @@ ratings:
   - "**.js"
   - "**.php"
 exclude_paths:
+- Command/
+- Console/
 - Tests/
 - vendor/
