@@ -2,7 +2,7 @@
 
 namespace Yoghi\Bundle\MaddaBundle\Command;
 
-use Symfony\Component\Console\Command\Command as Command;
+use Symfony\Component\Console\Command\Command;
 use SensioLabs\Security\SecurityChecker;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
