@@ -4,6 +4,9 @@ engines:
     enabled: true
     config:
       file_extensions: "php"
+      dead-code-detection: true
+      minimum-severity: 10 #low=0, normal=5, critical=10
+      backward-compatibility-checks: true
   duplication:
     enabled: true
     config:
