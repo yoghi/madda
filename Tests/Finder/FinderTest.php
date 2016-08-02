@@ -37,7 +37,9 @@ class FinderTest extends \PHPUnit_Framework_TestCase
         }
 
         $expected = array('model','emptyModel','invalidModel');
-        $this->assertSame($names, $expected, 'invalid filename');
+        $diff = array_diff($names, $expected);
+
+        $this->assertEmpty($diff, 'yml not found');
     }
 
     public function testFindYmlOnVfs()
