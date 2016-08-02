@@ -29,10 +29,10 @@ class Finder
         if (isset($this->logger)) {
             $this->logger->info("Finder invocato su directory : ".$dir);
         }
-        $di = new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS);
-        $it = new \RecursiveIteratorIterator($di);
+        $rdi = new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS);
+        $rit = new \RecursiveIteratorIterator($rdi);
 
-        foreach ($it as $file) {
+        foreach ($rit as $file) {
             if (isset($this->logger)) {
                 $this->logger->debug("Valuto file", array('filename' => $file));
             }

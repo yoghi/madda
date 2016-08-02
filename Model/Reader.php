@@ -73,13 +73,13 @@ class Reader
 
     public function getClassDefinitionAttributes($key)
     {
-        $x = new A($this->specList->offsetGet('classes'));
-        return $x->offsetGet($key);
+        $classDefList = new A($this->specList->offsetGet('classes'));
+        return $classDefList->offsetGet($key);
     }
 
     public function getDomainDefinitionAttributes($key)
     {
-        $x = new A($this->specList->offsetGet('ddd'));
-        return $x->offsetGet($key);
+        $domainDefList = new A($this->specList->offsetGet('ddd'));
+        return $domainDefList->offsetGet($key);
     }
 }
