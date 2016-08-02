@@ -189,148 +189,148 @@ class DDDGenerator
                 if (is_null($dddDefinition)) {
                     $this->error('Missing ddd reference for : '.$dddType.' into '.$className, array( 'class' => $className ));
                     $this->errors[] = 'Missing ddd reference for : '.$dddType.' into '.$className;
-                }
-
-                if (array_key_exists('package', $dddDefinition)) {
-                    $namespace = $dddDefinition['package'];
-                }
-
-                if (empty($namespace)) {
-                    $this->error('Missing namespace', array( 'class' => $className ));
-                    $this->errors[] = 'Missing namespace for '.$className;
-                }
-
-                $createGetter = false;
-                $createSetter = false;
-                if (array_key_exists('getter', $dddDefinition)) {
-                    $createGetter = $dddDefinition['getter'];
-                }
-                if (array_key_exists('setter', $dddDefinition)) {
-                    $createSetter = $dddDefinition['setter'];
-                }
-
-                $isRootAggregate = $dddType == 'aggregate' && isset($properties['ddd']['root']) && boolval($properties['ddd']['root']) ? true : false;
-
-                $this->info('Method required', array( 'class' => $className, 'getter' => $createGetter, 'setter' => $createSetter, 'aggregateRoot' => $isRootAggregate ));
-
-                if (array_key_exists('extend', $dddDefinition)) {
-                    $ddd_extend = $dddDefinition['extend'];
-                    if (!array_key_exists('extend', $properties)) {
-                        $properties['extend'] = $ddd_extend; //No multi-inheritance
-                    }
-                }
-
-                $dddReferenceFields = array();
-                if (array_key_exists('fields', $dddDefinition)) {
-                    foreach ($dddDefinition['fields'] as $key => $value) {
-                        $dddReferenceFields[$key] = $value;
-                    }
-                }
-
-                //TODO: gestire gli [] dentro la definizione del modello se serve...
-
-                //TODO: aggiungere le validazioni
-                // validationRule:
-                //   events:
-                //     create:
-                //       fields: [ id, sessione, tipologiaCampo]
-                //     delete:
-                //       fields: [ id ]
-                //     addDocument:
-                //       fields: [ id, documentoCorrelato ]
-
-                if (array_key_exists('events', $properties)) {
-                    //genero altre classi per ogni evento!
-                    $eventsProperties = $this->rym->getDomainDefinitionAttributes('events');
-                    $eventsNamespace = $eventsProperties['package'];
-                    $eventsImplement = '';
-                    if (array_key_exists('implement', $eventsProperties)) {
-                        $eventsImplement = $eventsProperties['implement'];
+                } else {
+                    if (array_key_exists('package', $dddDefinition)) {
+                        $namespace = $dddDefinition['package'];
                     }
 
-                    $eventsExtend = '';
-                    if (array_key_exists('extend', $eventsProperties)) {
-                        $eventsExtend = $eventsProperties['extend'];
+                    if (empty($namespace)) {
+                        $this->error('Missing namespace', array( 'class' => $className ));
+                        $this->errors[] = 'Missing namespace for '.$className;
                     }
 
-                    if (!array_key_exists($eventsImplement, $this->modelClass)) {
-                        $this->error('Missing implement class '.$eventsImplement, array( 'class' => $className ));
-                        $this->errors[] = 'Missing implement '.$eventsImplement.' for '.$className;
-                        continue;
+                    $createGetter = false;
+                    $createSetter = false;
+                    if (array_key_exists('getter', $dddDefinition)) {
+                        $createGetter = $dddDefinition['getter'];
                     }
-                    $namespaceImplementClass = $this->modelClass[$eventsImplement];
-                    $eventsImplementFull = $namespaceImplementClass.'\\'.$eventsImplement;
+                    if (array_key_exists('setter', $dddDefinition)) {
+                        $createSetter = $dddDefinition['setter'];
+                    }
 
-                    $eventsField = array();
-                    if (array_key_exists('fields', $eventsProperties)) {
-                        foreach ($eventsProperties['fields'] as $key => $value) {
-                            $eventsField[$key] = $value;
+                    $isRootAggregate = $dddType == 'aggregate' && isset($properties['ddd']['root']) && boolval($properties['ddd']['root']) ? true : false;
+
+                    $this->info('Method required', array( 'class' => $className, 'getter' => $createGetter, 'setter' => $createSetter, 'aggregateRoot' => $isRootAggregate ));
+
+                    if (array_key_exists('extend', $dddDefinition)) {
+                        $dddExtendDefinition = $dddDefinition['extend'];
+                        if (!array_key_exists('extend', $properties)) {
+                            $properties['extend'] = $dddExtendDefinition; //No multi-inheritance
                         }
                     }
 
-                    //field's inheritance
-                    if (array_key_exists($eventsImplementFull, $this->fieldsClass)) {
-                        $fieldsImplementClass = $this->fieldsClass[$eventsImplementFull];
-                        foreach ($fieldsImplementClass as $key => $value) {
-                            $eventsField[$key] = $value;
+                    $dddReferenceFields = array();
+                    if (array_key_exists('fields', $dddDefinition)) {
+                        foreach ($dddDefinition['fields'] as $key => $value) {
+                            $dddReferenceFields[$key] = $value;
                         }
                     }
 
-                    $eventsToCreate = array();
+                  //TODO: gestire gli [] dentro la definizione del modello se serve...
+
+                  //TODO: aggiungere le validazioni
+                  // validationRule:
+                  //   events:
+                  //     create:
+                  //       fields: [ id, sessione, tipologiaCampo]
+                  //     delete:
+                  //       fields: [ id ]
+                  //     addDocument:
+                  //       fields: [ id, documentoCorrelato ]
+
                     if (array_key_exists('events', $properties)) {
-                        $eventsToCreate = $properties['events'];
-                    }
-
-                    if (array_key_exists('events', $dddDefinition)) {
-                        $eventsToCreate = array_merge($dddDefinition['events'], $eventsToCreate);
-                    }
-
-                    foreach ($eventsToCreate as $event) {
-                        $eventClassName = $className . str_replace('_', '', ucwords($event, '_')).'Event';
-                        $eventClassComments = 'Event '.$event.' for Aggregate Root '.$className;
-
-                        $propertiesEventClass = array();
-                        if (!empty($eventsExtend)) {
-                            $propertiesEventClass['extend'] = $eventsExtend;
-                        }
-                        if (!empty($eventsImplement)) {
-                            $propertiesEventClass['implements'] = $eventsImplementFull;
+                        //genero altre classi per ogni evento!
+                        $eventsProperties = $this->rym->getDomainDefinitionAttributes('events');
+                        $eventsNamespace = $eventsProperties['package'];
+                        $eventsImplement = '';
+                        if (array_key_exists('implement', $eventsProperties)) {
+                            $eventsImplement = $eventsProperties['implement'];
                         }
 
-                        $propertiesEventClass['fields'] = $eventsField;
+                        $eventsExtend = '';
+                        if (array_key_exists('extend', $eventsProperties)) {
+                            $eventsExtend = $eventsProperties['extend'];
+                        }
 
-                        $this->info('Create Event', array('event' => $event, 'class' => $className, 'extend' =>$eventsExtend, 'implement' => $eventsImplementFull, 'fields' => $eventsField));
+                        if (!array_key_exists($eventsImplement, $this->modelClass)) {
+                            $this->error('Missing implement class '.$eventsImplement, array( 'class' => $className ));
+                            $this->errors[] = 'Missing implement '.$eventsImplement.' for '.$className;
+                            continue;
+                        }
+                        $namespaceImplementClass = $this->modelClass[$eventsImplement];
+                        $eventsImplementFull = $namespaceImplementClass.'\\'.$eventsImplement;
 
-                        $g = new ClassGenerator($eventsNamespace, $eventClassName, $eventClassComments);
-                        $g->setLogger($this->logger);
-                        $config = new ClassConfig();
-                        $config->isInterface = false;
-                        $config->haveConstructor = true;
-                        $config->isFinalClass = true; //don't wnat cycle dependency
-                        $config->haveGetter = true;
-                        $config->haveSetter = false;
-                        $g->generateClassType($propertiesEventClass, $this->modelClass, $this->modelComments, $config);
-                        $g->createFileOnDir($directoryOutput);
-                        $generated = true;
+                        $eventsField = array();
+                        if (array_key_exists('fields', $eventsProperties)) {
+                            foreach ($eventsProperties['fields'] as $key => $value) {
+                                $eventsField[$key] = $value;
+                            }
+                        }
+
+                        //field's inheritance
+                        if (array_key_exists($eventsImplementFull, $this->fieldsClass)) {
+                            $fieldsImplementClass = $this->fieldsClass[$eventsImplementFull];
+                            foreach ($fieldsImplementClass as $key => $value) {
+                                $eventsField[$key] = $value;
+                            }
+                        }
+
+                        $eventsToCreate = array();
+                        if (array_key_exists('events', $properties)) {
+                            $eventsToCreate = $properties['events'];
+                        }
+
+                        if (array_key_exists('events', $dddDefinition)) {
+                            $eventsToCreate = array_merge($dddDefinition['events'], $eventsToCreate);
+                        }
+
+                        foreach ($eventsToCreate as $event) {
+                            $eventClassName = $className . str_replace('_', '', ucwords($event, '_')).'Event';
+                            $eventClassComments = 'Event '.$event.' for Aggregate Root '.$className;
+
+                            $propertiesEventClass = array();
+                            if (!empty($eventsExtend)) {
+                                $propertiesEventClass['extend'] = $eventsExtend;
+                            }
+                            if (!empty($eventsImplement)) {
+                                $propertiesEventClass['implements'] = $eventsImplementFull;
+                            }
+
+                            $propertiesEventClass['fields'] = $eventsField;
+
+                            $this->info('Create Event', array('event' => $event, 'class' => $className, 'extend' =>$eventsExtend, 'implement' => $eventsImplementFull, 'fields' => $eventsField));
+
+                            $g = new ClassGenerator($eventsNamespace, $eventClassName, $eventClassComments);
+                            $g->setLogger($this->logger);
+                            $config = new ClassConfig();
+                            $config->isInterface = false;
+                            $config->haveConstructor = true;
+                            $config->isFinalClass = true; //don't wnat cycle dependency
+                            $config->haveGetter = true;
+                            $config->haveSetter = false;
+                            $g->generateClassType($propertiesEventClass, $this->modelClass, $this->modelComments, $config);
+                            $g->createFileOnDir($directoryOutput);
+                            $generated = true;
+                        }
+
+                        if ($generated) {
+                            $this->fieldsClass[$namespace.'\\'.$className] = $eventsField; //ONLY IF VALID!!!
+                        }
                     }
 
-                    if ($generated) {
-                        $this->fieldsClass[$namespace.'\\'.$className] = $eventsField; //ONLY IF VALID!!!
-                    }
+                  //NORMAL GENERATION
+                    $g = new ClassGenerator($namespace, $className, $classComments);
+                    $g->setLogger($this->logger);
+                    $config = new ClassConfig();
+                    $config->isInterface = false;
+                    $config->haveConstructor = true;
+                    $config->isFinalClass = true; //don't wnat cycle dependency
+                    $config->haveGetter = $createGetter;
+                    $config->haveSetter = $createSetter;
+                    $g->generateClassType($properties, $this->modelClass, $this->modelComments, $config);
+                    $g->createFileOnDir($directoryOutput);
+                    $generated = true;
                 }
-
-                //NORMAL GENERATION
-                $g = new ClassGenerator($namespace, $className, $classComments);
-                $g->setLogger($this->logger);
-                $config = new ClassConfig();
-                $config->isInterface = false;
-                $config->haveConstructor = true;
-                $config->isFinalClass = true; //don't wnat cycle dependency
-                $config->haveGetter = $createGetter;
-                $config->haveSetter = $createSetter;
-                $g->generateClassType($properties, $this->modelClass, $this->modelComments, $config);
-                $g->createFileOnDir($directoryOutput);
-                $generated = true;
             }
 
             if ($generated) {

@@ -103,7 +103,7 @@ class ClassGenerator
               'type' => $fieldClassFull,
               'static' => $isStatic,
               'concrete' => $isConcrete
-          ));
+            ));
         }
 
         /** $methodGetter @var \Nette\PhpGenerator\Method */
@@ -131,9 +131,9 @@ class ClassGenerator
         $this->currentClass->addTrait($traitFull);
         if (isset($this->logger)) {
             $this->logger->info('Add trait', array(
-          'class' => $this->currentClass->getName(),
-          'trait' => $traitFull
-        ));
+            'class' => $this->currentClass->getName(),
+            'trait' => $traitFull
+            ));
         }
     }
 
@@ -146,7 +146,7 @@ class ClassGenerator
               'type' => $fieldClassFull,
               'static' => $isStatic,
               'concrete' => $isConcrete
-          ));
+            ));
         }
 
         /** $methodSetter @var \Nette\PhpGenerator\Method */
@@ -173,7 +173,7 @@ class ClassGenerator
         if (isset($this->logger)) {
             $this->logger->info('Aggiungo parseString', array(
               'class' => $this->currentClass->getName()
-          ));
+            ));
         }
 
         /** $methodParseString @var \Nette\PhpGenerator\Method */
@@ -224,7 +224,7 @@ class ClassGenerator
                 $this->logger->info('Aggiungo extend', array(
                 'class' => $this->currentClass->getName(),
                 'extend' => $extendClassName
-              ));
+                ));
             }
             $this->currentClass->setExtends($extendClassName);
             $this->currentClass->getNamespace()->addUse($extendClassName);
@@ -244,7 +244,7 @@ class ClassGenerator
                     $this->logger->info('Aggiungo implement', array(
                     'class' => $this->currentClass->getName(),
                     'implements' => $implementUse
-                  ));
+                    ));
                 }
                 $this->currentClass->getNamespace()->addUse($implementUse);
             }
@@ -362,21 +362,21 @@ class ClassGenerator
                             'class' => $this->currentClass->getName(),
                             'field' => $fieldClassName,
                             'className' => $fieldClassFull
-                          ));
+                            ));
                         }
                     } else {
                         //FIXME: strpos is better
                         if ($fieldClassName[0] == '\\') {
                             //Class: \DateTime
-                          $fieldClassFull = $fieldClassName;
+                            $fieldClassFull = $fieldClassName;
                         } else {
                             $fieldClassFull = $phpNamespace->getName().'\\'.$fieldClassName;
                             if (isset($this->logger)) {
                                 $this->logger->info('Uso class for field same namespace', array(
-                              'class' => $this->currentClass->getName(),
-                              'field' => $fieldClassName,
-                              'className' => $fieldClassFull
-                            ));
+                                'class' => $this->currentClass->getName(),
+                                'field' => $fieldClassName,
+                                'className' => $fieldClassFull
+                                ));
                             }
                         }
                     }
@@ -391,7 +391,7 @@ class ClassGenerator
                                 'className' => $fieldClassFull,
                                 'default' => $defaultValue,
                                 'autoinizialize' => $isAutoinizialize
-                              ));
+                                ));
                             }
                             if (!$first) {
                                 $parameter = $methodConstructor->addParameter($name, null); //solo i primitivi hanno un default, gli altri null come object
@@ -408,7 +408,7 @@ class ClassGenerator
                                 'className' => $fieldClassFull,
                                 'default' => $defaultValue,
                                 'autoinizialize' => $isAutoinizialize
-                              ));
+                                ));
                             }
                         }
                     }
@@ -419,7 +419,7 @@ class ClassGenerator
                             'class' => $this->currentClass->getName(),
                             'field' => $fieldClassName,
                             'className' => $fieldClassFull
-                          ));
+                            ));
                         }
                         $this->currentClass->getNamespace()->addUse($fieldClassFull);
                     }
@@ -476,14 +476,14 @@ class ClassGenerator
                     'field' => $name,
                     'autoinizialize' => $isAutoinizialize,
                     'default' => $defaultValue
-                  ));
+                    ));
                 }
 
                 $comment = 'no description available';
                 if (array_key_exists('description', $fieldProperties)) {
                     $comment = $fieldProperties['description'];
                 } else {
-                    if (array_key_exists($fieldClassName, $typesDescription)) {
+                    if (!is_null($typesDescription) && array_key_exists($fieldClassName, $typesDescription)) {
                         $comment = $typesDescription[$fieldClassName];
                     }
                 }

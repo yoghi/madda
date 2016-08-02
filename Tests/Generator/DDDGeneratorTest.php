@@ -109,10 +109,28 @@ class DDDGeneratorTest extends \PHPUnit_Framework_TestCase
         $dddg->analyze($directoryOutput.'/test.yml');
         $dddg->generate(new VfsAdapter($directorySrcGen));
 
-        $mappaToCheck = [];
-        foreach ($mappaToCheck as $namespace => $className) {
-            $this->compareFilePhp($resourcesDir.'/ddd/generated/'.$namespace, $namespace, $className, $directorySrcGen);
+        $errors = $dddg->getErrors();
+        $this->assertCount(1, $errors, 'errori non previsti durante la generazione');
+    }
+
+    public function testGenerateDDDOnVfsBad()
+    {
+        $directoryOutput = self::$directoryV->url().'/output';
+        $directorySrcGen = self::$directoryV->url().'/src-gen-bad-event';
+        $resourcesDir = __DIR__.'/../Resources';
+        if (!file_exists($directoryOutput)) {
+            mkdir($directoryOutput, 0700, true);
         }
+        if (!file_exists($directorySrcGen)) {
+            mkdir($directorySrcGen, 0700, true);
+        }
+        $data = file_get_contents($resourcesDir.'/ddd/bad.yml');
+        file_put_contents($directoryOutput.'/test.yml', $data);
+
+        $dddg = new DDDGenerator();
+        $dddg->setLogger($this->logger);
+        $dddg->analyze($directoryOutput.'/test.yml');
+        $dddg->generate(new VfsAdapter($directorySrcGen));
 
         $errors = $dddg->getErrors();
         $this->assertCount(1, $errors, 'errori non previsti durante la generazione');

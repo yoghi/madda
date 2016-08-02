@@ -21,7 +21,7 @@ class Finder
 
     /**
      * [search description]
-     * @param  string $dir search directory 
+     * @param  string $dir search directory
      * @param  string $extension extension to find, Ex: yml, php, raml
      */
     public function search($dir, $extension)

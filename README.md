@@ -42,6 +42,13 @@ composer install yoghi/madda
     - [ ] [Tactician](http://tactician.thephpleague.com/)
  - [ ] Contrib Guide
 
+## clean code
+
+ ```
+phpcbf **/*.php --standard=PSR2
+```
+
+
 ## Contributing
 
 Pull requests are welcome. Please see our CONTRIBUTING guide.
