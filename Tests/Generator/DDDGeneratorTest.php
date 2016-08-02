@@ -136,6 +136,29 @@ class DDDGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $errors, 'errori non previsti durante la generazione');
     }
 
+    public function testGenerateDDDOnVfsBadDefinition()
+    {
+        $directoryOutput = self::$directoryV->url().'/output';
+        $directorySrcGen = self::$directoryV->url().'/src-gen-bad-event';
+        $resourcesDir = __DIR__.'/../Resources';
+        if (!file_exists($directoryOutput)) {
+            mkdir($directoryOutput, 0700, true);
+        }
+        if (!file_exists($directorySrcGen)) {
+            mkdir($directorySrcGen, 0700, true);
+        }
+        $data = file_get_contents($resourcesDir.'/ddd/badDefinition.yml');
+        file_put_contents($directoryOutput.'/test.yml', $data);
+
+        $dddg = new DDDGenerator();
+        $dddg->setLogger($this->logger);
+        $dddg->analyze($directoryOutput.'/test.yml');
+        $dddg->generate(new VfsAdapter($directorySrcGen));
+
+        $errors = $dddg->getErrors();
+        $this->assertCount(1, $errors, 'errori non previsti durante la generazione');
+    }
+
     public function testGenerateDDDOnVfsEventsSpecific()
     {
         $directoryOutput = self::$directoryV->url().'/output';

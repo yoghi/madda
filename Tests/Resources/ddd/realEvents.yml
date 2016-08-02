@@ -11,9 +11,18 @@ ddd:
         autoinizialize: true
         description: special value
         getter: true
+        setter: true
   aggregate:
     package: BitPrepared\Bundle\EventBundle\Domain\Aggregate
     getter: true
+    fields:
+      specialAggregate:
+        primitive: int
+        default: 1
+        autoinizialize: false
+        description: special value aggregate
+        getter: true
+        setter: true
     events:
       - create
       - delete

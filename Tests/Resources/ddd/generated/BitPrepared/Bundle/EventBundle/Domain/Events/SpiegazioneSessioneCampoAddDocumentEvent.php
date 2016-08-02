@@ -55,6 +55,15 @@ final class SpiegazioneSessioneCampoAddDocumentEvent implements DomainEvent
 
 
     /**
+     * @var special int
+     */
+    final public function setSpecial(int $special)
+    {
+        $this->special = $special;
+    }
+
+
+    /**
      * @return \DateTime
      */
     final public function getOccurredOn()

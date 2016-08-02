@@ -1,0 +1,23 @@
+classes:
+
+    SpiegazioneSessioneCampo:
+        ddd:
+          type: aggregate
+          root: true
+        name: SpiegazioneSessioneCampo
+        fields:
+          id :
+            primitive: int
+            description: "identificativo univoco della sessione come aggregato root"
+          sessione:
+            class: SessioneCampo
+        events:
+          - add_document
+        validationRule:
+          events:
+            create:
+              fields: [ id, sessione, tipologiaCampo]
+            delete:
+              fields: [ id ]
+            addDocument:
+              fields: [ id, documentoCorrelato ]
