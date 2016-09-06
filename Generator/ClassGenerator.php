@@ -22,21 +22,13 @@ use Psr\Log\LoggerInterface;
 /**
  * @author Stefano Tamagnini <>
  */
-class ClassGenerator
+class ClassGenerator extends AbstractFileGenerator
 {
     /**
      * [$currentClass description]
      * @var \Nette\PhpGenerator\ClassType
      */
     private $currentClass;
-    private $currentFile;
-    private $errors;
-
-    /**
-     * [$logger description]
-     * @var \Psr\Log\LoggerInterface
-     */
-    private $logger;
 
     public function __construct($namespace, $className, $document = 'Generated Class')
     {
@@ -45,20 +37,13 @@ class ClassGenerator
         $this->currentClass->addComment($document);
     }
 
-    public function setLogger(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
-    }
-
     /**
      * Aggiungere il costruttore
      * @return Nette\PhpGenerator\Method
      */
     private function addConstructor()
     {
-        if (isset($this->logger)) {
-            $this->logger->info('Aggiungo costruttore', array( 'class' => $this->currentClass->getName() ));
-        }
+        $this->info('Aggiungo costruttore', array( 'class' => $this->currentClass->getName() ));
         $mc = $this->currentClass->addMethod('__construct');
         $mc->setStatic(false);
         $mc->setVisibility('public');
@@ -69,11 +54,9 @@ class ClassGenerator
 
     private function addSingleton($comment, $createGetter)
     {
-        if (isset($this->logger)) {
-            $this->logger->info('Aggiungo supporto singleton', array(
-              'class' => $this->currentClass->getName()
-            ));
-        }
+        $this->info('Aggiungo supporto singleton', array(
+          'class' => $this->currentClass->getName()
+        ));
         $fullClassName = $this->currentClass->getNamespace()->getName().'\\'.$this->currentClass->getName();
         if ($createGetter) {
             $mSingleton = $this->currentClass->addMethod('getInstance');
@@ -96,15 +79,13 @@ class ClassGenerator
 
     private function addGetter($fieldName, $fieldClassFull, $isStatic, $isConcrete)
     {
-        if (isset($this->logger)) {
-            $this->logger->info('Aggiungo getter', array(
-              'class' => $this->currentClass->getName(),
-              'field' => $fieldName,
-              'type' => $fieldClassFull,
-              'static' => $isStatic,
-              'concrete' => $isConcrete
-            ));
-        }
+        $this->info('Aggiungo getter', array(
+          'class' => $this->currentClass->getName(),
+          'field' => $fieldName,
+          'type' => $fieldClassFull,
+          'static' => $isStatic,
+          'concrete' => $isConcrete
+        ));
 
         /** $methodGetter @var \Nette\PhpGenerator\Method */
         $methodGetter = $this->currentClass->addMethod('get'.ucfirst($fieldName));
@@ -129,25 +110,21 @@ class ClassGenerator
         }
         $this->currentClass->getNamespace()->addUse($traitFull);
         $this->currentClass->addTrait($traitFull);
-        if (isset($this->logger)) {
-            $this->logger->info('Add trait', array(
-            'class' => $this->currentClass->getName(),
-            'trait' => $traitFull
-            ));
-        }
+        $this->info('Add trait', array(
+          'class' => $this->currentClass->getName(),
+          'trait' => $traitFull
+        ));
     }
 
     private function addSetter($fieldName, $fieldClassFull, $isStatic, $isConcrete)
     {
-        if (isset($this->logger)) {
-            $this->logger->info('Aggiungo setter', array(
-              'class' => $this->currentClass->getName(),
-              'field' => $fieldName,
-              'type' => $fieldClassFull,
-              'static' => $isStatic,
-              'concrete' => $isConcrete
-            ));
-        }
+        $this->info('Aggiungo setter', array(
+          'class' => $this->currentClass->getName(),
+          'field' => $fieldName,
+          'type' => $fieldClassFull,
+          'static' => $isStatic,
+          'concrete' => $isConcrete
+        ));
 
         /** $methodSetter @var \Nette\PhpGenerator\Method */
         $methodSetter = $this->currentClass->addMethod('set'.ucfirst($fieldName));
@@ -170,11 +147,9 @@ class ClassGenerator
     {
         $fieldClassFull = $this->currentClass->getNamespace()->getName().'\\'.$this->currentClass->getName();
 
-        if (isset($this->logger)) {
-            $this->logger->info('Aggiungo parseString', array(
-              'class' => $this->currentClass->getName()
-            ));
-        }
+        $this->info('Aggiungo parseString', array(
+          'class' => $this->currentClass->getName()
+        ));
 
         /** $methodParseString @var \Nette\PhpGenerator\Method */
         $methodParseString = $this->currentClass->addMethod('parseString');
@@ -182,7 +157,7 @@ class ClassGenerator
         $methodParseString->setStatic(true);
         $methodParseString->addComment('@return '.$fieldClassFull.'|null');
         $methodParseString->addParameter('parseString');
-        $body = '$class_name = \'TestNamespace\EnumTest\'.\'\\\\\'.$parseString;'."\n";
+        $body = '$class_name = \''.$fieldClassFull.'\'.\'\\\\\'.$parseString;'."\n";
         $body .= 'if (class_exists($class_name)) {';
         $body .= "\t".'$x = $class_name::instance();';
         $body .= "\t".'return $x;';
@@ -203,29 +178,23 @@ class ClassGenerator
     {
         $phpNamespace = $this->currentClass->getNamespace();
         if ($config->isInterface) {
-            if (isset($this->logger)) {
-                $this->logger->info('Passo a interfaccia', array($this->currentClass->getName()));
-            }
+            $this->info('Passo a interfaccia', array($this->currentClass->getName()));
             $docs = $this->currentClass->getComment();
             $this->currentClass = $this->currentFile->addInterface($phpNamespace->getName().'\\'.ucfirst($this->currentClass->getName()));
             $this->currentClass->setComment($docs);
-            if (isset($this->logger)) {
-                $this->logger->info('Check haveConstructor, in caso metto a false', array($config->haveConstructor));
-            }
+            $this->info('Check haveConstructor, in caso metto a false', array($config->haveConstructor));
             $config->haveConstructor = false;
         }
 
-        $this->logger->info('Generate', array( 'class' => $this->currentClass->getName(), 'namespace' => $phpNamespace->getName(), 'comment' => $this->currentClass->getComment(), 'properties' => $properties ));
+        $this->info('Generate', array( 'class' => $this->currentClass->getName(), 'namespace' => $phpNamespace->getName(), 'comment' => $this->currentClass->getComment(), 'properties' => $properties ));
 
         // extend class
         if (array_key_exists('extend', $properties)) {
             $extendClassName = $properties['extend'];
-            if (isset($this->logger)) {
-                $this->logger->info('Aggiungo extend', array(
-                'class' => $this->currentClass->getName(),
-                'extend' => $extendClassName
-                ));
-            }
+            $this->info('Aggiungo extend', array(
+              'class' => $this->currentClass->getName(),
+              'extend' => $extendClassName
+            ));
             $this->currentClass->setExtends($extendClassName);
             $this->currentClass->getNamespace()->addUse($extendClassName);
         }
@@ -240,12 +209,10 @@ class ClassGenerator
             }
             $this->currentClass->setImplements($implementsList);
             foreach ($implementsList as $implementUse) {
-                if (isset($this->logger)) {
-                    $this->logger->info('Aggiungo implement', array(
-                    'class' => $this->currentClass->getName(),
-                    'implements' => $implementUse
-                    ));
-                }
+                $this->info('Aggiungo implement', array(
+                  'class' => $this->currentClass->getName(),
+                  'implements' => $implementUse
+                ));
                 $this->currentClass->getNamespace()->addUse($implementUse);
             }
         }
@@ -320,7 +287,7 @@ class ClassGenerator
                 } else {
                     if (!empty($defaultValue) || is_int($defaultValue)) {
                         if (substr(rtrim($defaultValue), -1) == ";") {
-                            $this->logger->error('autoinizialize for '.$name.' on class '.$this->currentClass->getName().' have default with ";" please remove!');
+                            $this->error('autoinizialize for '.$name.' on class '.$this->currentClass->getName().' have default with ";" please remove!');
                             $defaultValue = substr($defaultValue, 0, strlen($defaultValue)-1);
                         }
                         if (!$isStatic) {
@@ -343,9 +310,7 @@ class ClassGenerator
                             }
                         }
                     } else {
-                        if (isset($this->logger)) {
-                            $this->logger->error('autoinizialize for '.$name.' not defined on element '.$this->currentClass->getName());
-                        }
+                        $this->error('autoinizialize for '.$name.' not defined on element '.$this->currentClass->getName());
                         $this->errors[] = 'autoinizialize for '.$name.' not defined on element '.$this->currentClass->getName();
                     }
                 }
@@ -357,13 +322,11 @@ class ClassGenerator
                     if (array_key_exists($fieldClassName, $typesReference)) {
                         $fieldNamespace = $typesReference[$fieldClassName];
                         $fieldClassFull = $fieldNamespace.'\\'.$fieldClassName;
-                        if (isset($this->logger)) {
-                            $this->logger->info('Trovato field namespace tra le reference', array(
-                            'class' => $this->currentClass->getName(),
-                            'field' => $fieldClassName,
-                            'className' => $fieldClassFull
-                            ));
-                        }
+                        $this->info('Trovato field namespace tra le reference', array(
+                          'class' => $this->currentClass->getName(),
+                          'field' => $fieldClassName,
+                          'className' => $fieldClassFull
+                        ));
                     } else {
                         //FIXME: strpos is better
                         if ($fieldClassName[0] == '\\') {
@@ -371,28 +334,24 @@ class ClassGenerator
                             $fieldClassFull = $fieldClassName;
                         } else {
                             $fieldClassFull = $phpNamespace->getName().'\\'.$fieldClassName;
-                            if (isset($this->logger)) {
-                                $this->logger->info('Uso class for field same namespace', array(
-                                'class' => $this->currentClass->getName(),
-                                'field' => $fieldClassName,
-                                'className' => $fieldClassFull
-                                ));
-                            }
+                            $this->info('Uso class for field same namespace', array(
+                              'class' => $this->currentClass->getName(),
+                              'field' => $fieldClassName,
+                              'className' => $fieldClassFull
+                            ));
                         }
                     }
 
                     if ($config->haveConstructor && !$isStatic) {
                         $parameter = null;
                         if (!$isAutoinizialize) {
-                            if (isset($this->logger)) {
-                                $this->logger->info('Aggiungo parametro al costruttore', array(
+                            $this->info('Aggiungo parametro al costruttore', array(
                                 'class' => $this->currentClass->getName(),
                                 'parameter' => $name,
                                 'className' => $fieldClassFull,
                                 'default' => $defaultValue,
                                 'autoinizialize' => $isAutoinizialize
-                                ));
-                            }
+                            ));
                             if (!$first) {
                                 $parameter = $methodConstructor->addParameter($name, null); //solo i primitivi hanno un default, gli altri null come object
                                 $parameter->setTypeHint($fieldClassFull);
@@ -401,26 +360,22 @@ class ClassGenerator
                                 $parameter->setTypeHint($fieldClassFull);
                             }
                         } else {
-                            if (isset($this->logger)) {
-                                $this->logger->info('Skip parametro al costruttore -> autoinizialize true', array(
-                                'class' => $this->currentClass->getName(),
-                                'parameter' => $name,
-                                'className' => $fieldClassFull,
-                                'default' => $defaultValue,
-                                'autoinizialize' => $isAutoinizialize
-                                ));
-                            }
+                            $this->info('Skip parametro al costruttore -> autoinizialize true', array(
+                              'class' => $this->currentClass->getName(),
+                              'parameter' => $name,
+                              'className' => $fieldClassFull,
+                              'default' => $defaultValue,
+                              'autoinizialize' => $isAutoinizialize
+                            ));
                         }
                     }
 
                     if (array_key_exists($fieldClassName, $typesReference)) {
-                        if (isset($this->logger)) {
-                            $this->logger->info('Add field type class with namespace', array(
+                        $this->info('Add field type class with namespace', array(
                             'class' => $this->currentClass->getName(),
                             'field' => $fieldClassName,
                             'className' => $fieldClassFull
-                            ));
-                        }
+                        ));
                         $this->currentClass->getNamespace()->addUse($fieldClassFull);
                     }
                 } else {
@@ -436,15 +391,13 @@ class ClassGenerator
 
                         if (!$isAutoinizialize) {
                             if (is_null($defaultValue)) {
-                                if (isset($this->logger)) {
-                                    $this->logger->info('Aggiungo parametro al costruttore', array(
-                                      'class' => $this->currentClass->getName(),
-                                      'parameter' => $name,
-                                      'className' => $fieldClassFull,
-                                      'default' => $defaultValue,
-                                      'autoinizialize' => $isAutoinizialize
-                                    ));
-                                }
+                                $this->info('Aggiungo parametro al costruttore', array(
+                                  'class' => $this->currentClass->getName(),
+                                  'parameter' => $name,
+                                  'className' => $fieldClassFull,
+                                  'default' => $defaultValue,
+                                  'autoinizialize' => $isAutoinizialize
+                                ));
 
                                 //PHP7 ONLY
                                 // if ($fieldClassFull == 'int') {
@@ -470,14 +423,12 @@ class ClassGenerator
                     }
                 }
 
-                if (isset($this->logger)) {
-                    $this->logger->info('Check autoinizialize field', array(
-                    'class' => $this->currentClass->getName(),
-                    'field' => $name,
-                    'autoinizialize' => $isAutoinizialize,
-                    'default' => $defaultValue
-                    ));
-                }
+                $this->info('Check autoinizialize field', array(
+                  'class' => $this->currentClass->getName(),
+                  'field' => $name,
+                  'autoinizialize' => $isAutoinizialize,
+                  'default' => $defaultValue
+                ));
 
                 $comment = 'no description available';
                 if (array_key_exists('description', $fieldProperties)) {
@@ -534,6 +485,62 @@ class ClassGenerator
             if ($config->haveConstructor) {
                 $methodConstructor->setBody($body, []);
             }
+        } //end fields
+
+        if (array_key_exists('methods', $properties)) {
+            $body = '';
+
+            foreach ($properties['methods'] as $methodName => $methodsProperties) {
+                $this->info('Aggiungo method', array(
+                  'class' => $this->currentClass->getName(),
+                  'methodName' => $methodName,
+                  'methodProp' => $methodsProperties
+                ));
+
+                /** $newMethodCall @var \Nette\PhpGenerator\Method */
+                $newMethodCall = $this->currentClass->addMethod($methodName);
+                $newMethodCall->setFinal(true);
+
+                $newMethodCall->setStatic(false);
+                if (array_key_exists('static', $methodsProperties)) {
+                    $newMethodCall->setStatic($methodsProperties['static']);
+                }
+
+                if (array_key_exists('description', $methodsProperties)) {
+                    $newMethodCall->setVisibility($methodsProperties['visibility']);
+                } else {
+                    $newMethodCall->setVisibility('public');
+                }
+
+                if (array_key_exists('description', $methodsProperties)) {
+                    $newMethodCall->addComment($methodsProperties['description']);
+                } else {
+                    $returnType = 'void';
+                    if (array_key_exists('@return', $methodsProperties)) {
+                        $returnType = $methodsProperties['@return'];
+                        //TODO: .'|null' va messo in quale condizione?
+                        $newMethodCall->addComment('@return '.$returnType);
+                    } else {
+                        $newMethodCall->addComment('@return void');
+                    }
+                }
+
+                if (array_key_exists('params', $methodsProperties)) {
+                    foreach ($methodsProperties['params'] as $paramName => $paramProp) {
+                        if (array_key_exists('class', $paramProp)) {
+                            $newMethodCall->addParameter($paramName)->setTypeHint($paramProp['class']);
+                        }
+                        if (array_key_exists('primitive', $paramProp)) {
+                            $newMethodCall->addParameter($paramName);
+                        }
+                    }
+                }
+                $body = ' // FIMXE: da implementare ';
+                if (array_key_exists('body', $methodsProperties)) {
+                    $body = $methodsProperties['body'];
+                }
+                $newMethodCall->setBody($body);
+            }
         }
 
         if ($config->isEnum) {
@@ -547,27 +554,9 @@ class ClassGenerator
         }
     }
 
-    public function toString()
-    {
-        return (string)$this->currentFile;
-    }
-
     public function createFileOnDir(Local $adapter)
     {
-        $filesystem = new Filesystem($adapter);
         $outFile = str_replace('\\', '/', $this->currentClass->getNamespace()->getName().'\\'.$this->currentClass->getName()).'.php';
-
-        $dir = pathinfo($adapter->getPathPrefix().$outFile, PATHINFO_DIRNAME).'/';
-        if (!is_dir($dir)) {
-            $this->logger->info('Creo directory mancante: '.$dir);
-            mkdir($dir, 0700, true);
-        }
-
-        if ($filesystem->has($outFile)) {
-            $filesystem->put($outFile, (string)$this->currentFile);
-        } else {
-            $filesystem->write($outFile, (string)$this->currentFile);
-        }
-        return $outFile; //$io->text('Outfile: '.$outFile);
+        $this->_createFileOnDir($adapter, $outFile);
     }
 }

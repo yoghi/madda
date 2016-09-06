@@ -2,10 +2,10 @@
 namespace BitPrepared\Bundle\FormazioneBundle\Domain\Service\QueryRequest;
 
 use BitPrepared\Bundle\FormazioneBundle\Domain\Service\Request;
-use BitPrepared\Bundle\FormazioneBundle\Domain\ValueObject;
+use BitPrepared\Bundle\FormazioneBundle\Domain\ValueObject\TipologiaCampo;
 
 /**
- * Generated Class
+ * No comment found on ddd model
  */
 final class ElencoSessioniForTipologiaRequest extends Request
 {
@@ -19,7 +19,7 @@ final class ElencoSessioniForTipologiaRequest extends Request
     /**
      * costruttore
      */
-    final public function __construct(ValueObject\TipologiaCampo $tipoCampo)
+    final public function __construct(TipologiaCampo $tipoCampo)
     {
         $this->tipoCampo = $tipoCampo;
     }

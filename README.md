@@ -29,6 +29,7 @@ composer install yoghi/madda
  - [X] [Coveralls](https://coveralls.io/github/yoghi/madda)
  - [X] [VersionEye](https://www.versioneye.com) -> controllo degli aggiornamenti delle dipendeze
  - [X] badge licenza
+ - [ ] git tag -a 1.0.0
  - [ ] changelog / release workflow
  - [ ] wiki
  - [ ] faq
@@ -44,10 +45,53 @@ composer install yoghi/madda
 
 ## clean code
 
- ```
+```
 phpcbf **/*.php --standard=PSR2
+bin/parallel-lint --exclude app --exclude vendor .
+bin/phpcs --colors -wp src --report=summary --standard=PSR2,phpcs.xml
+bin/phpunit --coverage-php tests/coverage/phpunit.cov tests
+bin/phpspec run --format=pretty --no-code-generation
 ```
 
+## Debug
+
+con atom si deve configurare la porta di ascolto (via cson o settings normale.)
+
+a livello di php va installato xdebug
+
+```
+phpbrew ext install xdebug stable
+```
+
+configurato:
+
+```
+cd ~/.phpbrew/php/var/db/
+```
+edit del file **xdebug.ini** sotto la riga "zend_extension=...."
+
+~~~
+xdebug.remote_enable=1
+xdebug.remote_host=127.0.0.1
+xdebug.remote_connect_back=1    # Not safe for production servers
+xdebug.remote_port=9000
+xdebug.remote_handler=dbgp
+xdebug.remote_mode=req
+xdebug.remote_autostart=true
+~~~
+
+tenerlo abilitato significa rallentare, quindi conviene attivarlo solo quando serve.
+
+```
+phpbrew ext disable xdebug
+phpbrew ext enable xdebug
+```
+
+info :
+
+```
+phpbrew ext show xdebug
+```
 
 ## Contributing
 

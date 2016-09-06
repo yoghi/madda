@@ -15,30 +15,40 @@ trait FileCompare
    * @param  string         $className    class name
    * @param  ClassGenerator $g            class generator object to test
    */
-  private function compareFilePhp($resourcesDir, $namespace, $className, $directoryOutput)
-  {
-      $fileInput = $resourcesDir.'/'.$className.'.php';
-      $fileName = $className.'.php';
-      $fileOutput = $directoryOutput . '/'.$namespace. '/'. $fileName;
+   private function compareClassPhp($resourcesDir, $namespace, $className, $directoryOutput, $createIfNotExist = false)
+   {
+       $fileInput = $resourcesDir.'/'.$className.'.php';
+       $fileName = $className.'.php';
+       $fileOutput = $directoryOutput . '/'.$namespace. '/'. $fileName;
 
-      $expected = file_get_contents($fileInput);
-      $iFile = new SplFileInfo($fileOutput, $directoryOutput.'/'.$namespace, $fileName);
-      $f = new Fixer();
-      $f->registerBuiltInFixers();
-      $f->registerBuiltInConfigs();
+       $iFile = new SplFileInfo($fileOutput, $directoryOutput.'/'.$namespace, $fileName);
+       $fixer = new Fixer();
+       $fixer->registerBuiltInFixers();
+       $fixer->registerBuiltInConfigs();
 
-      $cr = new ConfigurationResolver();
-      $cr->setAllFixers($f->getFixers());
-      $cr->setOption('level', 'psr2');
-      $cr->setOption('fixers', 'eof_ending,strict_param,short_array_syntax,trailing_spaces,indentation,line_after_namespace,php_closing_tag');
-      $cr->resolve();
+       $cresolver = new ConfigurationResolver();
+       $cresolver->setAllFixers($fixer->getFixers());
+       $cresolver->setOption('level', 'psr2');
+       $cresolver->setOption('fixers', 'eof_ending,strict_param,short_array_syntax,trailing_spaces,indentation,line_after_namespace,php_closing_tag');
+       $cresolver->resolve();
 
-      $fileCacheManager = new FileCacheManager(false, $directoryOutput, $cr->getFixers());
-      $f->fixFile($iFile, $cr->getFixers(), false, false, $fileCacheManager);
+       $fileCacheManager = new FileCacheManager(false, $directoryOutput, $cresolver->getFixers());
+       $fixer->fixFile($iFile, $cresolver->getFixers(), false, false, $fileCacheManager);
 
-      $fileOutput2 = $iFile->getPathname();
-      $actual = file_get_contents($fileOutput2);
+       $fileOutput2 = $iFile->getPathname();
+       $actual = file_get_contents($fileOutput2);
 
-      $this->assertSame($expected, $actual, 'Classe '.$className.' invalid');
-  }
+       if (!file_exists($fileInput) && $createIfNotExist) {
+           file_put_contents($fileInput, $actual);
+       }
+
+       $expected = file_get_contents($fileInput);
+
+       $this->assertSame($expected, $actual, 'Classe '.$className.' invalid');
+   }
+
+    private function compareFile($resourcesDir, $directoryOutput, $pathFie, $createIfNotExist = false)
+    {
+        //TODO: da implementare
+    }
 }

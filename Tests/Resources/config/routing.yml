@@ -1,0 +1,76 @@
+# app/config/routing.yml
+blog_list:
+    path:      /blog/{page}
+    defaults:  { _controller: AppBundle:Blog:list }
+    requirements:
+        page: '\d+'
+
+blog_list_2:
+    path:      /blog2/{page}
+    defaults:  { _controller: AppBundle:Blog:list, page: 1 }
+
+    # src/AppBundle/Controller/BlogController.php ->  public function listAction($page)
+    # use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+    # class BlogController extends Controller
+
+    requirements:
+        page: '\d+'
+
+article_show:
+  path:     /articles/{_locale}/{year}/{title}.{_format}
+  defaults: { _controller: AppBundle:Article:show, _format: html }
+  requirements:
+      _locale:  en|fr
+      _format:  html|rss
+      year:     \d+
+
+_hello:
+    path:     /hello/{username}
+    defaults: { _controller: AppBundle:Demo:hello }
+    requirements:
+        username: .+
+        # in questo modo .+ permette / all'interno dell'username
+
+contact:
+    path:     /contact
+    defaults: { _controller: AcmeDemoBundle:Main:contact }
+    condition: "context.getMethod() in ['GET', 'HEAD'] and request.headers.get('User-Agent') matches '/firefox/i'"
+
+projects_homepage:
+    path:     /
+    host:     "{project_name}.example.com"
+    defaults: { _controller: AcmeDemoBundle:Main:mobileHomepage }
+
+
+# http://symfony.com/doc/current/routing/hostname_pattern.html
+mobile_homepage:
+    path:     /
+    host:     "{subdomain}.example.com"
+    defaults:
+        _controller: AcmeDemoBundle:Main:mobileHomepage
+        subdomain: m
+    requirements:
+        subdomain: m|mobile
+
+
+mobile_homepage:
+    path:     /
+    host:     "m.{domain}"
+    defaults:
+        _controller: AcmeDemoBundle:Main:mobileHomepage
+        domain: '%domain%'
+    requirements:
+        domain: '%domain%'
+
+# http://symfony.com/doc/current/routing/redirect_trailing_slash.html
+remove_trailing_slash:
+    path: /{url}
+    defaults: { _controller: AppBundle:Redirecting:removeTrailingSlash }
+    requirements:
+        url: .*/$
+    methods: [GET]
+
+
+blog_home:
+    path:     /
+    defaults: { _controller: SensioBlogBundle:Post:index }

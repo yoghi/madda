@@ -4,7 +4,7 @@ namespace BitPrepared\Bundle\FormazioneBundle\Domain\ValueObject\TipologiaCampo;
 use BitPrepared\Bundle\FormazioneBundle\Domain\ValueObject\TipologiaCampo;
 
 /**
- * Generated Class
+ * Child of TipologiaCampo CAMLC
  */
 final class CAMLC extends TipologiaCampo
 {

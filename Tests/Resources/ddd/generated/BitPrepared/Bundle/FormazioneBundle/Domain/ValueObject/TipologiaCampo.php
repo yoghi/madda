@@ -1,10 +1,8 @@
 <?php
 namespace BitPrepared\Bundle\FormazioneBundle\Domain\ValueObject;
 
-use BitPrepared\Bundle\FormazioneBundle\Domain\ValueObject;
-
 /**
- * Generated Class
+ * Tipologia di campo CFM/CFT/CCG/CAM
  */
 abstract class TipologiaCampo
 {
@@ -15,10 +13,19 @@ abstract class TipologiaCampo
     protected $name;
 
     /**
-     * singleton
+     * Singleton instance for enum
      * @var BitPrepared\Bundle\FormazioneBundle\Domain\ValueObject\TipologiaCampo
      */
     protected static $instance;
+
+
+    /**
+     * @return string
+     */
+    final public function getName()
+    {
+        return $this->name;
+    }
 
 
     /**
@@ -30,16 +37,7 @@ abstract class TipologiaCampo
         if (class_exists($class_name)) {
             $x = $class_name::instance();
             return $x;
-        };
+        }
         return null;
-    }
-
-
-    /**
-     * @return string
-     */
-    final public function getName()
-    {
-        return $this->name;
     }
 }

@@ -616,7 +616,40 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $typesDescArray = array();
         $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescArray, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
+    }
 
+
+    public function testFirstClassMethodGenerator()
+    {
+        $namespace = "TestNamespace";
+        $className = "FirstMethodClass";
+        $gClassgen = new ClassGenerator($namespace, $className);
+        $gClassgen->setLogger($this->logger);
+        $config = new ClassConfig();
+        $properties = array(
+          "extend" => "ExtendClass",
+          "implements" => "IClass",
+          "methods" => array(
+            "methodName" => array(
+              "params" => array(
+                "prova" => array(
+                  "primitive" => "int",
+                  "description" => "session unique identifier"
+                ),
+                "prova2" => array(
+                  "primitive" => "string",
+                  "description" => "campo generico"
+                )
+              )
+            )
+          )
+        );
+        $typesReferenceArray = array();
+        $typesDescArray = array();
+        $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescArray, $config);
+
+        $resourcesDir = __DIR__.'/../Resources/php';
         $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
     }
 
@@ -708,6 +741,6 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $directoryOutput = $this->generateDestDir($namespace);
         $gClassgen->createFileOnDir(new VfsAdapter($directoryOutput, 0));
-        $this->compareFilePhp($resourcesDir, $namespace, $className, $directoryOutput);
+        $this->compareClassPhp($resourcesDir, $namespace, $className, $directoryOutput);
     }
 }

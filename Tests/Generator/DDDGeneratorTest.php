@@ -59,32 +59,43 @@ class DDDGeneratorTest extends \PHPUnit_Framework_TestCase
         // exit;
 
         $mappaToCheck = [];
-        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Events'] = 'DomainEvent';
-        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Events'] = 'SpiegazioneSessioneCampoAddDocumentEvent';
-        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Events'] = 'SpiegazioneSessioneCampoCreateEvent';
-        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Events'] = 'SpiegazioneSessioneCampoDeleteEvent';
-        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/ValueObject'] = 'TipologiaCampo';
-        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/ValueObject'] = 'Sessione';
-        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/ValueObject'] = 'SessioniArray';
-        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Entity'] = 'SessioneCampo';
-        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Aggregate'] = 'SpiegazioneSessioneCampo';
-        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Service/QueryRequest'] = 'DettagliSessioneRequest';
-        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Service/QueryRequest'] = 'ElencoSessioniForTipologiaRequest';
-        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Service/QueryRequest'] = 'ElencoSessioniRequest';
-        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Service/CommandRequest'] = 'NewSessioneRequest';
-        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Classes'] = 'SampleClassWithNamespace';
-        $mappaToCheck[''] = 'SampleClass';
-        foreach ($mappaToCheck as $namespace => $className) {
-            $this->compareFilePhp($resourcesDir.'/ddd/generated/'.$namespace, $namespace, $className, $directorySrcGen);
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Events'][] = 'DomainEvent';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Events'][] = 'SpiegazioneSessioneCampoAddDocumentEvent';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Events'][] = 'SpiegazioneSessioneCampoCreateEvent';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Events'][] = 'SpiegazioneSessioneCampoDeleteEvent';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/ValueObject/TipologiaCampo'][] = 'CFMLC';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/ValueObject/TipologiaCampo'][] = 'CFMEG';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/ValueObject/TipologiaCampo'][] = 'CFMRS';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/ValueObject/TipologiaCampo'][] = 'CFT';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/ValueObject/TipologiaCampo'][] = 'CAMLC';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/ValueObject/TipologiaCampo'][] = 'CAMEG';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/ValueObject/TipologiaCampo'][] = 'CAMRS';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/ValueObject/TipologiaCampo'][] = 'CCG';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/ValueObject'][] = 'TipologiaCampo';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/ValueObject'][] = 'Sessione';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/ValueObject'][] = 'SessioniArray';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Entity'][] = 'SessioneCampo';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Aggregate'][] = 'SpiegazioneSessioneCampo';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Service/QueryRequest'][] = 'DettagliSessioneRequest';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Service/QueryRequest'][] = 'ElencoSessioniForTipologiaRequest';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Service/QueryRequest'][] = 'ElencoSessioniRequest';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Service/CommandRequest'][] = 'NewSessioneRequest';
+        $mappaToCheck['BitPrepared/Bundle/FormazioneBundle/Domain/Classes'][] = 'SampleClassWithNamespace';
+        $mappaToCheck[''][] = 'SampleClass';
+
+        foreach ($mappaToCheck as $namespace => $classList) {
+            foreach ($classList as $className) {
+                $this->compareClassPhp($resourcesDir.'/ddd/generated/'.$namespace, $namespace, $className, $directorySrcGen);
+            }
         }
 
         // $namespace = 'BitPrepared/Bundle/FormazioneBundle/Domain/ValueObject';
         // $className = 'Sessione';
-        // $this->compareFilePhp($resourcesDir.'/ddd/generated/'.$namespace, $namespace, $className, $directorySrcGen);
+        // $this->compareClassPhp($resourcesDir.'/ddd/generated/'.$namespace, $namespace, $className, $directorySrcGen);
         //
         // $namespace = 'BitPrepared/Bundle/FormazioneBundle/Domain/ValueObject';
         // $className = 'SessioniArray';
-        // $this->compareFilePhp($resourcesDir.'/ddd/generated/'.$namespace, $namespace, $className, $directorySrcGen);
+        // $this->compareClassPhp($resourcesDir.'/ddd/generated/'.$namespace, $namespace, $className, $directorySrcGen);
 
         $errors = $dddg->getErrors();
         $this->assertCount(0, $errors, 'errori durante la generazione');
@@ -189,14 +200,16 @@ class DDDGeneratorTest extends \PHPUnit_Framework_TestCase
         // exit;
 
         $mappaToCheck = [];
-        $mappaToCheck['BitPrepared/Bundle/EventBundle/Domain/Events'] = 'DomainEvent';
-        $mappaToCheck['BitPrepared/Bundle/EventBundle/Domain/Events'] = 'SpiegazioneSessioneCampoCreateEvent';
-        $mappaToCheck['BitPrepared/Bundle/EventBundle/Domain/Events'] = 'SpiegazioneSessioneCampoDeleteEvent';
-        $mappaToCheck['BitPrepared/Bundle/EventBundle/Domain/Events'] = 'SpiegazioneSessioneCampoAddDocumentEvent';
-        $mappaToCheck['BitPrepared/Bundle/EventBundle/Domain/Aggregate'] = 'SpiegazioneSessioneCampo';
+        $mappaToCheck['BitPrepared/Bundle/EventBundle/Domain/Events'][] = 'DomainEvent';
+        $mappaToCheck['BitPrepared/Bundle/EventBundle/Domain/Events'][] = 'SpiegazioneSessioneCampoCreateEvent';
+        $mappaToCheck['BitPrepared/Bundle/EventBundle/Domain/Events'][] = 'SpiegazioneSessioneCampoDeleteEvent';
+        $mappaToCheck['BitPrepared/Bundle/EventBundle/Domain/Events'][] = 'SpiegazioneSessioneCampoAddDocumentEvent';
+        $mappaToCheck['BitPrepared/Bundle/EventBundle/Domain/Aggregate'][] = 'SpiegazioneSessioneCampo';
 
-        foreach ($mappaToCheck as $namespace => $className) {
-            $this->compareFilePhp($resourcesDir.'/ddd/generated/'.$namespace, $namespace, $className, $directorySrcGen);
+        foreach ($mappaToCheck as $namespace => $classList) {
+            foreach ($classList as $className) {
+                $this->compareClassPhp($resourcesDir.'/ddd/generated/'.$namespace, $namespace, $className, $directorySrcGen);
+            }
         }
 
         $errors = $dddg->getErrors();

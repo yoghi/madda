@@ -22,4 +22,9 @@ class VfsAdapter extends Local
     {
         return $root;
     }
+
+    public function __toString()
+    {
+        return $this->getPathPrefix();
+    }
 }

@@ -12,7 +12,7 @@
         }
     ],
     "autoload": {
-        "psr-4": { "Yoghi\\Bundle\\MaddaBundle\\": "" , "Yoghi\\Bundle\\MaddaBundleTest\\": "Tests" }
+        "psr-4": { "Yoghi\\Bundle\\MaddaBundle\\": "" , "Yoghi\\Bundle\\MaddaBundleTest\\": "Tests" , "Raml\\" : "vendor/kubawerlos/php-raml-parser/src" }
     },
     "prefer-stable": true,
     "require": {
@@ -22,12 +22,18 @@
         "symfony/console": "^3.0",
         "symfony/process": "^3.0",
         "symfony/filesystem": "^3.0",
+        "symfony/yaml": "^3.0",
         "webpatser/laravel-uuid": "2.*",
         "nette/php-generator": "^2.3",
         "friendsofphp/php-cs-fixer": "^1.11",
         "bocharsky-bw/arrayzy": "^0.6.0",
         "league/flysystem": "^1.0",
-        "cweagans/composer-patches": "1.5.0"
+        "cweagans/composer-patches": "1.5.0",
+
+        "justinrainbow/json-schema": "~1.5",
+        "oodle/inflect": "~0.2",
+        "kubawerlos/php-raml-parser": "2.0.*"
+
     },
     "require-dev" : {
         "sensiolabs/security-checker": "^3.0",
@@ -39,6 +45,22 @@
         "monolog/monolog": "^1.19",
         "johnkary/phpunit-speedtrap": "^1.0"
     },
+
+    "repositories": {
+        "raml-parser-unofficial": {
+            "type": "package",
+            "package": {
+                "name": "kubawerlos/php-raml-parser",
+                "version": "2.0",
+                "source": {
+                    "url": "https://github.com/kubawerlos/php-raml-parser.git",
+                    "type": "git",
+                    "reference": "origin/master"
+                }
+            }
+        }
+    },
+
     "scripts": {
     },
     "extra": {

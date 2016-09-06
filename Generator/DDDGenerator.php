@@ -112,7 +112,6 @@ class DDDGenerator
         //$is_constructor_enable = true;
         //$ddd_is_root_aggregate = false;
 
-
         $specListClasses = $this->rym->getClassesDefinition();
         foreach ($specListClasses as $className => $properties) {
             $this->info('Generate class', array('class' => $className)); //, 'properties' => $properties
@@ -226,17 +225,17 @@ class DDDGenerator
                         }
                     }
 
-                  //TODO: gestire gli [] dentro la definizione del modello se serve...
+                    //TODO: gestire gli [] dentro la definizione del modello se serve...
 
-                  //TODO: aggiungere le validazioni
-                  // validationRule:
-                  //   events:
-                  //     create:
-                  //       fields: [ id, sessione, tipologiaCampo]
-                  //     delete:
-                  //       fields: [ id ]
-                  //     addDocument:
-                  //       fields: [ id, documentoCorrelato ]
+                    //TODO: aggiungere le validazioni
+                    // validationRule:
+                    //   events:
+                    //     create:
+                    //       fields: [ id, sessione, tipologiaCampo]
+                    //     delete:
+                    //       fields: [ id ]
+                    //     addDocument:
+                    //       fields: [ id, documentoCorrelato ]
 
                     if (array_key_exists('events', $properties)) {
                         //genero altre classi per ogni evento!
@@ -318,15 +317,72 @@ class DDDGenerator
                         }
                     }
 
-                  //NORMAL GENERATION
+                    if (array_key_exists('enum', $properties)) {
+                        $enumClassList = $properties['enum'];
+                        foreach ($enumClassList as $enumClassName) {
+                            $enumNamespace = $namespace.'\\'.$className;
+                            $propertiesEnumClass = array(
+                              'extend' => $namespace.'\\'.$className
+                            );
+                            $actionName = 'instance';
+                            $propertiesEnumClass['methods'] = array();
+                            $propertiesEnumClass['methods'][$actionName] = array();
+                            $propertiesEnumClass['methods'][$actionName]['params'] = array();
+                            $propertiesEnumClass['methods'][$actionName]['static'] = true;
+                            $propertiesEnumClass['methods'][$actionName]['@return'] = $enumNamespace.'\\'.$enumClassName;
+                            $body = 'self::$instance = new '.$enumClassName.'();';
+                            $body .= 'return self::$instance;';
+                            $propertiesEnumClass['methods'][$actionName]['body'] = $body;
+
+                            //TODO: pensare se qui va bene cosi... potrebbe il ClassGenerator sapere come fare questo costruttore?
+                            $actionName = '__construct';
+                            $propertiesEnumClass['methods'][$actionName] = array();
+                            $propertiesEnumClass['methods'][$actionName]['visibility'] = 'private';
+                            $propertiesEnumClass['methods'][$actionName]['params'] = array();
+                            $propertiesEnumClass['methods'][$actionName]['static'] = false;
+                            $propertiesEnumClass['methods'][$actionName]['description'] = 'costruttore';
+                            $body = '$this->name = \''.$enumClassName.'\';';
+                            $propertiesEnumClass['methods'][$actionName]['body'] = $body;
+
+                            $enumClassComments = 'Child of '.$className.' '.$enumClassName;
+                            $g = new ClassGenerator($enumNamespace, $enumClassName, $enumClassComments);
+                            $g->setLogger($this->logger);
+                            $configEnum = new ClassConfig();
+                            $configEnum->isInterface = false;
+                            $configEnum->haveConstructor = true;
+                            $configEnum->isFinalClass = true; //don't wnat cycle dependency
+                            $configEnum->haveGetter = true;
+                            $configEnum->haveSetter = false;
+                            $g->generateClassType($propertiesEnumClass, $this->modelClass, $this->modelComments, $configEnum);
+                            $g->createFileOnDir($directoryOutput);
+                            $generated = true;
+                        }
+
+                        $properties['fields']['name'] = array(
+                          "primitive" => "string",
+                          "description" => "nome esplicativo della enum",
+                          "getter" => true
+                        );
+
+                        $config = new ClassConfig();
+                        $config->isInterface = false;
+                        $config->haveConstructor = false;
+                        $config->isFinalClass = false;
+                        $config->isEnum = true;
+                        $config->haveGetter = $createGetter;
+                        $config->haveSetter = $createSetter;
+                    } else {
+                        $config = new ClassConfig();
+                        $config->isInterface = false;
+                        $config->haveConstructor = true;
+                        $config->isFinalClass = true; //don't wnat cycle dependency
+                        $config->haveGetter = $createGetter;
+                        $config->haveSetter = $createSetter;
+                    }
+
+                    //NORMAL GENERATION
                     $g = new ClassGenerator($namespace, $className, $classComments);
                     $g->setLogger($this->logger);
-                    $config = new ClassConfig();
-                    $config->isInterface = false;
-                    $config->haveConstructor = true;
-                    $config->isFinalClass = true; //don't wnat cycle dependency
-                    $config->haveGetter = $createGetter;
-                    $config->haveSetter = $createSetter;
                     $g->generateClassType($properties, $this->modelClass, $this->modelComments, $config);
                     $g->createFileOnDir($directoryOutput);
                     $generated = true;

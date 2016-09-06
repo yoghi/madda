@@ -4,7 +4,7 @@ namespace BitPrepared\Bundle\FormazioneBundle\Domain\Service\QueryRequest;
 use BitPrepared\Bundle\FormazioneBundle\Domain\Service\Request;
 
 /**
- * Generated Class
+ * No comment found on ddd model
  */
 final class DettagliSessioneRequest extends Request
 {

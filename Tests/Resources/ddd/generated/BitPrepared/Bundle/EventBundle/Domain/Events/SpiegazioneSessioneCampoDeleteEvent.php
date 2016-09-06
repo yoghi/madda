@@ -7,6 +7,12 @@ namespace BitPrepared\Bundle\EventBundle\Domain\Events;
 final class SpiegazioneSessioneCampoDeleteEvent implements DomainEvent
 {
     /**
+     * special value
+     * @var int
+     */
+    private $special;
+
+    /**
      * quando accade l'evento
      * @var \DateTime
      */
@@ -31,9 +37,29 @@ final class SpiegazioneSessioneCampoDeleteEvent implements DomainEvent
     final public function __construct($aggregateId, array $properties = null)
     {
         // autoinizialize
+        $this->special = 10;
+        // autoinizialize
         $this->occurredOn = new \DateTime();
         $this->aggregateId = $aggregateId;
         $this->properties = $properties;
+    }
+
+
+    /**
+     * @return int
+     */
+    final public function getSpecial()
+    {
+        return $this->special;
+    }
+
+
+    /**
+     * @var special int
+     */
+    final public function setSpecial(int $special)
+    {
+        $this->special = $special;
     }
 
 

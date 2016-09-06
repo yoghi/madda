@@ -2,7 +2,7 @@
 namespace BitPrepared\Bundle\FormazioneBundle\Domain\Events;
 
 /**
- * Event for Aggregate Root SpiegazioneSessioneCampo
+ * Event add_document for Aggregate Root SpiegazioneSessioneCampo
  */
 final class SpiegazioneSessioneCampoAddDocumentEvent implements DomainEvent
 {
@@ -28,8 +28,9 @@ final class SpiegazioneSessioneCampoAddDocumentEvent implements DomainEvent
     /**
      * costruttore
      */
-    final public function __construct($aggregateId, array $properties)
+    final public function __construct($aggregateId, array $properties = null)
     {
+        // autoinizialize
         $this->occurredOn = new \DateTime();
         $this->aggregateId = $aggregateId;
         $this->properties = $properties;
