@@ -1,0 +1,35 @@
+status_get:
+    path: /status
+    defaults: { _controller: 'AppBundle:Status:getStatus' }
+    host: 'sublevel.secondlevel.domain'
+    methods: [GET]
+    schemas: [HTTPS]
+    requirements: [FIXME]
+badge_get:
+    path: /badge
+    defaults: { _controller: 'AppBundle:Badge:getBadge' }
+    host: 'sublevel.secondlevel.domain'
+    methods: [GET]
+    schemas: [HTTPS]
+    requirements: [FIXME]
+workspace_post:
+    path: /workspace
+    defaults: { _controller: 'AppBundle:Workspace:postWorkspace' }
+    host: 'sublevel.secondlevel.domain'
+    methods: [POST]
+    schemas: [HTTPS]
+    requirements: [FIXME]
+workspace_get:
+    path: /workspace
+    defaults: { _controller: 'AppBundle:Workspace:getWorkspace' }
+    host: 'sublevel.secondlevel.domain'
+    methods: [GET]
+    schemas: [HTTPS]
+    requirements: [FIXME]
+stream_post:
+    path: /stream
+    defaults: { _controller: 'AppBundle:Stream:postStream' }
+    host: 'sublevel.secondlevel.domain'
+    methods: [POST]
+    schemas: [HTTPS]
+    requirements: [FIXME]

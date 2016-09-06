@@ -49,6 +49,15 @@ trait FileCompare
 
     private function compareFile($resourcesDir, $directoryOutput, $pathFie, $createIfNotExist = false)
     {
-        //TODO: da implementare
+        $fileInput = $resourcesDir.'/'.$pathFie;
+        $actual = file_get_contents($directoryOutput.'/'.$pathFie);
+
+        if (!file_exists($fileInput) && $createIfNotExist) {
+            file_put_contents($fileInput, $actual);
+        }
+
+        $expected = file_get_contents($fileInput);
+
+        $this->assertSame($expected, $actual, 'File '.$pathFie.' invalid');
     }
 }
