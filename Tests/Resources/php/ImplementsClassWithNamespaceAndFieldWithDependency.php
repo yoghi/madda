@@ -1,30 +1,32 @@
 <?php
+
 namespace TestNamespace;
 
 use ExtendClass;
-use NS\IClass;
 use NamespaceDep\classDep;
+use NS\IClass;
 
 /**
- * Generated Class
+ * Generated Class.
  */
 class ImplementsClassWithNamespaceAndFieldWithDependency extends ExtendClass implements IClass
 {
     /**
-     * session unique identifier
+     * session unique identifier.
+     *
      * @var int
      */
     private $prova;
 
     /**
-     * comment classDep
+     * comment classDep.
+     *
      * @var NamespaceDep\classDep
      */
     private $dependency;
 
-
     /**
-     * costruttore
+     * costruttore.
      */
     final public function __construct($prova, classDep $dependency)
     {

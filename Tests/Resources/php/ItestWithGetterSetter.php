@@ -1,17 +1,16 @@
 <?php
+
 namespace TestNamespace;
 
 /**
- * Generated Class
+ * Generated Class.
  */
 interface ItestWithGetterSetter
 {
-
     /**
      * @return int
      */
     public function getProva();
-
 
     /**
      * @var prova int

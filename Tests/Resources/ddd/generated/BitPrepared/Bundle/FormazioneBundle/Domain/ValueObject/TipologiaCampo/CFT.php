@@ -1,26 +1,26 @@
 <?php
+
 namespace BitPrepared\Bundle\FormazioneBundle\Domain\ValueObject\TipologiaCampo;
 
 use BitPrepared\Bundle\FormazioneBundle\Domain\ValueObject\TipologiaCampo;
 
 /**
- * Child of TipologiaCampo CFT
+ * Child of TipologiaCampo CFT.
  */
 final class CFT extends TipologiaCampo
 {
-
     /**
      * @return BitPrepared\Bundle\FormazioneBundle\Domain\ValueObject\TipologiaCampo\CFT
      */
     final public static function instance()
     {
-        self::$instance = new CFT();
+        self::$instance = new self();
+
         return self::$instance;
     }
 
-
     /**
-     * costruttore
+     * costruttore.
      */
     final private function __construct()
     {

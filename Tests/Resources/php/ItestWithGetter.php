@@ -1,12 +1,12 @@
 <?php
+
 namespace TestNamespace;
 
 /**
- * Generated Class
+ * Generated Class.
  */
 interface ItestWithGetter
 {
-
     /**
      * @return int
      */

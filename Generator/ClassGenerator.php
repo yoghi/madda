@@ -11,13 +11,9 @@ namespace Yoghi\Bundle\MaddaBundle\Generator;
 * with this source code in the file LICENSE.
 */
 
-use Nette\PhpGenerator\ClassType;
-use Nette\PhpGenerator\PhpLiteral;
+use League\Flysystem\Adapter\Local;
 use Nette\PhpGenerator\Method;
 use Nette\PhpGenerator\PhpFile;
-use League\Flysystem\Filesystem;
-use League\Flysystem\Adapter\Local;
-use Psr\Log\LoggerInterface;
 
 /**
  * @author Stefano Tamagnini <>
@@ -25,38 +21,41 @@ use Psr\Log\LoggerInterface;
 class ClassGenerator extends AbstractFileGenerator
 {
     /**
-     * [$currentClass description]
+     * [$currentClass description].
+     *
      * @var \Nette\PhpGenerator\ClassType
      */
     private $currentClass;
 
     public function __construct($namespace, $className, $document = 'Generated Class')
     {
-        $this->currentFile = new PhpFile;
+        $this->currentFile = new PhpFile();
         $this->currentClass = $this->currentFile->addClass($namespace.'\\'.ucfirst($className));
         $this->currentClass->addComment($document);
     }
 
     /**
-     * Aggiungere il costruttore
+     * Aggiungere il costruttore.
+     *
      * @return Nette\PhpGenerator\Method
      */
     private function addConstructor()
     {
-        $this->info('Aggiungo costruttore', array( 'class' => $this->currentClass->getName() ));
+        $this->info('Aggiungo costruttore', ['class' => $this->currentClass->getName()]);
         $mc = $this->currentClass->addMethod('__construct');
         $mc->setStatic(false);
         $mc->setVisibility('public');
         $mc->addComment('costruttore');
         $mc->setFinal(true);
+
         return $mc;
     }
 
     private function addSingleton($comment, $createGetter)
     {
-        $this->info('Aggiungo supporto singleton', array(
-          'class' => $this->currentClass->getName()
-        ));
+        $this->info('Aggiungo supporto singleton', [
+          'class' => $this->currentClass->getName(),
+        ]);
         $fullClassName = $this->currentClass->getNamespace()->getName().'\\'.$this->currentClass->getName();
         if ($createGetter) {
             $mSingleton = $this->currentClass->addMethod('getInstance');
@@ -79,13 +78,13 @@ class ClassGenerator extends AbstractFileGenerator
 
     private function addGetter($fieldName, $fieldClassFull, $isStatic, $isConcrete)
     {
-        $this->info('Aggiungo getter', array(
-          'class' => $this->currentClass->getName(),
-          'field' => $fieldName,
-          'type' => $fieldClassFull,
-          'static' => $isStatic,
-          'concrete' => $isConcrete
-        ));
+        $this->info('Aggiungo getter', [
+          'class'    => $this->currentClass->getName(),
+          'field'    => $fieldName,
+          'type'     => $fieldClassFull,
+          'static'   => $isStatic,
+          'concrete' => $isConcrete,
+        ]);
 
         /** $methodGetter @var \Nette\PhpGenerator\Method */
         $methodGetter = $this->currentClass->addMethod('get'.ucfirst($fieldName));
@@ -110,21 +109,21 @@ class ClassGenerator extends AbstractFileGenerator
         }
         $this->currentClass->getNamespace()->addUse($traitFull);
         $this->currentClass->addTrait($traitFull);
-        $this->info('Add trait', array(
+        $this->info('Add trait', [
           'class' => $this->currentClass->getName(),
-          'trait' => $traitFull
-        ));
+          'trait' => $traitFull,
+        ]);
     }
 
     private function addSetter($fieldName, $fieldClassFull, $isStatic, $isConcrete)
     {
-        $this->info('Aggiungo setter', array(
-          'class' => $this->currentClass->getName(),
-          'field' => $fieldName,
-          'type' => $fieldClassFull,
-          'static' => $isStatic,
-          'concrete' => $isConcrete
-        ));
+        $this->info('Aggiungo setter', [
+          'class'    => $this->currentClass->getName(),
+          'field'    => $fieldName,
+          'type'     => $fieldClassFull,
+          'static'   => $isStatic,
+          'concrete' => $isConcrete,
+        ]);
 
         /** $methodSetter @var \Nette\PhpGenerator\Method */
         $methodSetter = $this->currentClass->addMethod('set'.ucfirst($fieldName));
@@ -147,9 +146,9 @@ class ClassGenerator extends AbstractFileGenerator
     {
         $fieldClassFull = $this->currentClass->getNamespace()->getName().'\\'.$this->currentClass->getName();
 
-        $this->info('Aggiungo parseString', array(
-          'class' => $this->currentClass->getName()
-        ));
+        $this->info('Aggiungo parseString', [
+          'class' => $this->currentClass->getName(),
+        ]);
 
         /** $methodParseString @var \Nette\PhpGenerator\Method */
         $methodParseString = $this->currentClass->addMethod('parseString');
@@ -168,40 +167,41 @@ class ClassGenerator extends AbstractFileGenerator
     }
 
     /**
-     * [generateClassType description]
-     * @param  string      $properties        elementi possibili 'fields', 'extend', 'implements'
-     * @param  array       $typesReference   [description]
-     * @param  array       $typesDescription [description]
-     * @param  ClassConfig $config            [description]
+     * [generateClassType description].
+     *
+     * @param string      $properties       elementi possibili 'fields', 'extend', 'implements'
+     * @param array       $typesReference   [description]
+     * @param array       $typesDescription [description]
+     * @param ClassConfig $config           [description]
      */
     public function generateClassType(array $properties, $typesReference, $typesDescription, ClassConfig $config)
     {
         $phpNamespace = $this->currentClass->getNamespace();
         if ($config->isInterface) {
-            $this->info('Passo a interfaccia', array($this->currentClass->getName()));
+            $this->info('Passo a interfaccia', [$this->currentClass->getName()]);
             $docs = $this->currentClass->getComment();
             $this->currentClass = $this->currentFile->addInterface($phpNamespace->getName().'\\'.ucfirst($this->currentClass->getName()));
             $this->currentClass->setComment($docs);
-            $this->info('Check haveConstructor, in caso metto a false', array($config->haveConstructor));
+            $this->info('Check haveConstructor, in caso metto a false', [$config->haveConstructor]);
             $config->haveConstructor = false;
         }
 
-        $this->info('Generate', array( 'class' => $this->currentClass->getName(), 'namespace' => $phpNamespace->getName(), 'comment' => $this->currentClass->getComment(), 'properties' => $properties ));
+        $this->info('Generate', ['class' => $this->currentClass->getName(), 'namespace' => $phpNamespace->getName(), 'comment' => $this->currentClass->getComment(), 'properties' => $properties]);
 
         // extend class
         if (array_key_exists('extend', $properties)) {
             $extendClassName = $properties['extend'];
-            $this->info('Aggiungo extend', array(
-              'class' => $this->currentClass->getName(),
-              'extend' => $extendClassName
-            ));
+            $this->info('Aggiungo extend', [
+              'class'  => $this->currentClass->getName(),
+              'extend' => $extendClassName,
+            ]);
             $this->currentClass->setExtends($extendClassName);
             $this->currentClass->getNamespace()->addUse($extendClassName);
         }
 
         // implements class
         if (array_key_exists('implements', $properties)) {
-            $implementsList = array();
+            $implementsList = [];
             if (!is_array($properties['implements'])) {
                 $implementsList[] = $properties['implements'];
             } else {
@@ -209,10 +209,10 @@ class ClassGenerator extends AbstractFileGenerator
             }
             $this->currentClass->setImplements($implementsList);
             foreach ($implementsList as $implementUse) {
-                $this->info('Aggiungo implement', array(
-                  'class' => $this->currentClass->getName(),
-                  'implements' => $implementUse
-                ));
+                $this->info('Aggiungo implement', [
+                  'class'      => $this->currentClass->getName(),
+                  'implements' => $implementUse,
+                ]);
                 $this->currentClass->getNamespace()->addUse($implementUse);
             }
         }
@@ -286,9 +286,9 @@ class ClassGenerator extends AbstractFileGenerator
                     }
                 } else {
                     if (!empty($defaultValue) || is_int($defaultValue)) {
-                        if (substr(rtrim($defaultValue), -1) == ";") {
+                        if (substr(rtrim($defaultValue), -1) == ';') {
                             $this->error('autoinizialize for '.$name.' on class '.$this->currentClass->getName().' have default with ";" please remove!');
-                            $defaultValue = substr($defaultValue, 0, strlen($defaultValue)-1);
+                            $defaultValue = substr($defaultValue, 0, strlen($defaultValue) - 1);
                         }
                         if (!$isStatic) {
                             if ($isAutoinizialize) {
@@ -322,11 +322,11 @@ class ClassGenerator extends AbstractFileGenerator
                     if (array_key_exists($fieldClassName, $typesReference)) {
                         $fieldNamespace = $typesReference[$fieldClassName];
                         $fieldClassFull = $fieldNamespace.'\\'.$fieldClassName;
-                        $this->info('Trovato field namespace tra le reference', array(
-                          'class' => $this->currentClass->getName(),
-                          'field' => $fieldClassName,
-                          'className' => $fieldClassFull
-                        ));
+                        $this->info('Trovato field namespace tra le reference', [
+                          'class'     => $this->currentClass->getName(),
+                          'field'     => $fieldClassName,
+                          'className' => $fieldClassFull,
+                        ]);
                     } else {
                         //FIXME: strpos is better
                         if ($fieldClassName[0] == '\\') {
@@ -334,24 +334,24 @@ class ClassGenerator extends AbstractFileGenerator
                             $fieldClassFull = $fieldClassName;
                         } else {
                             $fieldClassFull = $phpNamespace->getName().'\\'.$fieldClassName;
-                            $this->info('Uso class for field same namespace', array(
-                              'class' => $this->currentClass->getName(),
-                              'field' => $fieldClassName,
-                              'className' => $fieldClassFull
-                            ));
+                            $this->info('Uso class for field same namespace', [
+                              'class'     => $this->currentClass->getName(),
+                              'field'     => $fieldClassName,
+                              'className' => $fieldClassFull,
+                            ]);
                         }
                     }
 
                     if ($config->haveConstructor && !$isStatic) {
                         $parameter = null;
                         if (!$isAutoinizialize) {
-                            $this->info('Aggiungo parametro al costruttore', array(
-                                'class' => $this->currentClass->getName(),
-                                'parameter' => $name,
-                                'className' => $fieldClassFull,
-                                'default' => $defaultValue,
-                                'autoinizialize' => $isAutoinizialize
-                            ));
+                            $this->info('Aggiungo parametro al costruttore', [
+                                'class'          => $this->currentClass->getName(),
+                                'parameter'      => $name,
+                                'className'      => $fieldClassFull,
+                                'default'        => $defaultValue,
+                                'autoinizialize' => $isAutoinizialize,
+                            ]);
                             if (!$first) {
                                 $parameter = $methodConstructor->addParameter($name, null); //solo i primitivi hanno un default, gli altri null come object
                                 $parameter->setTypeHint($fieldClassFull);
@@ -360,22 +360,22 @@ class ClassGenerator extends AbstractFileGenerator
                                 $parameter->setTypeHint($fieldClassFull);
                             }
                         } else {
-                            $this->info('Skip parametro al costruttore -> autoinizialize true', array(
-                              'class' => $this->currentClass->getName(),
-                              'parameter' => $name,
-                              'className' => $fieldClassFull,
-                              'default' => $defaultValue,
-                              'autoinizialize' => $isAutoinizialize
-                            ));
+                            $this->info('Skip parametro al costruttore -> autoinizialize true', [
+                              'class'          => $this->currentClass->getName(),
+                              'parameter'      => $name,
+                              'className'      => $fieldClassFull,
+                              'default'        => $defaultValue,
+                              'autoinizialize' => $isAutoinizialize,
+                            ]);
                         }
                     }
 
                     if (array_key_exists($fieldClassName, $typesReference)) {
-                        $this->info('Add field type class with namespace', array(
-                            'class' => $this->currentClass->getName(),
-                            'field' => $fieldClassName,
-                            'className' => $fieldClassFull
-                        ));
+                        $this->info('Add field type class with namespace', [
+                            'class'     => $this->currentClass->getName(),
+                            'field'     => $fieldClassName,
+                            'className' => $fieldClassFull,
+                        ]);
                         $this->currentClass->getNamespace()->addUse($fieldClassFull);
                     }
                 } else {
@@ -391,13 +391,13 @@ class ClassGenerator extends AbstractFileGenerator
 
                         if (!$isAutoinizialize) {
                             if (is_null($defaultValue)) {
-                                $this->info('Aggiungo parametro al costruttore', array(
-                                  'class' => $this->currentClass->getName(),
-                                  'parameter' => $name,
-                                  'className' => $fieldClassFull,
-                                  'default' => $defaultValue,
-                                  'autoinizialize' => $isAutoinizialize
-                                ));
+                                $this->info('Aggiungo parametro al costruttore', [
+                                  'class'          => $this->currentClass->getName(),
+                                  'parameter'      => $name,
+                                  'className'      => $fieldClassFull,
+                                  'default'        => $defaultValue,
+                                  'autoinizialize' => $isAutoinizialize,
+                                ]);
 
                                 //PHP7 ONLY
                                 // if ($fieldClassFull == 'int') {
@@ -414,7 +414,7 @@ class ClassGenerator extends AbstractFileGenerator
                                     $parameter->setTypeHint('array');
                                 } else {
                                     if ($defaultValue != null) {
-                                        /** @var $parameter \Nette\PhpGenerator\Parameter */
+                                        /* @var $parameter \Nette\PhpGenerator\Parameter */
                                         $parameter->setDefaultValue(''.$defaultValue);
                                     }
                                 }
@@ -423,12 +423,12 @@ class ClassGenerator extends AbstractFileGenerator
                     }
                 }
 
-                $this->info('Check autoinizialize field', array(
-                  'class' => $this->currentClass->getName(),
-                  'field' => $name,
+                $this->info('Check autoinizialize field', [
+                  'class'          => $this->currentClass->getName(),
+                  'field'          => $name,
                   'autoinizialize' => $isAutoinizialize,
-                  'default' => $defaultValue
-                ));
+                  'default'        => $defaultValue,
+                ]);
 
                 $comment = 'no description available';
                 if (array_key_exists('description', $fieldProperties)) {
@@ -491,11 +491,11 @@ class ClassGenerator extends AbstractFileGenerator
             $body = '';
 
             foreach ($properties['methods'] as $methodName => $methodsProperties) {
-                $this->info('Aggiungo method', array(
-                  'class' => $this->currentClass->getName(),
+                $this->info('Aggiungo method', [
+                  'class'      => $this->currentClass->getName(),
                   'methodName' => $methodName,
-                  'methodProp' => $methodsProperties
-                ));
+                  'methodProp' => $methodsProperties,
+                ]);
 
                 /** $newMethodCall @var \Nette\PhpGenerator\Method */
                 $newMethodCall = $this->currentClass->addMethod($methodName);

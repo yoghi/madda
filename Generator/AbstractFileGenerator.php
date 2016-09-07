@@ -11,12 +11,8 @@ namespace Yoghi\Bundle\MaddaBundle\Generator;
 * with this source code in the file LICENSE.
 */
 
-use Nette\PhpGenerator\ClassType;
-use Nette\PhpGenerator\PhpLiteral;
-use Nette\PhpGenerator\Method;
-use Nette\PhpGenerator\PhpFile;
-use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Local;
+use League\Flysystem\Filesystem;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -24,21 +20,23 @@ use Psr\Log\LoggerInterface;
  */
 abstract class AbstractFileGenerator
 {
-
     /**
-     * [$currentFile description]
+     * [$currentFile description].
+     *
      * @var [type]
      */
     protected $currentFile;
 
     /**
-     * Array process errors
+     * Array process errors.
+     *
      * @var array
      */
     protected $errors;
 
     /**
-     * [$logger description]
+     * [$logger description].
+     *
      * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
@@ -48,14 +46,14 @@ abstract class AbstractFileGenerator
         $this->logger = $logger;
     }
 
-    protected function error($message, $context = array())
+    protected function error($message, $context = [])
     {
         if (!is_null($this->logger)) {
             $this->logger->error($message, $context);
         }
     }
 
-    protected function info($message, $context = array())
+    protected function info($message, $context = [])
     {
         if (!is_null($this->logger)) {
             $this->logger->info($message, $context);
@@ -63,7 +61,8 @@ abstract class AbstractFileGenerator
     }
 
     /**
-     * errori durante la generazione
+     * errori durante la generazione.
+     *
      * @return array of string
      */
     public function getErrors()
@@ -73,7 +72,7 @@ abstract class AbstractFileGenerator
 
     public function toString()
     {
-        return (string)$this->currentFile;
+        return (string) $this->currentFile;
     }
 
     protected function _createFileOnDir(Local $adapter, $outFile)
@@ -87,10 +86,11 @@ abstract class AbstractFileGenerator
         }
 
         if ($filesystem->has($outFile)) {
-            $filesystem->put($outFile, (string)$this->currentFile);
+            $filesystem->put($outFile, (string) $this->currentFile);
         } else {
-            $filesystem->write($outFile, (string)$this->currentFile);
+            $filesystem->write($outFile, (string) $this->currentFile);
         }
+
         return $outFile; //$io->text('Outfile: '.$outFile);
     }
 }

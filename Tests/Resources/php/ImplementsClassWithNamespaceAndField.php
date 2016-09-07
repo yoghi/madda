@@ -1,23 +1,24 @@
 <?php
+
 namespace TestNamespace;
 
 use ExtendClass;
 use NS\IClass;
 
 /**
- * Generated Class
+ * Generated Class.
  */
 class ImplementsClassWithNamespaceAndField extends ExtendClass implements IClass
 {
     /**
-     * identificativo univoco della sessione
+     * identificativo univoco della sessione.
+     *
      * @var int
      */
     private $prova;
 
-
     /**
-     * costruttore
+     * costruttore.
      */
     final public function __construct($prova)
     {

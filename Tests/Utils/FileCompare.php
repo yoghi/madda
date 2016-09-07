@@ -2,24 +2,25 @@
 
 namespace Yoghi\Bundle\MaddaBundleTest\Utils;
 
-use Symfony\CS\Fixer;
 use Symfony\CS\ConfigurationResolver;
 use Symfony\CS\FileCacheManager;
+use Symfony\CS\Fixer;
 
 trait FileCompare
 {
     /**
-   * Compare generated class with expected class into resource dir
-   * @param  string         $resourcesDir fullPath resources dir
-   * @param  string         $namespace    namespace of class
-   * @param  string         $className    class name
-   * @param  ClassGenerator $g            class generator object to test
-   */
+    * Compare generated class with expected class into resource dir.
+    *
+    * @param  string         $resourcesDir fullPath resources dir
+    * @param  string         $namespace    namespace of class
+    * @param  string         $className    class name
+    * @param  ClassGenerator $g            class generator object to test
+    */
    private function compareClassPhp($resourcesDir, $namespace, $className, $directoryOutput, $createIfNotExist = false)
    {
        $fileInput = $resourcesDir.'/'.$className.'.php';
        $fileName = $className.'.php';
-       $fileOutput = $directoryOutput . '/'.$namespace. '/'. $fileName;
+       $fileOutput = $directoryOutput.'/'.$namespace.'/'.$fileName;
 
        $iFile = new SplFileInfo($fileOutput, $directoryOutput.'/'.$namespace, $fileName);
        $fixer = new Fixer();

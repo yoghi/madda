@@ -1,4 +1,5 @@
 <?php
+
 namespace Yoghi\Bundle\MaddaBundleTest\Utils;
 
 use League\Flysystem\Adapter\Local;

@@ -12,8 +12,7 @@ namespace Yoghi\Bundle\MaddaBundle\Finder;
  */
 
 use Yoghi\Bundle\MaddaBundleTest\Utils\AbstractCommonLogTest;
-use Yoghi\Bundle\MaddaBundle\Finder\Finder;
-use Psr\Log\LoggerInterface;
+
 
 /**
  * @author Stefano Tamagnini <>
@@ -31,12 +30,12 @@ class FinderTest extends \PHPUnit_Framework_TestCase
         $this->logger->info('File trovati '.count($actual));
         $this->assertCount(3, $actual, 'yml file not found');
 
-        $names = array();
+        $names = [];
         foreach ($actual as $file) {
             $names[] = pathinfo($file, PATHINFO_FILENAME);
         }
 
-        $expected = array('model','emptyModel','invalidModel');
+        $expected = ['model', 'emptyModel', 'invalidModel'];
         $diff = array_diff($names, $expected);
 
         $this->assertEmpty($diff, 'yml not found');
