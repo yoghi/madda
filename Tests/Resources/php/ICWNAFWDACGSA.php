@@ -1,30 +1,32 @@
 <?php
+
 namespace TestNamespace;
 
 use ExtendClass;
-use NS\IClass;
 use NamespaceDep\ClassDep;
+use NS\IClass;
 
 /**
- * Generated Class
+ * Generated Class.
  */
 class ICWNAFWDACGSA extends ExtendClass implements IClass
 {
     /**
-     * session unique identifier
+     * session unique identifier.
+     *
      * @var int
      */
     private $prova;
 
     /**
-     * comment ClassDep
+     * comment ClassDep.
+     *
      * @var NamespaceDep\ClassDep
      */
     private $dependency;
 
-
     /**
-     * costruttore
+     * costruttore.
      */
     final public function __construct($prova, ClassDep $dependency = null)
     {
@@ -36,7 +38,6 @@ class ICWNAFWDACGSA extends ExtendClass implements IClass
         }
     }
 
-
     /**
      * @return int
      */
@@ -44,7 +45,6 @@ class ICWNAFWDACGSA extends ExtendClass implements IClass
     {
         return $this->prova;
     }
-
 
     /**
      * @var prova int
@@ -54,7 +54,6 @@ class ICWNAFWDACGSA extends ExtendClass implements IClass
         $this->prova = $prova;
     }
 
-
     /**
      * @return NamespaceDep\ClassDep
      */
@@ -62,7 +61,6 @@ class ICWNAFWDACGSA extends ExtendClass implements IClass
     {
         return $this->dependency;
     }
-
 
     /**
      * @var dependency NamespaceDep\ClassDep

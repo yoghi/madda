@@ -1,26 +1,26 @@
 <?php
+
 namespace BitPrepared\Bundle\FormazioneBundle\Domain\ValueObject\TipologiaCampo;
 
 use BitPrepared\Bundle\FormazioneBundle\Domain\ValueObject\TipologiaCampo;
 
 /**
- * Child of TipologiaCampo CAMRS
+ * Child of TipologiaCampo CAMRS.
  */
 final class CAMRS extends TipologiaCampo
 {
-
     /**
      * @return BitPrepared\Bundle\FormazioneBundle\Domain\ValueObject\TipologiaCampo\CAMRS
      */
     final public static function instance()
     {
-        self::$instance = new CAMRS();
+        self::$instance = new self();
+
         return self::$instance;
     }
 
-
     /**
-     * costruttore
+     * costruttore.
      */
     final private function __construct()
     {

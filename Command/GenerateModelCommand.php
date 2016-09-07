@@ -2,31 +2,22 @@
 
 namespace Yoghi\Bundle\MaddaBundle\Command;
 
+use League\Flysystem\Adapter\Local;
+use League\Flysystem\Filesystem;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
-use Nette\PhpGenerator\ClassType;
-use Nette\PhpGenerator\PhpLiteral;
-use Nette\PhpGenerator\Method;
-use Nette\PhpGenerator\PhpFile;
-use League\Flysystem\Filesystem;
-use League\Flysystem\Adapter\Local;
-use Yoghi\Bundle\MaddaBundle\Model\Reader;
-use Yoghi\Bundle\MaddaBundle\Generator\ClassConfig;
-use Yoghi\Bundle\MaddaBundle\Generator\DDDGenerator;
-use Yoghi\Bundle\MaddaBundle\Generator\ClassGenerator;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Yoghi\Bundle\MaddaBundle\Finder\Finder;
-use Psr\Log\LoggerInterface;
+use Yoghi\Bundle\MaddaBundle\Generator\DDDGenerator;
+use Yoghi\Bundle\MaddaBundle\Model\Reader;
 
 class GenerateModelCommand extends Command
 {
-
     private $logger;
     private $errors;
 
@@ -40,7 +31,7 @@ class GenerateModelCommand extends Command
             ->addOption('clean', null, InputOption::VALUE_OPTIONAL, 'Option clean output directory')
             // ->addArgument('argument', InputArgument::OPTIONAL, 'Argument description')
             // ->addOption('option', null, InputOption::VALUE_NONE, 'Option description')
-        ;
+;
     }
 
     // protected function generateClasses(Local $fullPathFile, Local $directoryOutput, $io)
@@ -61,7 +52,7 @@ class GenerateModelCommand extends Command
         $directory = realpath($input->getArgument('directory'));
         $directoryOutput = $input->getArgument('outputdirectory');
 
-        /** @var $logger Psr\Log\LoggerInterface */
+        /* @var $logger Psr\Log\LoggerInterface */
         $this->logger = $this->getContainer()->get('logger');
 
         $io = new SymfonyStyle($input, $output);
@@ -84,7 +75,7 @@ class GenerateModelCommand extends Command
             $finder->search($directory);
             foreach ($finder->getFindedFiles() as $file) {
                 if (pathinfo($file, PATHINFO_FILENAME) == 'model.yml') {
-                    $io->text("Analizzo model.yml in ".pathinfo($file, PATHINFO_DIRNAME));
+                    $io->text('Analizzo model.yml in '.pathinfo($file, PATHINFO_DIRNAME));
                     $dddGenerator = new DDDGenerator();
                     $dddGenerator->setLogger($this->logger);
                     $dddGenerator->analyze($file);
@@ -96,11 +87,11 @@ class GenerateModelCommand extends Command
 
             $fixer = new \Symfony\CS\Console\Command\FixCommand();
 
-            $input = new ArrayInput(array(
-               'path' => $directoryOutput,
-               '--level' => 'psr2',
-               '--fixers' => 'eof_ending,strict_param,short_array_syntax,trailing_spaces,indentation,line_after_namespace,php_closing_tag'
-            ));
+            $input = new ArrayInput([
+               'path'     => $directoryOutput,
+               '--level'  => 'psr2',
+               '--fixers' => 'eof_ending,strict_param,short_array_syntax,trailing_spaces,indentation,line_after_namespace,php_closing_tag',
+            ]);
 
             $output = new BufferedOutput();
             $fixer->run($input, $output);

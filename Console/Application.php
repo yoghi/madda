@@ -20,7 +20,6 @@ use Yoghi\Bundle\MaddaBundle\Command\GenerateModelCommand;
  */
 class Application extends BaseApplication
 {
-
     const VERSION = '1.0.0-DEV';
 
     /**
@@ -29,10 +28,11 @@ class Application extends BaseApplication
     public function __construct()
     {
         error_reporting(-1);
-        parent::__construct('Madda', Application::VERSION);
+        parent::__construct('Madda', self::VERSION);
         $this->add(new CheckSecurityCommand());
         $this->add(new GenerateModelCommand());
     }
+
     public function getLongVersion()
     {
         $version = parent::getLongVersion().' by <comment>Stefano Tamagnini</comment>';
@@ -40,6 +40,7 @@ class Application extends BaseApplication
         if ('@'.'git-commit@' !== $commit) {
             $version .= ' ('.substr($commit, 0, 7).')';
         }
+
         return $version;
     }
 }

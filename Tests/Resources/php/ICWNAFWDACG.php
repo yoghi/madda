@@ -1,29 +1,31 @@
 <?php
+
 namespace TestNamespace;
 
 use ExtendClass;
 use NS\IClass;
 
 /**
- * Generated Class
+ * Generated Class.
  */
 class ICWNAFWDACG extends ExtendClass implements IClass
 {
     /**
-     * session unique identifier
+     * session unique identifier.
+     *
      * @var int
      */
     private $prova;
 
     /**
-     * comment ClassDep
+     * comment ClassDep.
+     *
      * @var TestNamespace\ClassDep
      */
     private $dependency;
 
-
     /**
-     * costruttore
+     * costruttore.
      */
     final public function __construct($prova)
     {
@@ -31,7 +33,6 @@ class ICWNAFWDACG extends ExtendClass implements IClass
         // autoinizialize
         $this->dependency = new ClassDep();
     }
-
 
     /**
      * @return int

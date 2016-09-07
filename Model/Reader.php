@@ -11,10 +11,10 @@ namespace Yoghi\Bundle\MaddaBundle\Model;
  * with this source code in the file LICENSE.
  */
 
- use Symfony\Component\Yaml\Parser;
- use Symfony\Component\Yaml\Exception\ParseException;
- use Yoghi\Bundle\MaddaBundle\Exception\MaddaException;
  use Arrayzy\ArrayImitator as A;
+use Symfony\Component\Yaml\Exception\ParseException;
+use Symfony\Component\Yaml\Parser;
+use Yoghi\Bundle\MaddaBundle\Exception\MaddaException;
 
  /**
  * @author Stefano Tamagnini <>
@@ -22,17 +22,18 @@ namespace Yoghi\Bundle\MaddaBundle\Model;
 class Reader
 {
     /**
-     * Array delle definizioni
+     * Array delle definizioni.
+     *
      * @var \Arrayzy\ArrayImitator
      */
     private $specList;
 
     public function __construct()
     {
-        $specListArray = array(
-          'ddd' => array(),
-          'classes' => array()
-        );
+        $specListArray = [
+          'ddd'     => [],
+          'classes' => [],
+        ];
         $this->specList = new A($specListArray);
     }
 
@@ -45,7 +46,7 @@ class Reader
         try {
             $parsed = $yaml->parse(file_get_contents($fullPath));
             if (null != $parsed) {
-                /** @see https://github.com/bocharsky-bw/Arrayzy#merge*/
+                /* @see https://github.com/bocharsky-bw/Arrayzy#merge*/
                 $this->specList = $this->specList->merge($parsed, true);
             }
         } catch (ParseException $e) {
@@ -55,6 +56,7 @@ class Reader
 
     /**
      * @deprecated
+     *
      * @return array proprietà definite via yaml
      */
     public function getProperties()
@@ -63,7 +65,8 @@ class Reader
     }
 
     /**
-     * [getClassesDefinition description]
+     * [getClassesDefinition description].
+     *
      * @return array|false [description]
      */
     public function getClassesDefinition()
@@ -74,12 +77,14 @@ class Reader
     public function getClassDefinitionAttributes($key)
     {
         $classDefList = new A($this->specList->offsetGet('classes'));
+
         return $classDefList->offsetGet($key);
     }
 
     public function getDomainDefinitionAttributes($key)
     {
         $domainDefList = new A($this->specList->offsetGet('ddd'));
+
         return $domainDefList->offsetGet($key);
     }
 }

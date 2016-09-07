@@ -1,29 +1,31 @@
 <?php
+
 namespace TestNamespace;
 
 use ExtendClass;
 use NS\IClass;
 
 /**
- * Generated Class
+ * Generated Class.
  */
 class SNCD extends ExtendClass implements IClass
 {
     /**
-     * session unique identifier
+     * session unique identifier.
+     *
      * @var int
      */
     private $prova;
 
     /**
-     * comment ClassDep
+     * comment ClassDep.
+     *
      * @var TestNamespace\ClassDep
      */
     private $dependency;
 
-
     /**
-     * costruttore
+     * costruttore.
      */
     final public function __construct()
     {
@@ -33,7 +35,6 @@ class SNCD extends ExtendClass implements IClass
         $this->dependency = new ClassDep();
     }
 
-
     /**
      * @return int
      */
@@ -41,7 +42,6 @@ class SNCD extends ExtendClass implements IClass
     {
         return $this->prova;
     }
-
 
     /**
      * @var prova int
@@ -51,7 +51,6 @@ class SNCD extends ExtendClass implements IClass
         $this->prova = $prova;
     }
 
-
     /**
      * @return TestNamespace\ClassDep
      */
@@ -59,7 +58,6 @@ class SNCD extends ExtendClass implements IClass
     {
         return $this->dependency;
     }
-
 
     /**
      * @var dependency TestNamespace\ClassDep

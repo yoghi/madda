@@ -11,13 +11,11 @@ namespace Yoghi\Bundle\MaddaBundle\Generator;
  * with this source code in the file LICENSE.
  */
 
-use Yoghi\Bundle\MaddaBundle\Generator\RestGenerator;
-use Yoghi\Bundle\MaddaBundleTest\Utils\VfsAdapter;
-use Yoghi\Bundle\MaddaBundleTest\Utils\SplFileInfo;
+use Yoghi\Bundle\MaddaBundle\Finder\Finder;
 use Yoghi\Bundle\MaddaBundleTest\Utils\AbstractCommonLogTest;
 use Yoghi\Bundle\MaddaBundleTest\Utils\FileCompare;
 use Yoghi\Bundle\MaddaBundleTest\Utils\PhpunitFatalErrorHandling;
-use Yoghi\Bundle\MaddaBundle\Finder\Finder;
+use Yoghi\Bundle\MaddaBundleTest\Utils\VfsAdapter;
 
 /**
  * @author Stefano Tamagnini <>

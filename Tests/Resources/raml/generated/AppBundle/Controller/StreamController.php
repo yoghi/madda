@@ -1,14 +1,14 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
- * Generated Class
+ * Generated Class.
  */
 class StreamController extends Controller
 {
-
     /**
      * @return void
      */

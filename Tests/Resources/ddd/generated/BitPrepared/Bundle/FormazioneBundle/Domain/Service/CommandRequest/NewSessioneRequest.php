@@ -1,35 +1,38 @@
 <?php
+
 namespace BitPrepared\Bundle\FormazioneBundle\Domain\Service\CommandRequest;
 
 use BitPrepared\Bundle\FormazioneBundle\Domain\Service\Request;
 use BitPrepared\Bundle\FormazioneBundle\Domain\ValueObject\TipologiaCampo;
 
 /**
- * No comment found on ddd model
+ * No comment found on ddd model.
  */
 final class NewSessioneRequest extends Request
 {
     /**
-     * titolo della sessione
+     * titolo della sessione.
+     *
      * @var string
      */
     private $title;
 
     /**
-     * descrizione della sessione
+     * descrizione della sessione.
+     *
      * @var string
      */
     private $description;
 
     /**
-     * Tipologia di campo CFM/CFT/CCG/CAM
+     * Tipologia di campo CFM/CFT/CCG/CAM.
+     *
      * @var BitPrepared\Bundle\FormazioneBundle\Domain\ValueObject\TipologiaCampo
      */
     private $tipoCampo;
 
-
     /**
-     * costruttore
+     * costruttore.
      */
     final public function __construct($title, $description = null, TipologiaCampo $tipoCampo = null)
     {
@@ -37,7 +40,6 @@ final class NewSessioneRequest extends Request
         $this->description = $description;
         $this->tipoCampo = $tipoCampo;
     }
-
 
     /**
      * @return string
@@ -47,7 +49,6 @@ final class NewSessioneRequest extends Request
         return $this->title;
     }
 
-
     /**
      * @return string
      */
@@ -55,7 +56,6 @@ final class NewSessioneRequest extends Request
     {
         return $this->description;
     }
-
 
     /**
      * @return BitPrepared\Bundle\FormazioneBundle\Domain\ValueObject\TipologiaCampo

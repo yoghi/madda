@@ -1,32 +1,35 @@
 <?php
+
 namespace BitPrepared\Bundle\FormazioneBundle\Domain\Events;
 
 /**
- * Event add_document for Aggregate Root SpiegazioneSessioneCampo
+ * Event add_document for Aggregate Root SpiegazioneSessioneCampo.
  */
 final class SpiegazioneSessioneCampoAddDocumentEvent implements DomainEvent
 {
     /**
-     * quando accade l'evento
+     * quando accade l'evento.
+     *
      * @var \DateTime
      */
     private $occurredOn;
 
     /**
-     * id dell'aggregato root relativo all'evento
+     * id dell'aggregato root relativo all'evento.
+     *
      * @var int
      */
     private $aggregateId;
 
     /**
-     * proprietà dell'evento
+     * proprietà dell'evento.
+     *
      * @var array
      */
     private $properties;
 
-
     /**
-     * costruttore
+     * costruttore.
      */
     final public function __construct($aggregateId, array $properties = null)
     {
@@ -36,7 +39,6 @@ final class SpiegazioneSessioneCampoAddDocumentEvent implements DomainEvent
         $this->properties = $properties;
     }
 
-
     /**
      * @return \DateTime
      */
@@ -45,7 +47,6 @@ final class SpiegazioneSessioneCampoAddDocumentEvent implements DomainEvent
         return $this->occurredOn;
     }
 
-
     /**
      * @return int
      */
@@ -53,7 +54,6 @@ final class SpiegazioneSessioneCampoAddDocumentEvent implements DomainEvent
     {
         return $this->aggregateId;
     }
-
 
     /**
      * @return array

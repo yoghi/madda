@@ -1,18 +1,18 @@
 <?php
 /**
- * No comment found on ddd model
+ * No comment found on ddd model.
  */
 class SampleClass
 {
     /**
-     * sample string
+     * sample string.
+     *
      * @var string
      */
     private $sasa;
 
-
     /**
-     * costruttore
+     * costruttore.
      */
     final public function __construct($sasa)
     {

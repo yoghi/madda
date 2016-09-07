@@ -1,8 +1,9 @@
 <?php
+
 namespace TestNamespace;
 
 /**
- * Generated Class
+ * Generated Class.
  */
 class EmptyClass
 {

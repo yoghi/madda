@@ -1,15 +1,15 @@
 <?php
+
 namespace TestNamespace;
 
 use ExtendClass;
 use IClass;
 
 /**
- * Generated Class
+ * Generated Class.
  */
 class FirstMethodClass extends ExtendClass implements IClass
 {
-
     /**
      * @return void
      */

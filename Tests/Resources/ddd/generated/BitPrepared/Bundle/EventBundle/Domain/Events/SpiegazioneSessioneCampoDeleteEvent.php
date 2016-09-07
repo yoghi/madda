@@ -1,38 +1,42 @@
 <?php
+
 namespace BitPrepared\Bundle\EventBundle\Domain\Events;
 
 /**
- * Event delete for Aggregate Root SpiegazioneSessioneCampo
+ * Event delete for Aggregate Root SpiegazioneSessioneCampo.
  */
 final class SpiegazioneSessioneCampoDeleteEvent implements DomainEvent
 {
     /**
-     * special value
+     * special value.
+     *
      * @var int
      */
     private $special;
 
     /**
-     * quando accade l'evento
+     * quando accade l'evento.
+     *
      * @var \DateTime
      */
     private $occurredOn;
 
     /**
-     * id dell'aggregato root relativo all'evento
+     * id dell'aggregato root relativo all'evento.
+     *
      * @var int
      */
     private $aggregateId;
 
     /**
-     * proprietà dell'evento
+     * proprietà dell'evento.
+     *
      * @var array
      */
     private $properties;
 
-
     /**
-     * costruttore
+     * costruttore.
      */
     final public function __construct($aggregateId, array $properties = null)
     {
@@ -44,7 +48,6 @@ final class SpiegazioneSessioneCampoDeleteEvent implements DomainEvent
         $this->properties = $properties;
     }
 
-
     /**
      * @return int
      */
@@ -52,7 +55,6 @@ final class SpiegazioneSessioneCampoDeleteEvent implements DomainEvent
     {
         return $this->special;
     }
-
 
     /**
      * @var special int
@@ -62,7 +64,6 @@ final class SpiegazioneSessioneCampoDeleteEvent implements DomainEvent
         $this->special = $special;
     }
 
-
     /**
      * @return \DateTime
      */
@@ -71,7 +72,6 @@ final class SpiegazioneSessioneCampoDeleteEvent implements DomainEvent
         return $this->occurredOn;
     }
 
-
     /**
      * @return int
      */
@@ -79,7 +79,6 @@ final class SpiegazioneSessioneCampoDeleteEvent implements DomainEvent
     {
         return $this->aggregateId;
     }
-
 
     /**
      * @return array
