@@ -11,9 +11,7 @@ namespace Yoghi\Bundle\MaddaBundle\Generator;
  * with this source code in the file LICENSE.
  */
 
-use Yoghi\Bundle\MaddaBundle\Generator\RestGenerator;
 use Yoghi\Bundle\MaddaBundleTest\Utils\VfsAdapter;
-use Yoghi\Bundle\MaddaBundleTest\Utils\SplFileInfo;
 use Yoghi\Bundle\MaddaBundleTest\Utils\AbstractCommonLogTest;
 use Yoghi\Bundle\MaddaBundleTest\Utils\FileCompare;
 use Yoghi\Bundle\MaddaBundleTest\Utils\PhpunitFatalErrorHandling;
@@ -64,8 +62,8 @@ class RestGeneratorTest extends \PHPUnit_Framework_TestCase
             }
         }
 
-        // $routingFile = 'AppBundle/Resources/config/routing.yml';
-        // $this->compareFile($resourcesDir.'/raml/generated/', $directoryOutput, $routingFile, false);
+        $routingFile = 'AppBundle/Resources/config/routing.yml';
+        $this->compareFile($resourcesDir.'/raml/generated/', $directoryOutput, $routingFile, false);
 
         $errors = $rgen->getErrors();
         $this->assertCount(0, $errors, 'errori durante la generazione');

@@ -12,8 +12,8 @@
 namespace Yoghi\Bundle\MaddaBundle\Exception;
 
 /**
-* @author Stefano Tamagnini <>
-*/
+ * @author Stefano Tamagnini <>
+ */
 class MaddaException extends \RuntimeException
 {
 }

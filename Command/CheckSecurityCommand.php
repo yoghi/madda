@@ -2,16 +2,15 @@
 
 namespace Yoghi\Bundle\MaddaBundle\Command;
 
-use Symfony\Component\Console\Command\Command;
+use Psr\Log\LoggerInterface;
 use SensioLabs\Security\SecurityChecker;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class CheckSecurityCommand extends Command
 {
-
     private $logger;
     // private $errors;
 
@@ -32,8 +31,6 @@ class CheckSecurityCommand extends Command
         ;
     }
 
-
-
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
@@ -49,6 +46,6 @@ class CheckSecurityCommand extends Command
         $checker = new SecurityChecker();
         $alerts = $checker->check('composer.lock');
 
-        count($alerts) > 0 ?  $io->error($alerts) : $io->success("security checked!");
+        count($alerts) > 0 ?  $io->error($alerts) : $io->success('security checked!');
     }
 }

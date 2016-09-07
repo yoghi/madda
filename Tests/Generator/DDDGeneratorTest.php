@@ -12,11 +12,10 @@ namespace Yoghi\Bundle\MaddaBundle\Finder;
  */
 
 use Monolog\Logger;
-use Yoghi\Bundle\MaddaBundleTest\Utils\VfsAdapter;
-use Yoghi\Bundle\MaddaBundleTest\Utils\AbstractCommonLogTest;
-use Yoghi\Bundle\MaddaBundle\Finder\Finder;
 use Yoghi\Bundle\MaddaBundle\Generator\DDDGenerator;
+use Yoghi\Bundle\MaddaBundleTest\Utils\AbstractCommonLogTest;
 use Yoghi\Bundle\MaddaBundleTest\Utils\FileCompare;
+use Yoghi\Bundle\MaddaBundleTest\Utils\VfsAdapter;
 
 /**
  * @author Stefano Tamagnini <>

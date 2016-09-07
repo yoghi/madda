@@ -11,55 +11,52 @@ namespace Yoghi\Bundle\MaddaBundle\Generator;
 * with this source code in the file LICENSE.
 */
 
-use Raml\Parser;
-use Nette\PhpGenerator\ClassType;
-use Nette\PhpGenerator\PhpLiteral;
-use Nette\PhpGenerator\Method;
-use Nette\PhpGenerator\PhpFile;
-use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Local;
-use Psr\Log\LoggerInterface;
+use Nette\PhpGenerator\Method;
 use Raml\Exception\InvalidJsonException;
 use Raml\Exception\RamlParserException;
-use Symfony\Component\Yaml\Yaml;
+use Raml\Parser;
+use Symfony\Component\Yaml\Dumper;
 
 /**
  * @author Stefano Tamagnini <>
  */
 class RestGenerator extends AbstractFileGenerator
 {
-
     /**
-     * Modello virtuale delle API
+     * Modello virtuale delle API.
+     *
      * @var \Raml\ApiDefinition
      */
     private $apiDef;
 
     /**
-     * Informazioni esterne usate per generare i web service
+     * Informazioni esterne usate per generare i web service.
+     *
      * @var array
      */
     private $mapExternalInfo;
 
     /**
-     * Name bundle
+     * Name bundle.
+     *
      * @var string
      */
     private $bundleName;
 
-
-    public function __construct($bundleName = 'AppBundle', $mapExternalInfo = array())
+    public function __construct($bundleName = 'AppBundle', $mapExternalInfo = [])
     {
-        $this->errors = array();
+        $this->errors = [];
         $this->bundleName = $bundleName;
         $this->mapExternalInfo = $mapExternalInfo;
     }
 
-
     /**
-     * Rimuove le parentesi graffe e capitalizza le parole della stringa passata in ingresso
-     * @param  [type] $str [description]
-     * @return [type]      [description]
+     * Rimuove le parentesi graffe e capitalizza le parole della stringa passata in ingresso.
+     *
+     * @param [type] $str [description]
+     *
+     * @return [type] [description]
      */
     private function removeGraph(&$str)
     {
@@ -73,17 +70,17 @@ class RestGenerator extends AbstractFileGenerator
         $parser = new Parser();
         try {
 
-            /**
+            /*
              * file di routing symfony
              * @var array
              */
-            $routing = array();
+            $routing = [];
 
-            /**
+            /*
              * Mappa delle proprieta dei controller da generare
              * @var array
              */
-            $mappaClassDef = array();
+            $mappaClassDef = [];
 
             $this->apiDef = $parser->parse($ramlFile);
             $this->logger->info('Title: '.$this->apiDef->getTitle());
@@ -106,7 +103,7 @@ class RestGenerator extends AbstractFileGenerator
 
             $infoSecuritySchema = $this->apiDef->getSecuredBy(); // descrive i vari security schema usati nelle varie risorse
 
-            /** @var: \Raml\Resource[] */
+            /* @var: \Raml\Resource[] */
             $resources = $this->apiDef->getResources();
 
             $namespace = $this->bundleName.'\Controller';
@@ -118,8 +115,8 @@ class RestGenerator extends AbstractFileGenerator
 
                 $names = explode('/', $displayName);
                 preg_match_all("/(\/{[a-zA-Z]+}(\/)?)+/i", $displayName, $methodParam);
-                array_walk($names, array($this, 'removeGraph'));
-                $className = join('', $names);
+                array_walk($names, [$this, 'removeGraph']);
+                $className = implode('', $names);
 
                 $methods = $resource->getMethods();
 
@@ -130,23 +127,23 @@ class RestGenerator extends AbstractFileGenerator
 
                         // Creo $appBundle / $workspace Controller . php
                         $this->info('Genera: '.$namespace.$controllerName.'Controller');
-                        $controllerProperties = array();
+                        $controllerProperties = [];
                         $controllerProperties['name'] = $controllerName.'Controller';
                         $controllerProperties['namespace'] = $namespace;
                         $controllerProperties['extend'] = 'Symfony\Bundle\FrameworkBundle\Controller\Controller';
 
-                        $methodListParams = join(',', $methodParam[0]);
+                        $methodListParams = implode(',', $methodParam[0]);
 
                         $type = strtolower($method->getType());
                         $methodCallName = $type.$controllerName;
                         $actionName = $methodCallName.'Action';
                         $this->info('Call Method: '.$actionName.'('.$methodListParams.')');
 
-                        $controllerProperties['methods'] = array();
-                        $controllerProperties['methods'][$actionName] = array();
-                        $controllerProperties['methods'][$actionName]['params'] = array(
+                        $controllerProperties['methods'] = [];
+                        $controllerProperties['methods'][$actionName] = [];
+                        $controllerProperties['methods'][$actionName]['params'] = [
 
-                        );
+                        ];
 
                         $description = $method->getDescription();
                         $this->info('Description: '.$description);
@@ -155,10 +152,10 @@ class RestGenerator extends AbstractFileGenerator
                         $routing[$entryName]['path'] = $displayName;
                         $routing[$entryName]['defaults']['_controller'] = $this->bundleName.':'.$controllerName.':'.$methodCallName;
                         $routing[$entryName]['host'] = $baseUrl;
-                        $routing[$entryName]['methods'] = array();
+                        $routing[$entryName]['methods'] = [];
                         $routing[$entryName]['methods'][] = strtoupper($type);
                         $routing[$entryName]['schemas'] = $enabledProtocols;
-                        $routing[$entryName]['requirements'] = array();
+                        $routing[$entryName]['requirements'] = [];
                         $routing[$entryName]['requirements'][] = 'FIXME';
 
                         $mappaClassDef[$controllerName.'Controller'] = $controllerProperties;
@@ -170,11 +167,18 @@ class RestGenerator extends AbstractFileGenerator
 
                 foreach ($subResources as $subResource) {
                     //$this->analyzeResource($subResource, $directoryOutput);
+                    //// SAMPLE:
+                    // /Workspace GET => Workspace/GetWorkspace.php
+                    // /Workspace POST => Workspace/POSTWorkspace.php
+                    // /Workspace/{id} GET => Workspace/GetWorkspaceById.php
                 }
             } //fine reousrces
 
-            // $yaml = Yaml::dump($routing, 2);
-            $this->currentFile = Yaml::dump($routing, 2);
+            $indent = 4;
+            $inline = 2;
+            $yaml = new Dumper($indent);
+            $this->currentFile = $yaml->dump($routing, $inline, 0, 0);
+
             $this->_createFileOnDir($directoryOutput, $this->bundleName.'/Resources/config/routing.yml');
 
             foreach ($mappaClassDef as $className => $controllerProp) {
@@ -182,18 +186,18 @@ class RestGenerator extends AbstractFileGenerator
                 $gClassgen = new ClassGenerator($namespace, $className);
                 $gClassgen->setLogger($this->logger);
                 $config = new ClassConfig();
-                $typesReferenceArray = array();
-                $typesDescArray = array();
+                $typesReferenceArray = [];
+                $typesDescArray = [];
                 $gClassgen->generateClassType($controllerProp, $typesReferenceArray, $typesDescArray, $config);
                 $gClassgen->createFileOnDir($directoryOutput);
             }
 
             $this->info('Scrittura su '.$directoryOutput);
         } catch (InvalidJsonException $e) {
-            $this->error('['.$e->getErrorCode().'] ' .$e->getMessage());
+            $this->error('['.$e->getErrorCode().'] '.$e->getMessage());
             $this->error($e->getTraceAsString());
         } catch (RamlParserException $e) {
-            $this->error('['.$e->getErrorCode().'] ' .$e->getMessage());
+            $this->error('['.$e->getErrorCode().'] '.$e->getMessage());
         }
     }
 }

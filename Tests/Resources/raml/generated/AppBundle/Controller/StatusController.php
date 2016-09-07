@@ -8,10 +8,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
  */
 class StatusController extends Controller
 {
-
-    /**
-     * @return void
-     */
     final public function getStatusAction()
     {
         // FIMXE: da implementare

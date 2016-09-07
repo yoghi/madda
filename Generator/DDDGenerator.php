@@ -11,49 +11,53 @@ namespace Yoghi\Bundle\MaddaBundle\Generator;
  * with this source code in the file LICENSE.
  */
 
-
-use Yoghi\Bundle\MaddaBundle\Model\Reader;
-use Psr\Log\LoggerInterface;
 use League\Flysystem\Adapter\Local;
+use Psr\Log\LoggerInterface;
+use Yoghi\Bundle\MaddaBundle\Model\Reader;
 
 /**
  * @author Stefano Tamagnini <>
  */
 class DDDGenerator
 {
-
     /**
-     * [$logger description]
+     * [$logger description].
+     *
      * @var \Psr\Log\LoggerInterface
      */
     private $logger;
 
     /**
-     * Reader model file
+     * Reader model file.
+     *
      * @var \Yoghi\Bundle\MaddaBundle\Model\Reader
      */
     private $rym;
 
     /**
-     * Model classes: class -> namespace
+     * Model classes: class -> namespace.
+     *
      * @var array
      */
     private $modelClass;
 
     /**
-     * Comments of model classes
+     * Comments of model classes.
+     *
      * @var array
      */
     private $modelComments;
 
     /**
-     * Fields of model classes
+     * Fields of model classes.
+     *
      * @var array
      */
     private $fieldsClass;
 
     /**
-     * Array process errors
+     * Array process errors.
+     *
      * @var array
      */
     private $errors;
@@ -61,8 +65,8 @@ class DDDGenerator
     public function __construct()
     {
         $this->rym = new Reader();
-        $this->errors = array();
-        $this->modelClass = array();
+        $this->errors = [];
+        $this->modelClass = [];
     }
 
     public function setLogger(LoggerInterface $logger)
@@ -71,23 +75,25 @@ class DDDGenerator
     }
 
     /**
-     * [analyze description]
-     * @param  [type] $fullPathFile [description]
-     * @return [type]               [description]
+     * [analyze description].
+     *
+     * @param [type] $fullPathFile [description]
+     *
+     * @return [type] [description]
      */
     public function analyze($fullPathFile)
     {
         $this->rym->readYaml($fullPathFile);
     }
 
-    private function info($message, $context = array())
+    private function info($message, $context = [])
     {
         if (!is_null($this->logger)) {
             $this->logger->info($message, $context);
         }
     }
 
-    private function error($message, $context = array())
+    private function error($message, $context = [])
     {
         if (!is_null($this->logger)) {
             $this->logger->error($message, $context);
@@ -95,7 +101,8 @@ class DDDGenerator
     }
 
     /**
-     * errori durante la generazione
+     * errori durante la generazione.
+     *
      * @return array of string
      */
     public function getErrors()
@@ -104,8 +111,9 @@ class DDDGenerator
     }
 
     /**
-     * [generate description]
-     * @param  String $directoryOutput directory where write generated class
+     * [generate description].
+     *
+     * @param string $directoryOutput directory where write generated class
      */
     public function generate(Local $directoryOutput)
     {
@@ -114,12 +122,12 @@ class DDDGenerator
 
         $specListClasses = $this->rym->getClassesDefinition();
         foreach ($specListClasses as $className => $properties) {
-            $this->info('Generate class', array('class' => $className)); //, 'properties' => $properties
+            $this->info('Generate class', ['class' => $className]); //, 'properties' => $properties
             if (!array_key_exists('ddd', $properties)) {
-                $this->error('missing ddd section into yml for class', array( 'class' => $className ));
+                $this->error('missing ddd section into yml for class', ['class' => $className]);
                 $this->errors[] = 'missing ddd section into yml for class '.$className;
                 $this->info('force '.$className.' to type class');
-                $properties['ddd'] = array();
+                $properties['ddd'] = [];
                 $properties['ddd']['type'] = 'class';
             }
 
@@ -138,7 +146,7 @@ class DDDGenerator
 
             $generated = false;
             $dddType = $properties['ddd']['type'];
-            if (in_array($dddType, array('interface'))) {
+            if (in_array($dddType, ['interface'])) {
                 $g = new ClassGenerator($namespace, $className, $classComments);
                 $g->setLogger($this->logger);
                 $config = new ClassConfig();
@@ -157,7 +165,7 @@ class DDDGenerator
             }
 
             // NOTE: class aren't ddd type, we haven't section on ddd definition
-            if (in_array($dddType, array('class'))) {
+            if (in_array($dddType, ['class'])) {
                 $g = new ClassGenerator($namespace, $className, $classComments);
                 $g->setLogger($this->logger);
                 $config = new ClassConfig();
@@ -176,9 +184,9 @@ class DDDGenerator
                 // $this->generateClassType($fileInterface, $interface, $properties, $types_reference, $types_description, false, true, true, false, false, $filesystem, $io);
             }
 
-            if (in_array($dddType, array('events'))) {
+            if (in_array($dddType, ['events'])) {
                 //FIXME: impossible! events exist in relation on aggregateRoot
-                $this->error('events exist in relation on aggregateRoot', array( 'class' => $className ));
+                $this->error('events exist in relation on aggregateRoot', ['class' => $className]);
                 $this->errors[] = 'events exist in relation on aggregateRoot, event class '.$className.' cannot exist!';
             }
 
@@ -186,7 +194,7 @@ class DDDGenerator
                 $dddDefinition = $this->rym->getDomainDefinitionAttributes($dddType);
 
                 if (is_null($dddDefinition)) {
-                    $this->error('Missing ddd reference for : '.$dddType.' into '.$className, array( 'class' => $className ));
+                    $this->error('Missing ddd reference for : '.$dddType.' into '.$className, ['class' => $className]);
                     $this->errors[] = 'Missing ddd reference for : '.$dddType.' into '.$className;
                 } else {
                     if (array_key_exists('package', $dddDefinition)) {
@@ -194,7 +202,7 @@ class DDDGenerator
                     }
 
                     if (empty($namespace)) {
-                        $this->error('Missing namespace', array( 'class' => $className ));
+                        $this->error('Missing namespace', ['class' => $className]);
                         $this->errors[] = 'Missing namespace for '.$className;
                     }
 
@@ -209,7 +217,7 @@ class DDDGenerator
 
                     $isRootAggregate = $dddType == 'aggregate' && isset($properties['ddd']['root']) && boolval($properties['ddd']['root']) ? true : false;
 
-                    $this->info('Method required', array( 'class' => $className, 'getter' => $createGetter, 'setter' => $createSetter, 'aggregateRoot' => $isRootAggregate ));
+                    $this->info('Method required', ['class' => $className, 'getter' => $createGetter, 'setter' => $createSetter, 'aggregateRoot' => $isRootAggregate]);
 
                     if (array_key_exists('extend', $dddDefinition)) {
                         $dddExtendDefinition = $dddDefinition['extend'];
@@ -218,7 +226,7 @@ class DDDGenerator
                         }
                     }
 
-                    $dddReferenceFields = array();
+                    $dddReferenceFields = [];
                     if (array_key_exists('fields', $dddDefinition)) {
                         foreach ($dddDefinition['fields'] as $key => $value) {
                             $dddReferenceFields[$key] = $value;
@@ -252,14 +260,14 @@ class DDDGenerator
                         }
 
                         if (!array_key_exists($eventsImplement, $this->modelClass)) {
-                            $this->error('Missing implement class '.$eventsImplement, array( 'class' => $className ));
+                            $this->error('Missing implement class '.$eventsImplement, ['class' => $className]);
                             $this->errors[] = 'Missing implement '.$eventsImplement.' for '.$className;
                             continue;
                         }
                         $namespaceImplementClass = $this->modelClass[$eventsImplement];
                         $eventsImplementFull = $namespaceImplementClass.'\\'.$eventsImplement;
 
-                        $eventsField = array();
+                        $eventsField = [];
                         if (array_key_exists('fields', $eventsProperties)) {
                             foreach ($eventsProperties['fields'] as $key => $value) {
                                 $eventsField[$key] = $value;
@@ -274,7 +282,7 @@ class DDDGenerator
                             }
                         }
 
-                        $eventsToCreate = array();
+                        $eventsToCreate = [];
                         if (array_key_exists('events', $properties)) {
                             $eventsToCreate = $properties['events'];
                         }
@@ -284,10 +292,10 @@ class DDDGenerator
                         }
 
                         foreach ($eventsToCreate as $event) {
-                            $eventClassName = $className . str_replace('_', '', ucwords($event, '_')).'Event';
+                            $eventClassName = $className.str_replace('_', '', ucwords($event)).'Event';
                             $eventClassComments = 'Event '.$event.' for Aggregate Root '.$className;
 
-                            $propertiesEventClass = array();
+                            $propertiesEventClass = [];
                             if (!empty($eventsExtend)) {
                                 $propertiesEventClass['extend'] = $eventsExtend;
                             }
@@ -297,7 +305,7 @@ class DDDGenerator
 
                             $propertiesEventClass['fields'] = $eventsField;
 
-                            $this->info('Create Event', array('event' => $event, 'class' => $className, 'extend' =>$eventsExtend, 'implement' => $eventsImplementFull, 'fields' => $eventsField));
+                            $this->info('Create Event', ['event' => $event, 'class' => $className, 'extend' => $eventsExtend, 'implement' => $eventsImplementFull, 'fields' => $eventsField]);
 
                             $g = new ClassGenerator($eventsNamespace, $eventClassName, $eventClassComments);
                             $g->setLogger($this->logger);
@@ -321,13 +329,13 @@ class DDDGenerator
                         $enumClassList = $properties['enum'];
                         foreach ($enumClassList as $enumClassName) {
                             $enumNamespace = $namespace.'\\'.$className;
-                            $propertiesEnumClass = array(
-                              'extend' => $namespace.'\\'.$className
-                            );
+                            $propertiesEnumClass = [
+                              'extend' => $namespace.'\\'.$className,
+                            ];
                             $actionName = 'instance';
-                            $propertiesEnumClass['methods'] = array();
-                            $propertiesEnumClass['methods'][$actionName] = array();
-                            $propertiesEnumClass['methods'][$actionName]['params'] = array();
+                            $propertiesEnumClass['methods'] = [];
+                            $propertiesEnumClass['methods'][$actionName] = [];
+                            $propertiesEnumClass['methods'][$actionName]['params'] = [];
                             $propertiesEnumClass['methods'][$actionName]['static'] = true;
                             $propertiesEnumClass['methods'][$actionName]['@return'] = $enumNamespace.'\\'.$enumClassName;
                             $body = 'self::$instance = new '.$enumClassName.'();';
@@ -336,9 +344,9 @@ class DDDGenerator
 
                             //TODO: pensare se qui va bene cosi... potrebbe il ClassGenerator sapere come fare questo costruttore?
                             $actionName = '__construct';
-                            $propertiesEnumClass['methods'][$actionName] = array();
+                            $propertiesEnumClass['methods'][$actionName] = [];
                             $propertiesEnumClass['methods'][$actionName]['visibility'] = 'private';
-                            $propertiesEnumClass['methods'][$actionName]['params'] = array();
+                            $propertiesEnumClass['methods'][$actionName]['params'] = [];
                             $propertiesEnumClass['methods'][$actionName]['static'] = false;
                             $propertiesEnumClass['methods'][$actionName]['description'] = 'costruttore';
                             $body = '$this->name = \''.$enumClassName.'\';';
@@ -358,11 +366,11 @@ class DDDGenerator
                             $generated = true;
                         }
 
-                        $properties['fields']['name'] = array(
-                          "primitive" => "string",
-                          "description" => "nome esplicativo della enum",
-                          "getter" => true
-                        );
+                        $properties['fields']['name'] = [
+                          'primitive' => 'string',
+                          'description' => 'nome esplicativo della enum',
+                          'getter' => true,
+                        ];
 
                         $config = new ClassConfig();
                         $config->isInterface = false;

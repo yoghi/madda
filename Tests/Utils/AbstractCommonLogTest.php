@@ -2,19 +2,18 @@
 
 namespace Yoghi\Bundle\MaddaBundleTest\Utils;
 
-use org\bovigo\vfs\vfsStream;
-use Monolog\Handler\StreamHandler;
 use Monolog\Formatter\LineFormatter;
+use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
-use Psr\Log\LoggerInterface;
+use org\bovigo\vfs\vfsStream;
 
 trait AbstractCommonLogTest
 {
-
     private static $directoryV;
 
     /**
-     * [$logger description]
+     * [$logger description].
+     *
      * @var Psr\Log\LoggerInterface
      */
     private $logger;
@@ -43,6 +42,7 @@ trait AbstractCommonLogTest
     protected function readLog()
     {
         $fileLog = self::$directoryV->url().'/log/phpunit.log';
+
         return file_get_contents($fileLog);
     }
 

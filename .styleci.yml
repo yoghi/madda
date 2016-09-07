@@ -1,0 +1,28 @@
+preset: symfony
+
+risky: false
+linting: true
+
+enabled:
+  - short_array_syntax
+  - linebreak_after_opening_tag
+  - ordered_imports
+  - no_useless_return
+  - phpdoc_order
+
+disabled:
+  - phpdoc_summary
+
+finder:
+  exclude:
+    - "Tests"
+  name:
+    - "*.php"
+  not-name:
+    - "*Test.php"
+  not-contains:
+    - "config"
+  not-path:
+    - "vendor"
+  depth:
+    - "< 3"

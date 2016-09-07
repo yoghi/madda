@@ -16,14 +16,13 @@ namespace Yoghi\Bundle\MaddaBundle\Model;
  */
 class ReaderTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @expectedException Yoghi\Bundle\MaddaBundle\Exception\MaddaException
      */
     public function testReadNotExistFile()
     {
         $baseDirectory = __DIR__.'/';
-        $fileName = "nonEsite.yml";
+        $fileName = 'nonEsite.yml';
         $rym = new Reader();
         $rym->readYaml($baseDirectory.'/'.$fileName);
     }
@@ -31,15 +30,15 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     public function testEmptyReadFile()
     {
         $baseDirectory = __DIR__.'/../Resources/finder';
-        $fileName = "emptyModel.yml";
+        $fileName = 'emptyModel.yml';
         $rym = new Reader();
         $rym->readYaml($baseDirectory.'/'.$fileName);
         $prop = $rym->getProperties();
-        $propExpected = array(
-          "ddd" => array(),
-          "classes" => array()
-        );
-        $this->assertEquals($propExpected, $prop, "corretta lettura yml");
+        $propExpected = [
+          'ddd' => [],
+          'classes' => [],
+        ];
+        $this->assertEquals($propExpected, $prop, 'corretta lettura yml');
     }
 
     /**
@@ -48,7 +47,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     public function testReadInvalidFile()
     {
         $baseDirectory = __DIR__.'/../Resources/';
-        $fileName = "invalidModel.yml";
+        $fileName = 'invalidModel.yml';
         $rym = new Reader();
         $rym->readYaml($baseDirectory.'/'.$fileName);
     }
@@ -59,36 +58,36 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     public function testReadFile()
     {
         $baseDirectory = __DIR__.'/../Resources/finder/basemodel';
-        $fileName = "model.yml";
+        $fileName = 'model.yml';
         $rym = new Reader();
         $rym->readYaml($baseDirectory.'/'.$fileName);
         $prop = $rym->getProperties();
-        $propExpected = array(
-          "ddd" => array(
-            "vo" => array(
-              "package" => "Yoghi\Bundle\Madda\Domain\ValueObject",
-              "getter" => 1
-            )
-          ),
-          "classes" => array(
-            "TestEnum" => array(
-              "ddd" => array( "type" => "vo"),
-              "name" => "TestEnum",
-              "description" => "Test Enum",
-              "namespace" => 'Yoghi\Bundle\Madda\Domain\ValueObject',
-              'enum' => array(
-                'TEST'
-              )
-            )
-          )
-        );
-        $this->assertEquals($propExpected, $prop, "corretta lettura yml");
+        $propExpected = [
+          'ddd' => [
+            'vo' => [
+              'package' => "Yoghi\Bundle\Madda\Domain\ValueObject",
+              'getter' => 1,
+            ],
+          ],
+          'classes' => [
+            'TestEnum' => [
+              'ddd' => ['type' => 'vo'],
+              'name' => 'TestEnum',
+              'description' => 'Test Enum',
+              'namespace' => 'Yoghi\Bundle\Madda\Domain\ValueObject',
+              'enum' => [
+                'TEST',
+              ],
+            ],
+          ],
+        ];
+        $this->assertEquals($propExpected, $prop, 'corretta lettura yml');
     }
 
     public function testReadDomainDefinition()
     {
         $baseDirectory = __DIR__.'/../Resources/finder/basemodel';
-        $fileName = "model.yml";
+        $fileName = 'model.yml';
         $rym = new Reader();
         $rym->readYaml($baseDirectory.'/'.$fileName);
         $testVoProperties = $rym->getDomainDefinitionAttributes('vo');
@@ -98,26 +97,26 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     public function testReadAllClassDefinition()
     {
         $baseDirectory = __DIR__.'/../Resources/finder/basemodel';
-        $fileName = "model.yml";
+        $fileName = 'model.yml';
         $rym = new Reader();
         $rym->readYaml($baseDirectory.'/'.$fileName);
         $prop = $rym->getClassesDefinition();
-        $propExpected = array(
-        "TestEnum" => array(
-          "ddd" => array( "type" => "vo"),
-          "name" => "TestEnum",
-          "description" => "Test Enum",
-          "namespace" => 'Yoghi\Bundle\Madda\Domain\ValueObject',
-          'enum' => array('TEST')
-          )
-        );
-        $this->assertEquals($propExpected, $prop, "corretta lettura yml");
+        $propExpected = [
+        'TestEnum' => [
+          'ddd' => ['type' => 'vo'],
+          'name' => 'TestEnum',
+          'description' => 'Test Enum',
+          'namespace' => 'Yoghi\Bundle\Madda\Domain\ValueObject',
+          'enum' => ['TEST'],
+          ],
+        ];
+        $this->assertEquals($propExpected, $prop, 'corretta lettura yml');
     }
 
     public function testReadClassDefinition()
     {
         $baseDirectory = __DIR__.'/../Resources/finder/basemodel';
-        $fileName = "model.yml";
+        $fileName = 'model.yml';
         $rym = new Reader();
         $rym->readYaml($baseDirectory.'/'.$fileName);
         $testEnumProperties = $rym->getClassDefinitionAttributes('TestEnum');

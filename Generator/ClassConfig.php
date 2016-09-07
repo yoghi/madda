@@ -11,7 +11,6 @@ namespace Yoghi\Bundle\MaddaBundle\Generator;
  * with this source code in the file LICENSE.
  */
 
-
 /**
  * @author Stefano Tamagnini <>
  */

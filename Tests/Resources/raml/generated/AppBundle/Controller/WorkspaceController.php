@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -8,9 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
  */
 class WorkspaceController extends Controller
 {
-
     /**
-     * @return void
      */
     final public function getWorkspaceAction()
     {

@@ -1,4 +1,5 @@
 <?php
+
 namespace BitPrepared\Bundle\EventBundle\Domain\Events;
 
 /**
@@ -6,18 +7,15 @@ namespace BitPrepared\Bundle\EventBundle\Domain\Events;
  */
 interface DomainEvent
 {
-
     /**
      * @return \DateTime
      */
     public function getOccurredOn();
 
-
     /**
      * @return int
      */
     public function getAggregateId();
-
 
     /**
      * @return array
