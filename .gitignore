@@ -12,3 +12,6 @@
 
 # Ambiente Sviluppo
 .DS_Store
+
+# Editor
+project.cson
