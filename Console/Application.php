@@ -32,6 +32,7 @@ class Application extends BaseApplication
         $this->add(new CheckSecurityCommand());
         $this->add(new GenerateModelCommand());
     }
+
     public function getLongVersion()
     {
         $version = parent::getLongVersion().' by <comment>Stefano Tamagnini</comment>';
