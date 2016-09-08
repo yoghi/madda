@@ -9,8 +9,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
  */
 class WorkspaceController extends Controller
 {
-    /**
-     */
     final public function getWorkspaceAction()
     {
         // FIMXE: da implementare

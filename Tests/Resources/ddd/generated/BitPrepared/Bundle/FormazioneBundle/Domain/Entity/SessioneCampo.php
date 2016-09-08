@@ -1,4 +1,5 @@
 <?php
+
 namespace BitPrepared\Bundle\FormazioneBundle\Domain\Entity;
 
 use BitPrepared\Bundle\FormazioneBundle\Domain\ValueObject\Sessione;
@@ -13,28 +14,31 @@ final class SessioneCampo
 
     /**
      * identificativo univoco della sessione
+     *
      * @var int
      */
     private $id;
 
     /**
      * Sessione generica utilizzabile in un campo
+     *
      * @var BitPrepared\Bundle\FormazioneBundle\Domain\ValueObject\Sessione
      */
     private $sessione;
 
     /**
      * Tipologia di campo CFM/CFT/CCG/CAM
+     *
      * @var BitPrepared\Bundle\FormazioneBundle\Domain\ValueObject\TipologiaCampo
      */
     private $tipologiaCampo;
 
     /**
      * Documenti correlati alla sessione al campo
+     *
      * @var array
      */
     private $documentiCorrelati;
-
 
     /**
      * costruttore
@@ -47,7 +51,6 @@ final class SessioneCampo
         $this->documentiCorrelati = $documentiCorrelati;
     }
 
-
     /**
      * @return int
      */
@@ -55,7 +58,6 @@ final class SessioneCampo
     {
         return $this->id;
     }
-
 
     /**
      * @return BitPrepared\Bundle\FormazioneBundle\Domain\ValueObject\Sessione
@@ -65,7 +67,6 @@ final class SessioneCampo
         return $this->sessione;
     }
 
-
     /**
      * @return BitPrepared\Bundle\FormazioneBundle\Domain\ValueObject\TipologiaCampo
      */
@@ -73,7 +74,6 @@ final class SessioneCampo
     {
         return $this->tipologiaCampo;
     }
-
 
     /**
      * @return array

@@ -1,4 +1,5 @@
 <?php
+
 namespace TestNamespace;
 
 use ExtendClass;
@@ -11,16 +12,17 @@ class ICWNAFWDACG extends ExtendClass implements IClass
 {
     /**
      * session unique identifier
+     *
      * @var int
      */
     private $prova;
 
     /**
      * comment ClassDep
+     *
      * @var TestNamespace\ClassDep
      */
     private $dependency;
-
 
     /**
      * costruttore
@@ -31,7 +33,6 @@ class ICWNAFWDACG extends ExtendClass implements IClass
         // autoinizialize
         $this->dependency = new ClassDep();
     }
-
 
     /**
      * @return int

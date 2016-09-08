@@ -1,4 +1,5 @@
 <?php
+
 namespace TestNamespace;
 
 /**
@@ -6,7 +7,6 @@ namespace TestNamespace;
  */
 interface ItestWithGetter
 {
-
     /**
      * @return int
      */

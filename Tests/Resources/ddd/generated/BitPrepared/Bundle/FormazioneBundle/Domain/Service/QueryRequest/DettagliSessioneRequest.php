@@ -1,4 +1,5 @@
 <?php
+
 namespace BitPrepared\Bundle\FormazioneBundle\Domain\Service\QueryRequest;
 
 use BitPrepared\Bundle\FormazioneBundle\Domain\Service\Request;
@@ -10,10 +11,10 @@ final class DettagliSessioneRequest extends Request
 {
     /**
      * identificativo univoco della sessione richiesta
+     *
      * @var int
      */
     private $id;
-
 
     /**
      * costruttore
@@ -22,7 +23,6 @@ final class DettagliSessioneRequest extends Request
     {
         $this->id = $id;
     }
-
 
     /**
      * @return int

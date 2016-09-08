@@ -31,6 +31,7 @@ composer install yoghi/madda
  - [X] badge licenza
  - [ ] git tag -a 1.0.0
  - [ ] changelog / release workflow
+ - [ ] aggiungere la capacita di applicare php-cs-fixer alla fine di una generazione 
  - [ ] wiki
  - [ ] faq
  - [ ] [raml](http://raml.org) to controller

@@ -27,22 +27,28 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testEmptyClassGenerator()
     {
-        $gClassgenClassgen = new ClassGenerator('TestNamespace', 'emptyClass');
-        $gClassgenClassgen->setLogger($this->logger);
+        $namespace = 'TestNamespace';
+        $className = 'EmptyClass';
+        $gClassgen = new ClassGenerator($namespace, $className);
+        $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
         $properties = []; // 'fields', 'extend', 'implements'
         $typesReferenceArray = []; //dipendenza dei field da altre classi
         $typesDescArray = []; //descrizione delle classi da cui dipendono i field
-        $gClassgenClassgen->generateClassType($properties, $typesReferenceArray, $typesDescArray, $config);
-        $actual = $gClassgenClassgen->toString();
-        $expected = file_get_contents(__DIR__.'/../Resources/php/EmptyClass.php');
-        $this->assertSame($actual, $expected, 'Classe EmptyClass invalid');
+        $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescArray, $config);
+        // $actual = $gClassgen->toString();
+        // $expected = file_get_contents(__DIR__.'/../Resources/php/EmptyClass.php');
+        // $this->assertSame($actual, $expected, 'Classe EmptyClass invalid');
+        $resourcesDir = __DIR__.'/../Resources/php';
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
     }
 
     public function testFirstClassGenerator()
     {
-        $gClassgenClassgen = new ClassGenerator('TestNamespace', 'FirstClass');
-        $gClassgenClassgen->setLogger($this->logger);
+        $namespace = 'TestNamespace';
+        $className = 'FirstClass';
+        $gClassgen = new ClassGenerator($namespace, $className);
+        $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
         $properties = [
           'extend' => 'ExtendClass',
@@ -50,18 +56,20 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         ];
         $typesReferenceArray = [];
         $typesDescArray = [];
-        $gClassgenClassgen->generateClassType($properties, $typesReferenceArray, $typesDescArray, $config);
-        $actual = $gClassgenClassgen->toString();
-        $expected = file_get_contents(__DIR__.'/../Resources/php/FirstClass.php');
-        $this->assertSame($expected, $actual, 'Classe FirstClass invalid');
+        $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescArray, $config);
+        // $actual = $gClassgenClassgen->toString();
+        // $expected = file_get_contents(__DIR__.'/../Resources/php/FirstClass.php');
+        // $this->assertSame($expected, $actual, 'Classe FirstClass invalid');
+        $resourcesDir = __DIR__.'/../Resources/php';
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
     }
 
     public function testTraitsGenerator()
     {
         $namespace = 'TestNamespace';
         $className = 'TraitsTestClass';
-        $gClassgenClassgen = new ClassGenerator($namespace, $className);
-        $gClassgenClassgen->setLogger($this->logger);
+        $gClassgen = new ClassGenerator($namespace, $className);
+        $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
         $properties = [
           'extend' => 'ExtendClass',
@@ -72,10 +80,10 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
           'TraitsClass' => 'TraitNamespace',
         ];
         $typesDescArray = [];
-        $gClassgenClassgen->generateClassType($properties, $typesReferenceArray, $typesDescArray, $config);
+        $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescArray, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
 
-        $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgenClassgen);
+        $this->compareFileGenerated($resourcesDir, $namespace, $className, $gClassgen);
     }
 
     public function testMultiTraitsGenerator()

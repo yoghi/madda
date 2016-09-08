@@ -1,4 +1,5 @@
 <?php
+
 namespace BitPrepared\Bundle\EventBundle\Domain\Aggregate;
 
 /**
@@ -8,10 +9,10 @@ final class SpiegazioneSessioneCampo
 {
     /**
      * identificativo univoco della sessione come aggregato root
+     *
      * @var int
      */
     private $id;
-
 
     /**
      * costruttore
@@ -20,7 +21,6 @@ final class SpiegazioneSessioneCampo
     {
         $this->id = $id;
     }
-
 
     /**
      * @return int

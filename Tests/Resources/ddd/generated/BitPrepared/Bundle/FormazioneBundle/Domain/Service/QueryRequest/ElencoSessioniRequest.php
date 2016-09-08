@@ -1,4 +1,5 @@
 <?php
+
 namespace BitPrepared\Bundle\FormazioneBundle\Domain\Service\QueryRequest;
 
 use BitPrepared\Bundle\FormazioneBundle\Domain\Service\Request;

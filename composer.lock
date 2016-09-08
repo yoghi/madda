@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0460a9a935c91d6ad2f7d4e6149d9d18",
-    "content-hash": "75d69d726c862b84029fe65878377914",
+    "hash": "0e681cb18ac44b86ac8a89d9caf975c1",
+    "content-hash": "40f98f0a76f2233d65f88f1188585018",
     "packages": [
         {
             "name": "bocharsky-bw/arrayzy",
@@ -103,16 +103,16 @@
         },
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "v1.12.0",
+            "version": "v1.12.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "ddac737e1c06a310a0bb4b3da755a094a31a916a"
+                "reference": "d33ee60f3d3e6152888b7f3a385f49e5c43bf1bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/ddac737e1c06a310a0bb4b3da755a094a31a916a",
-                "reference": "ddac737e1c06a310a0bb4b3da755a094a31a916a",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/d33ee60f3d3e6152888b7f3a385f49e5c43bf1bf",
+                "reference": "d33ee60f3d3e6152888b7f3a385f49e5c43bf1bf",
                 "shasum": ""
             },
             "require": {
@@ -157,7 +157,7 @@
                 }
             ],
             "description": "A tool to automatically fix PHP code style",
-            "time": "2016-08-17 00:17:27"
+            "time": "2016-09-07 06:48:24"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -640,7 +640,7 @@
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.8.10",
+            "version": "v2.8.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
@@ -1603,62 +1603,6 @@
                 "object graph"
             ],
             "time": "2016-09-06 16:07:05"
-        },
-        {
-            "name": "nette/tester",
-            "version": "v1.7.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/nette/tester.git",
-                "reference": "d97534578e8cf66eabe081e7d5eaa4dd527ab0c8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/nette/tester/zipball/d97534578e8cf66eabe081e7d5eaa4dd527ab0c8",
-                "reference": "d97534578e8cf66eabe081e7d5eaa4dd527ab0c8",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "bin": [
-                "src/tester"
-            ],
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.7-dev"
-                }
-            },
-            "autoload": {
-                "classmap": [
-                    "src/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause",
-                "GPL-2.0",
-                "GPL-3.0"
-            ],
-            "authors": [
-                {
-                    "name": "David Grudl",
-                    "homepage": "https://davidgrudl.com"
-                },
-                {
-                    "name": "Nette Community",
-                    "homepage": "https://nette.org/contributors"
-                }
-            ],
-            "description": "An easy-to-use PHP unit testing framework.",
-            "homepage": "https://tester.nette.org",
-            "keywords": [
-                "nette",
-                "testing",
-                "unit"
-            ],
-            "time": "2016-03-19 14:34:02"
         },
         {
             "name": "phpdocumentor/reflection-common",

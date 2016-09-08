@@ -1,4 +1,5 @@
 <?php
+
 namespace BitPrepared\Bundle\EventBundle\Domain\Events;
 
 /**
@@ -8,28 +9,31 @@ final class SpiegazioneSessioneCampoCreateEvent implements DomainEvent
 {
     /**
      * special value
+     *
      * @var int
      */
     private $special;
 
     /**
      * quando accade l'evento
+     *
      * @var \DateTime
      */
     private $occurredOn;
 
     /**
      * id dell'aggregato root relativo all'evento
+     *
      * @var int
      */
     private $aggregateId;
 
     /**
      * proprietà dell'evento
+     *
      * @var array
      */
     private $properties;
-
 
     /**
      * costruttore
@@ -44,7 +48,6 @@ final class SpiegazioneSessioneCampoCreateEvent implements DomainEvent
         $this->properties = $properties;
     }
 
-
     /**
      * @return int
      */
@@ -52,7 +55,6 @@ final class SpiegazioneSessioneCampoCreateEvent implements DomainEvent
     {
         return $this->special;
     }
-
 
     /**
      * @var special int
@@ -62,7 +64,6 @@ final class SpiegazioneSessioneCampoCreateEvent implements DomainEvent
         $this->special = $special;
     }
 
-
     /**
      * @return \DateTime
      */
@@ -71,7 +72,6 @@ final class SpiegazioneSessioneCampoCreateEvent implements DomainEvent
         return $this->occurredOn;
     }
 
-
     /**
      * @return int
      */
@@ -79,7 +79,6 @@ final class SpiegazioneSessioneCampoCreateEvent implements DomainEvent
     {
         return $this->aggregateId;
     }
-
 
     /**
      * @return array

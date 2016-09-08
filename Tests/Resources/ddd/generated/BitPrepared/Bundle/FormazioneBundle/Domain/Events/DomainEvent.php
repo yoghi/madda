@@ -8,9 +8,9 @@ namespace BitPrepared\Bundle\FormazioneBundle\Domain\Events;
 interface DomainEvent
 {
     /**
-     * @return array
+     * @return \DateTime
      */
-    public function getProperties();
+    public function getOccurredOn();
 
     /**
      * @return int
@@ -18,7 +18,7 @@ interface DomainEvent
     public function getAggregateId();
 
     /**
-     * @return \DateTime
+     * @return array
      */
-    public function getOccurredOn();
+    public function getProperties();
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace BitPrepared\Bundle\FormazioneBundle\Domain\Service\CommandRequest;
 
 use BitPrepared\Bundle\FormazioneBundle\Domain\Service\Request;
@@ -11,22 +12,24 @@ final class NewSessioneRequest extends Request
 {
     /**
      * titolo della sessione
+     *
      * @var string
      */
     private $title;
 
     /**
      * descrizione della sessione
+     *
      * @var string
      */
     private $description;
 
     /**
      * Tipologia di campo CFM/CFT/CCG/CAM
+     *
      * @var BitPrepared\Bundle\FormazioneBundle\Domain\ValueObject\TipologiaCampo
      */
     private $tipoCampo;
-
 
     /**
      * costruttore
@@ -38,7 +41,6 @@ final class NewSessioneRequest extends Request
         $this->tipoCampo = $tipoCampo;
     }
 
-
     /**
      * @return string
      */
@@ -47,7 +49,6 @@ final class NewSessioneRequest extends Request
         return $this->title;
     }
 
-
     /**
      * @return string
      */
@@ -55,7 +56,6 @@ final class NewSessioneRequest extends Request
     {
         return $this->description;
     }
-
 
     /**
      * @return BitPrepared\Bundle\FormazioneBundle\Domain\ValueObject\TipologiaCampo

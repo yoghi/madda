@@ -1,4 +1,5 @@
 <?php
+
 namespace BitPrepared\Bundle\FormazioneBundle\Domain\Aggregate;
 
 use BitPrepared\Bundle\FormazioneBundle\Domain\Entity\SessioneCampo;
@@ -10,16 +11,17 @@ final class SpiegazioneSessioneCampo
 {
     /**
      * identificativo univoco della sessione come aggregato root
+     *
      * @var int
      */
     private $id;
 
     /**
      * No comment found on ddd model
+     *
      * @var BitPrepared\Bundle\FormazioneBundle\Domain\Entity\SessioneCampo
      */
     private $sessione;
-
 
     /**
      * costruttore
@@ -30,7 +32,6 @@ final class SpiegazioneSessioneCampo
         $this->sessione = $sessione;
     }
 
-
     /**
      * @return int
      */
@@ -38,7 +39,6 @@ final class SpiegazioneSessioneCampo
     {
         return $this->id;
     }
-
 
     /**
      * @return BitPrepared\Bundle\FormazioneBundle\Domain\Entity\SessioneCampo

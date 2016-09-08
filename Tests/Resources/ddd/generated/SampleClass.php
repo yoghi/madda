@@ -6,10 +6,10 @@ class SampleClass
 {
     /**
      * sample string
+     *
      * @var string
      */
     private $sasa;
-
 
     /**
      * costruttore

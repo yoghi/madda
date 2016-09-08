@@ -1,4 +1,5 @@
 <?php
+
 namespace BitPrepared\Bundle\FormazioneBundle\Domain\Classes;
 
 /**
@@ -8,10 +9,10 @@ class SampleClassWithNamespace
 {
     /**
      * sample string
+     *
      * @var string
      */
     private $sasa;
-
 
     /**
      * costruttore

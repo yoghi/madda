@@ -1,4 +1,5 @@
 <?php
+
 namespace TestNamespace;
 
 use ExtendClass;
@@ -11,10 +12,10 @@ class ImplementsClassWithNamespaceAndFieldStatic extends ExtendClass implements 
 {
     /**
      * identificativo univoco della sessione
+     *
      * @var int
      */
     private static $prova;
-
 
     /**
      * costruttore

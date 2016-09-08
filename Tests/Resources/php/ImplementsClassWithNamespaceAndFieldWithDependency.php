@@ -1,9 +1,10 @@
 <?php
+
 namespace TestNamespace;
 
 use ExtendClass;
-use NS\IClass;
 use NamespaceDep\classDep;
+use NS\IClass;
 
 /**
  * Generated Class
@@ -12,16 +13,17 @@ class ImplementsClassWithNamespaceAndFieldWithDependency extends ExtendClass imp
 {
     /**
      * session unique identifier
+     *
      * @var int
      */
     private $prova;
 
     /**
      * comment classDep
+     *
      * @var NamespaceDep\classDep
      */
     private $dependency;
-
 
     /**
      * costruttore

@@ -29,7 +29,6 @@
         "bocharsky-bw/arrayzy": "^0.6.0",
         "league/flysystem": "^1.0",
         "cweagans/composer-patches": "1.5.0",
-
         "justinrainbow/json-schema": "~1.5",
         "oodle/inflect": "~0.2",
         "kubawerlos/php-raml-parser": "2.0.*"
@@ -44,8 +43,7 @@
         "mikey179/vfsStream": "^1.6",
         "monolog/monolog": "^1.19",
         "johnkary/phpunit-speedtrap": "^1.0",
-        "sllh/php-cs-fixer-styleci-bridge": "^2.1",
-        "nette/tester": "^1.7"
+        "sllh/php-cs-fixer-styleci-bridge": "^2.1"
     },
 
     "repositories": {

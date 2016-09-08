@@ -1,4 +1,5 @@
 <?php
+
 namespace BitPrepared\Bundle\FormazioneBundle\Domain\Events;
 
 /**
@@ -8,22 +9,24 @@ final class SpiegazioneSessioneCampoAddDocumentEvent implements DomainEvent
 {
     /**
      * quando accade l'evento
+     *
      * @var \DateTime
      */
     private $occurredOn;
 
     /**
      * id dell'aggregato root relativo all'evento
+     *
      * @var int
      */
     private $aggregateId;
 
     /**
      * proprietà dell'evento
+     *
      * @var array
      */
     private $properties;
-
 
     /**
      * costruttore
@@ -36,7 +39,6 @@ final class SpiegazioneSessioneCampoAddDocumentEvent implements DomainEvent
         $this->properties = $properties;
     }
 
-
     /**
      * @return \DateTime
      */
@@ -45,7 +47,6 @@ final class SpiegazioneSessioneCampoAddDocumentEvent implements DomainEvent
         return $this->occurredOn;
     }
 
-
     /**
      * @return int
      */
@@ -53,7 +54,6 @@ final class SpiegazioneSessioneCampoAddDocumentEvent implements DomainEvent
     {
         return $this->aggregateId;
     }
-
 
     /**
      * @return array

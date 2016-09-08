@@ -156,12 +156,12 @@ class ClassGenerator extends AbstractFileGenerator
         $methodParseString->setStatic(true);
         $methodParseString->addComment('@return '.$fieldClassFull.'|null');
         $methodParseString->addParameter('parseString');
-        $body = '$class_name = \''.$fieldClassFull.'\'.\'\\\\\'.$parseString;'."\n";
-        $body .= 'if (class_exists($class_name)) {';
-        $body .= "\t".'$x = $class_name::instance();';
-        $body .= "\t".'return $x;';
+        $body = '$className = \''.$fieldClassFull.'\'.\'\\\\\'.$parseString;'."\n";
+        $body .= 'if (class_exists($className)) {';
+        $body .= "\t".'$enumClass = $className::instance();';
+        $body .= "\t".'';
+        $body .= "\t".'return $enumClass;';
         $body .= '}';
-        $body .= 'return null;';
         //$methodParseString->setBody('self::$? = $?;', [$field_name, $field_name]);
         $methodParseString->setBody($body);
     }

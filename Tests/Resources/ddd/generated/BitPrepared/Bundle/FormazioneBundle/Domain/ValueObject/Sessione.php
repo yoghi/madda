@@ -1,4 +1,5 @@
 <?php
+
 namespace BitPrepared\Bundle\FormazioneBundle\Domain\ValueObject;
 
 /**
@@ -10,16 +11,17 @@ final class Sessione
 
     /**
      * titolo della sessione
+     *
      * @var string
      */
     private $title;
 
     /**
      * Descrizione completa della sessione
+     *
      * @var string
      */
     private $description;
-
 
     /**
      * costruttore
@@ -30,7 +32,6 @@ final class Sessione
         $this->description = $description;
     }
 
-
     /**
      * @return string
      */
@@ -38,7 +39,6 @@ final class Sessione
     {
         return $this->title;
     }
-
 
     /**
      * @return string

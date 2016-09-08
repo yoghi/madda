@@ -292,7 +292,7 @@ class DDDGenerator
                         }
 
                         foreach ($eventsToCreate as $event) {
-                            $eventClassName = $className.str_replace('_', '', ucwords($event)).'Event';
+                            $eventClassName = $className.str_replace('_', '', ucwords($event, '_')).'Event';
                             $eventClassComments = 'Event '.$event.' for Aggregate Root '.$className;
 
                             $propertiesEventClass = [];

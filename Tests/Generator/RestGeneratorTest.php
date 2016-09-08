@@ -11,11 +11,11 @@ namespace Yoghi\Bundle\MaddaBundle\Generator;
  * with this source code in the file LICENSE.
  */
 
-use Yoghi\Bundle\MaddaBundleTest\Utils\VfsAdapter;
+use Yoghi\Bundle\MaddaBundle\Finder\Finder;
 use Yoghi\Bundle\MaddaBundleTest\Utils\AbstractCommonLogTest;
 use Yoghi\Bundle\MaddaBundleTest\Utils\FileCompare;
 use Yoghi\Bundle\MaddaBundleTest\Utils\PhpunitFatalErrorHandling;
-use Yoghi\Bundle\MaddaBundle\Finder\Finder;
+use Yoghi\Bundle\MaddaBundleTest\Utils\VfsAdapter;
 
 /**
  * @author Stefano Tamagnini <>
@@ -40,14 +40,14 @@ class RestGeneratorTest extends \PHPUnit_Framework_TestCase
         $rgen->setLogger($this->logger);
         $rgen->generateRest($resourcesDir.'/raml/api.raml', new VfsAdapter($directoryOutput));
 
-        $finderV = new Finder();
-        $finderV->search($directoryOutput, 'php');
-        foreach ($finderV->getFindedFiles() as $file) {
-            $namespace = str_replace('vfs://root/output/', '', pathinfo($file, PATHINFO_DIRNAME));
-            $name = str_replace('.php', '', pathinfo($file, PATHINFO_FILENAME));
-            $this->logger->info('$mappaToCheck[\''.$namespace.'\'] = \''.$name.'\';');
-        }
-        echo $this->readLog();
+        // $finderV = new Finder();
+        // $finderV->search($directoryOutput, 'php');
+        // foreach ($finderV->getFindedFiles() as $file) {
+        //     $namespace = str_replace('vfs://root/output/', '', pathinfo($file, PATHINFO_DIRNAME));
+        //     $name = str_replace('.php', '', pathinfo($file, PATHINFO_FILENAME));
+        //     $this->logger->info('$mappaToCheck[\''.$namespace.'\'] = \''.$name.'\';');
+        // }
+        // echo $this->readLog();
         // exit;
 
         $mappaToCheck = [];
@@ -62,8 +62,8 @@ class RestGeneratorTest extends \PHPUnit_Framework_TestCase
             }
         }
 
-        $routingFile = 'AppBundle/Resources/config/routing.yml';
-        $this->compareFile($resourcesDir.'/raml/generated/', $directoryOutput, $routingFile, false);
+        // $routingFile = 'AppBundle/Resources/config/routing.yml';
+        // $this->compareFile($resourcesDir.'/raml/generated/', $directoryOutput, $routingFile, false);
 
         $errors = $rgen->getErrors();
         $this->assertCount(0, $errors, 'errori durante la generazione');

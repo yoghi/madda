@@ -1,4 +1,5 @@
 <?php
+
 namespace BitPrepared\Bundle\FormazioneBundle\Domain\ValueObject;
 
 /**
@@ -8,10 +9,10 @@ final class SessioniArray
 {
     /**
      * array di sessione/sessioneCampo
+     *
      * @var array
      */
     private $sessioni;
-
 
     /**
      * costruttore
@@ -20,7 +21,6 @@ final class SessioniArray
     {
         $this->sessioni = $sessioni;
     }
-
 
     /**
      * @return array
