@@ -1,0 +1,25 @@
+# .scrutinizer.yml
+build:
+    environment:
+        php:
+            version: 5.6.9 #5.4.41, 5.5.25, 5.6.9, 5.6.16, 7.0.6, 7.0.7, 7.0.8 and hhvm
+            ini:
+                'date.timezone': 'Europe/Rome'
+filter:
+    excluded_paths:
+        - vendor/*
+
+tests:
+        override:
+            - phpunit --process-isolation -c phpunit.xml.dist
+
+checks:
+    php:
+        parameters_in_camelcaps: true
+        no_short_variable_names:
+            minimum: '3'
+        function_in_camel_caps: true
+        encourage_single_quotes: true
+        classes_in_camel_caps: true
+        avoid_todo_comments: true
+        avoid_fixme_comments: true

@@ -6,6 +6,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/yoghi/madda/badge.svg?branch=master)](https://coveralls.io/github/yoghi/madda?branch=master)
 [![Codecov](https://codecov.io/gh/yoghi/madda/branch/master/graph/badge.svg)](https://codecov.io/gh/yoghi/madda)
 [![VersionEye](https://www.versioneye.com/user/projects/5759ce3f7757a0003bd4bd0f/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5759ce3f7757a0003bd4bd0f)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/yoghi/madda/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/yoghi/madda/?branch=master)
 [![Build Status](https://travis-ci.org/yoghi/madda.svg?branch=master)](https://travis-ci.org/yoghi/madda)
 [![license](https://img.shields.io/aur/license/yaourt.svg?maxAge=2592000&style=flat)](https://github.com/yoghi/madda/blob/master/LICENSE)
 
@@ -29,7 +30,7 @@ composer install yoghi/madda
  - [X] [Codecov](https://codecov.io/)
  - [X] [Coveralls](https://coveralls.io/github/yoghi/madda)
  - [X] [VersionEye](https://www.versioneye.com) -> controllo degli aggiornamenti delle dipendeze
- - [ ] [Scrutinizer-ci](https://scrutinizer-ci.com)
+ - [X] [Scrutinizer-ci](https://scrutinizer-ci.com)
  - [X] badge licenza
  - [ ] git tag -a 1.0.0
  - [ ] changelog / release workflow
