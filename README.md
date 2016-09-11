@@ -15,6 +15,7 @@ Model And Domain Driven Architecture
 
  * Symfony 3.0+
  * at least php 5.6.8
+ * justinrainbow/json-schema 1.6 (need from php-raml-parser -> [blocked by](https://github.com/alecsammon/php-raml-parser/pull/104))
 
 ## Installation
 
@@ -28,10 +29,11 @@ composer install yoghi/madda
  - [X] [Codecov](https://codecov.io/)
  - [X] [Coveralls](https://coveralls.io/github/yoghi/madda)
  - [X] [VersionEye](https://www.versioneye.com) -> controllo degli aggiornamenti delle dipendeze
+ - [ ] [Scrutinizer-ci](https://scrutinizer-ci.com)
  - [X] badge licenza
  - [ ] git tag -a 1.0.0
  - [ ] changelog / release workflow
- - [ ] aggiungere la capacita di applicare php-cs-fixer alla fine di una generazione 
+ - [ ] aggiungere la capacita di applicare php-cs-fixer alla fine di una generazione
  - [ ] wiki
  - [ ] faq
  - [ ] [raml](http://raml.org) to controller
