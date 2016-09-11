@@ -65,6 +65,9 @@ class RestGenerator extends AbstractFileGenerator
         $str = ucfirst($str);
     }
 
+    /**
+     * @param string $ramlFile
+     */
     public function generateRest($ramlFile, Local $directoryOutput)
     {
         $parser = new Parser();

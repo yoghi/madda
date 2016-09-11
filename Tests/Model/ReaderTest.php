@@ -35,8 +35,8 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $rym->readYaml($baseDirectory.'/'.$fileName);
         $prop = $rym->getProperties();
         $propExpected = [
-          'ddd' => [],
-          'classes' => [],
+            'ddd' => [],
+            'classes' => [],
         ];
         $this->assertEquals($propExpected, $prop, 'corretta lettura yml');
     }
@@ -63,23 +63,23 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $rym->readYaml($baseDirectory.'/'.$fileName);
         $prop = $rym->getProperties();
         $propExpected = [
-          'ddd' => [
+            'ddd' => [
             'vo' => [
-              'package' => "Yoghi\Bundle\Madda\Domain\ValueObject",
-              'getter' => 1,
+                'package' => "Yoghi\Bundle\Madda\Domain\ValueObject",
+                'getter' => 1,
             ],
-          ],
-          'classes' => [
+            ],
+            'classes' => [
             'TestEnum' => [
-              'ddd' => ['type' => 'vo'],
-              'name' => 'TestEnum',
-              'description' => 'Test Enum',
-              'namespace' => 'Yoghi\Bundle\Madda\Domain\ValueObject',
-              'enum' => [
+                'ddd' => ['type' => 'vo'],
+                'name' => 'TestEnum',
+                'description' => 'Test Enum',
+                'namespace' => 'Yoghi\Bundle\Madda\Domain\ValueObject',
+                'enum' => [
                 'TEST',
-              ],
+                ],
             ],
-          ],
+            ],
         ];
         $this->assertEquals($propExpected, $prop, 'corretta lettura yml');
     }
@@ -103,12 +103,12 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $prop = $rym->getClassesDefinition();
         $propExpected = [
         'TestEnum' => [
-          'ddd' => ['type' => 'vo'],
-          'name' => 'TestEnum',
-          'description' => 'Test Enum',
-          'namespace' => 'Yoghi\Bundle\Madda\Domain\ValueObject',
-          'enum' => ['TEST'],
-          ],
+            'ddd' => ['type' => 'vo'],
+            'name' => 'TestEnum',
+            'description' => 'Test Enum',
+            'namespace' => 'Yoghi\Bundle\Madda\Domain\ValueObject',
+            'enum' => ['TEST'],
+            ],
         ];
         $this->assertEquals($propExpected, $prop, 'corretta lettura yml');
     }
