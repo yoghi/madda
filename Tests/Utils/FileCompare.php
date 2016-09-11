@@ -18,7 +18,6 @@ trait FileCompare
      * @param string         $className        class name
      * @param string         $directoryOutput  output directory to compare from
      * @param bool           $createIfNotExist generate file if not exist equals on genereted one
-     * @param ClassGenerator $g                class generator object to test
      */
     private function compareClassPhp($resourcesDir, $namespace, $className, $directoryOutput, $createIfNotExist = false)
     {

@@ -51,6 +51,10 @@ class ClassGenerator extends AbstractFileGenerator
         return $mc;
     }
 
+    /**
+     * @param string $comment
+     * @param boolean $createGetter
+     */
     private function addSingleton($comment, $createGetter)
     {
         $this->info('Aggiungo supporto singleton', [
@@ -76,6 +80,9 @@ class ClassGenerator extends AbstractFileGenerator
         $field->addComment($comment)->addComment('@var '.$fullClassName);
     }
 
+    /**
+     * @param boolean $isConcrete
+     */
     private function addGetter($fieldName, $fieldClassFull, $isStatic, $isConcrete)
     {
         $this->info('Aggiungo getter', [
@@ -115,6 +122,9 @@ class ClassGenerator extends AbstractFileGenerator
         ]);
     }
 
+    /**
+     * @param boolean $isConcrete
+     */
     private function addSetter($fieldName, $fieldClassFull, $isStatic, $isConcrete)
     {
         $this->info('Aggiungo setter', [
@@ -260,7 +270,7 @@ class ClassGenerator extends AbstractFileGenerator
                 }
 
                 if (!$isAutoinizialize) {
-                    if (null !=  $defaultValue) {
+                    if (null != $defaultValue) {
                         //TODO: usare "primitive type per determinare il corretto IF"
                         //FARE UN TEST PER I BOOLEAN
                         //@see https://www.virendrachandak.com/techtalk/php-isset-vs-empty-vs-is_null/

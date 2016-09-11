@@ -46,6 +46,6 @@ class CheckSecurityCommand extends Command
         $checker = new SecurityChecker();
         $alerts = $checker->check('composer.lock');
 
-        count($alerts) > 0 ?  $io->error($alerts) : $io->success('security checked!');
+        count($alerts) > 0 ? $io->error($alerts) : $io->success('security checked!');
     }
 }

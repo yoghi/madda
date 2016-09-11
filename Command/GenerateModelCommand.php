@@ -88,9 +88,9 @@ class GenerateModelCommand extends Command
             $fixer = new \Symfony\CS\Console\Command\FixCommand();
 
             $input = new ArrayInput([
-               'path' => $directoryOutput,
-               '--level' => 'psr2',
-               '--fixers' => 'eof_ending,strict_param,short_array_syntax,trailing_spaces,indentation,line_after_namespace,php_closing_tag',
+                'path' => $directoryOutput,
+                '--level' => 'psr2',
+                '--fixers' => 'eof_ending,strict_param,short_array_syntax,trailing_spaces,indentation,line_after_namespace,php_closing_tag',
             ]);
 
             $output = new BufferedOutput();
