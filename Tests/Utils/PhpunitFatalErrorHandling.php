@@ -29,7 +29,7 @@ trait PhpunitFatalErrorHandling
      */
     public static function setupErrorHandling()
     {
-        set_exception_handler(function ($exception) {
+        set_exception_handler(function($exception) {
             self::generateCallTrace($exception);
         });
     }

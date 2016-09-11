@@ -51,8 +51,8 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
         $properties = [
-          'extend' => 'ExtendClass',
-          'implements' => 'IClass',
+            'extend' => 'ExtendClass',
+            'implements' => 'IClass',
         ];
         $typesReferenceArray = [];
         $typesDescArray = [];
@@ -72,12 +72,12 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
         $properties = [
-          'extend' => 'ExtendClass',
-          'implements' => "NS\IClass",
-          'traits' => 'TraitsClass',
+            'extend' => 'ExtendClass',
+            'implements' => "NS\IClass",
+            'traits' => 'TraitsClass',
         ];
         $typesReferenceArray = [
-          'TraitsClass' => 'TraitNamespace',
+            'TraitsClass' => 'TraitNamespace',
         ];
         $typesDescArray = [];
         $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescArray, $config);
@@ -94,13 +94,13 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $gClassgenClassgen->setLogger($this->logger);
         $config = new ClassConfig();
         $properties = [
-          'extend' => 'ExtendClass',
-          'implements' => "NS\IClass",
-          'traits' => ['TraitsClass', 'TraitsClass2'],
+            'extend' => 'ExtendClass',
+            'implements' => "NS\IClass",
+            'traits' => ['TraitsClass', 'TraitsClass2'],
         ];
         $typesReferenceArray = [
-          'TraitsClass' => 'TraitNamespace',
-          'TraitsClass2' => 'TestNamespace',
+            'TraitsClass' => 'TraitNamespace',
+            'TraitsClass2' => 'TestNamespace',
         ];
         $typesDescArray = [];
         $gClassgenClassgen->generateClassType($properties, $typesReferenceArray, $typesDescArray, $config);
@@ -117,8 +117,8 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $gClassgenClassgen->setLogger($this->logger);
         $config = new ClassConfig();
         $properties = [
-          'extend' => 'ExtendClass',
-          'implements' => "NS\IClass",
+            'extend' => 'ExtendClass',
+            'implements' => "NS\IClass",
         ];
         $typesReferenceArray = [];
         $typesDescArray = [];
@@ -136,11 +136,11 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $gClassgenClassgen->setLogger($this->logger);
         $config = new ClassConfig();
         $properties = [
-          'extend' => 'ExtendClass',
-          'implements' => [
+            'extend' => 'ExtendClass',
+            'implements' => [
             "NS\IClass",
             "NS\IClass2",
-          ],
+            ],
         ];
         $typesReferenceArray = [];
         $typesDescArray = [];
@@ -159,14 +159,14 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $config = new ClassConfig();
         $config->haveConstructor = true;
         $properties = [
-          'extend' => 'ExtendClass',
-          'implements' => "NS\IClass",
-          'fields' => [
+            'extend' => 'ExtendClass',
+            'implements' => "NS\IClass",
+            'fields' => [
             'prova' => [
-              'primitive' => 'int',
-              'description' => 'identificativo univoco della sessione',
+                'primitive' => 'int',
+                'description' => 'identificativo univoco della sessione',
             ],
-          ],
+            ],
         ];
         $typesReferenceArray = [];
         $typesDescArray = [];
@@ -185,15 +185,15 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $config = new ClassConfig();
         $config->haveConstructor = true;
         $properties = [
-          'extend' => 'ExtendClass',
-          'implements' => "NS\IClass",
-          'fields' => [
+            'extend' => 'ExtendClass',
+            'implements' => "NS\IClass",
+            'fields' => [
             'prova' => [
-              'primitive' => 'int',
-              'description' => 'identificativo univoco della sessione',
-              'static' => true,
+                'primitive' => 'int',
+                'description' => 'identificativo univoco della sessione',
+                'static' => true,
             ],
-          ],
+            ],
         ];
         $typesReferenceArray = [];
         $typesDescArray = [];
@@ -212,23 +212,23 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $config = new ClassConfig();
         $config->haveConstructor = true;
         $properties = [
-          'extend' => 'ExtendClass',
-          'implements' => "NS\IClass",
-          'fields' => [
+            'extend' => 'ExtendClass',
+            'implements' => "NS\IClass",
+            'fields' => [
             'prova' => [
-              'primitive' => 'int',
-              'description' => 'session unique identifier',
+                'primitive' => 'int',
+                'description' => 'session unique identifier',
             ],
             'dependency' => [
-              'class' => 'ClassDep',
+                'class' => 'ClassDep',
             ],
-          ],
+            ],
         ];
         $typesReferenceArray = [
-          'ClassDep' => 'NamespaceDep',
+            'ClassDep' => 'NamespaceDep',
         ];
         $typesDescArray = [
-          'ClassDep' => 'comment ClassDep',
+            'ClassDep' => 'comment ClassDep',
         ];
         $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescArray, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
@@ -245,25 +245,25 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $config = new ClassConfig();
         $config->haveConstructor = true;
         $properties = [
-          'extend' => 'ExtendClass',
-          'implements' => "NS\IClass",
-          'fields' => [
+            'extend' => 'ExtendClass',
+            'implements' => "NS\IClass",
+            'fields' => [
             'prova' => [
-              'primitive' => 'int',
-              'description' => 'session unique identifier',
-              'autoinizialize' => true,
-              'default' => 0,
+                'primitive' => 'int',
+                'description' => 'session unique identifier',
+                'autoinizialize' => true,
+                'default' => 0,
             ],
             'dependency' => [
-              'class' => 'ClassDep',
+                'class' => 'ClassDep',
             ],
-          ],
+            ],
         ];
         $typesReferenceArray = [
-          'ClassDep' => 'NamespaceDep',
+            'ClassDep' => 'NamespaceDep',
         ];
         $typesDescArray = [
-          'ClassDep' => 'comment ClassDep',
+            'ClassDep' => 'comment ClassDep',
         ];
         $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescArray, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
@@ -280,25 +280,25 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $config = new ClassConfig();
         $config->haveConstructor = true;
         $properties = [
-          'extend' => 'ExtendClass',
-          'implements' => "NS\IClass",
-          'fields' => [
+            'extend' => 'ExtendClass',
+            'implements' => "NS\IClass",
+            'fields' => [
             'prova' => [
-              'primitive' => 'int',
-              'description' => 'session unique identifier',
+                'primitive' => 'int',
+                'description' => 'session unique identifier',
             ],
             'dependency' => [
-              'class' => 'ClassDep',
-              'autoinizialize' => true,
-              'default' => 'new ClassDep();',
+                'class' => 'ClassDep',
+                'autoinizialize' => true,
+                'default' => 'new ClassDep();',
             ],
-          ],
+            ],
         ];
         $typesReferenceArray = [
-          'ClassDep' => 'NamespaceDep',
+            'ClassDep' => 'NamespaceDep',
         ];
         $typesDescArray = [
-          'ClassDep' => 'comment ClassDep',
+            'ClassDep' => 'comment ClassDep',
         ];
         $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescArray, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
@@ -315,24 +315,24 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $config = new ClassConfig();
         $config->haveConstructor = true;
         $properties = [
-          'extend' => 'ExtendClass',
-          'implements' => "NS\IClass",
-          'fields' => [
+            'extend' => 'ExtendClass',
+            'implements' => "NS\IClass",
+            'fields' => [
             'prova' => [
-              'primitive' => 'int',
-              'description' => 'session unique identifier',
-              'getter' => true,
+                'primitive' => 'int',
+                'description' => 'session unique identifier',
+                'getter' => true,
             ],
             'dependency' => [
-              'class' => 'ClassDep',
-              'autoinizialize' => true,
-              'default' => 'new ClassDep()',
+                'class' => 'ClassDep',
+                'autoinizialize' => true,
+                'default' => 'new ClassDep()',
             ],
-          ],
+            ],
         ];
         $typesReferenceArray = [];
         $typesDescArray = [
-          'ClassDep' => 'comment ClassDep',
+            'ClassDep' => 'comment ClassDep',
         ];
         $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescArray, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
@@ -350,25 +350,25 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $config->haveConstructor = true;
         $config->haveGetter = true;
         $properties = [
-          'extend' => 'ExtendClass',
-          'implements' => "NS\IClass",
-          'fields' => [
+            'extend' => 'ExtendClass',
+            'implements' => "NS\IClass",
+            'fields' => [
             'prova' => [
-              'primitive' => 'int',
-              'description' => 'session unique identifier',
+                'primitive' => 'int',
+                'description' => 'session unique identifier',
             ],
             'dependency' => [
-              'class' => 'ClassDep',
-              'autoinizialize' => true,
-              'default' => 'new ClassDep()',
+                'class' => 'ClassDep',
+                'autoinizialize' => true,
+                'default' => 'new ClassDep()',
             ],
-          ],
+            ],
         ];
         $typesReferenceArray = [
-          'ClassDep' => 'NamespaceDep',
+            'ClassDep' => 'NamespaceDep',
         ];
         $typesDescArray = [
-          'ClassDep' => 'comment ClassDep',
+            'ClassDep' => 'comment ClassDep',
         ];
         $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescArray, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
@@ -387,25 +387,25 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $config->haveGetter = true;
         $config->haveSetter = true;
         $properties = [
-          'extend' => 'ExtendClass',
-          'implements' => "NS\IClass",
-          'fields' => [
+            'extend' => 'ExtendClass',
+            'implements' => "NS\IClass",
+            'fields' => [
             'prova' => [
-              'primitive' => 'int',
-              'description' => 'session unique identifier',
+                'primitive' => 'int',
+                'description' => 'session unique identifier',
             ],
             'dependency' => [
-              'class' => 'ClassDep',
-              'autoinizialize' => false,
-              'default' => 'new ClassDep()',
+                'class' => 'ClassDep',
+                'autoinizialize' => false,
+                'default' => 'new ClassDep()',
             ],
-          ],
+            ],
         ];
         $typesReferenceArray = [
-          'ClassDep' => 'NamespaceDep',
+            'ClassDep' => 'NamespaceDep',
         ];
         $typesDescArray = [
-          'ClassDep' => 'comment ClassDep',
+            'ClassDep' => 'comment ClassDep',
         ];
         $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescArray, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
@@ -422,31 +422,31 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $config = new ClassConfig();
         $config->haveConstructor = true;
         $properties = [
-          'extend' => 'ExtendClass',
-          'implements' => "NS\IClass",
-          'fields' => [
+            'extend' => 'ExtendClass',
+            'implements' => "NS\IClass",
+            'fields' => [
             'prova' => [
-              'primitive' => 'int',
-              'description' => 'session unique identifier',
-              'static' => true,
-              'getter' => true,
-              'setter' => true,
+                'primitive' => 'int',
+                'description' => 'session unique identifier',
+                'static' => true,
+                'getter' => true,
+                'setter' => true,
             ],
             'dependency' => [
-              'class' => 'ClassDep',
-              'autoinizialize' => true,
-              'default' => 'new ClassDep()',
-              'static' => true,
-              'getter' => true,
-              'setter' => true,
+                'class' => 'ClassDep',
+                'autoinizialize' => true,
+                'default' => 'new ClassDep()',
+                'static' => true,
+                'getter' => true,
+                'setter' => true,
             ],
-          ],
+            ],
         ];
         $typesReferenceArray = [
-          'ClassDep' => 'NamespaceDep',
+            'ClassDep' => 'NamespaceDep',
         ];
         $typesDescArray = [
-          'ClassDep' => 'comment ClassDep',
+            'ClassDep' => 'comment ClassDep',
         ];
         $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescArray, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
@@ -465,27 +465,27 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $config->haveGetter = true;
         $config->haveSetter = true;
         $properties = [
-          'extend' => 'ExtendClass',
-          'implements' => "NS\IClass",
-          'fields' => [
+            'extend' => 'ExtendClass',
+            'implements' => "NS\IClass",
+            'fields' => [
             'prova' => [
-              'primitive' => 'int',
-              'description' => 'session unique identifier',
-              'static' => true,
+                'primitive' => 'int',
+                'description' => 'session unique identifier',
+                'static' => true,
             ],
             'dependency' => [
-              'class' => 'ClassDep',
-              'autoinizialize' => true,
-              'default' => 'new ClassDep()',
-              'static' => true,
+                'class' => 'ClassDep',
+                'autoinizialize' => true,
+                'default' => 'new ClassDep()',
+                'static' => true,
             ],
-          ],
+            ],
         ];
         $typesReferenceArray = [
-          'ClassDep' => 'NamespaceDep',
+            'ClassDep' => 'NamespaceDep',
         ];
         $typesDescArray = [
-          'ClassDep' => 'comment ClassDep',
+            'ClassDep' => 'comment ClassDep',
         ];
         $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescArray, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
@@ -504,27 +504,27 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $config->haveGetter = true;
         $config->haveSetter = true;
         $properties = [
-          'extend' => 'ExtendClass',
-          'implements' => "NS\IClass",
-          'fields' => [
+            'extend' => 'ExtendClass',
+            'implements' => "NS\IClass",
+            'fields' => [
             'prova' => [
-              'primitive' => 'int',
-              'autoinizialize' => true,
-              'default' => 0,
-              'description' => 'session unique identifier',
+                'primitive' => 'int',
+                'autoinizialize' => true,
+                'default' => 0,
+                'description' => 'session unique identifier',
             ],
             'dependency' => [
-              'class' => 'ClassDep',
-              'autoinizialize' => true,
-              'default' => 'new ClassDep()',
+                'class' => 'ClassDep',
+                'autoinizialize' => true,
+                'default' => 'new ClassDep()',
             ],
-          ],
+            ],
         ];
         $typesReferenceArray = [
-          'ClassDep' => 'TestNamespace',
+            'ClassDep' => 'TestNamespace',
         ];
         $typesDescArray = [
-          'ClassDep' => 'comment ClassDep',
+            'ClassDep' => 'comment ClassDep',
         ];
         $gClassgen->generateClassType($properties, $typesReferenceArray, $typesDescArray, $config);
         $resourcesDir = __DIR__.'/../Resources/php';
@@ -541,13 +541,13 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $config = new ClassConfig();
         $config->isEnum = true;
         $properties = [
-          'fields' => [
+            'fields' => [
             'name' => [
-              'primitive' => 'string',
-              'description' => 'nome esplicativo della enum',
-              'getter' => true,
+                'primitive' => 'string',
+                'description' => 'nome esplicativo della enum',
+                'getter' => true,
             ],
-          ],
+            ],
         ];
         $typesReferenceArray = [];
         $typesDescArray = [];
@@ -584,12 +584,12 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $config->haveConstructor = true;
         $config->isInterface = true;
         $properties = [
-          'fields' => [
+            'fields' => [
             'prova' => [
-              'primitive' => 'int',
-              'description' => 'session unique identifier',
+                'primitive' => 'int',
+                'description' => 'session unique identifier',
             ],
-          ],
+            ],
         ];
         $typesReferenceArray = [];
         $typesDescArray = [];
@@ -609,12 +609,12 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $config->haveGetter = true;
         $config->isInterface = true;
         $properties = [
-          'fields' => [
+            'fields' => [
             'prova' => [
-              'primitive' => 'int',
-              'description' => 'session unique identifier',
+                'primitive' => 'int',
+                'description' => 'session unique identifier',
             ],
-          ],
+            ],
         ];
         $typesReferenceArray = [];
         $typesDescArray = [];
@@ -631,22 +631,22 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
         $gClassgen->setLogger($this->logger);
         $config = new ClassConfig();
         $properties = [
-          'extend' => 'ExtendClass',
-          'implements' => 'IClass',
-          'methods' => [
+            'extend' => 'ExtendClass',
+            'implements' => 'IClass',
+            'methods' => [
             'methodName' => [
-              'params' => [
+                'params' => [
                 'prova' => [
-                  'primitive' => 'int',
-                  'description' => 'session unique identifier',
+                    'primitive' => 'int',
+                    'description' => 'session unique identifier',
                 ],
                 'prova2' => [
-                  'primitive' => 'string',
-                  'description' => 'campo generico',
+                    'primitive' => 'string',
+                    'description' => 'campo generico',
                 ],
-              ],
+                ],
             ],
-          ],
+            ],
         ];
         $typesReferenceArray = [];
         $typesDescArray = [];

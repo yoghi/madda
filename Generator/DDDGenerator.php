@@ -86,6 +86,9 @@ class DDDGenerator
         $this->rym->readYaml($fullPathFile);
     }
 
+    /**
+     * @param string $message
+     */
     private function info($message, $context = [])
     {
         if (!is_null($this->logger)) {
@@ -93,6 +96,9 @@ class DDDGenerator
         }
     }
 
+    /**
+     * @param string $message
+     */
     private function error($message, $context = [])
     {
         if (!is_null($this->logger)) {
@@ -113,7 +119,7 @@ class DDDGenerator
     /**
      * [generate description].
      *
-     * @param string $directoryOutput directory where write generated class
+     * @param Local $directoryOutput directory where write generated class
      */
     public function generate(Local $directoryOutput)
     {
@@ -330,7 +336,7 @@ class DDDGenerator
                         foreach ($enumClassList as $enumClassName) {
                             $enumNamespace = $namespace.'\\'.$className;
                             $propertiesEnumClass = [
-                              'extend' => $namespace.'\\'.$className,
+                                'extend' => $namespace.'\\'.$className,
                             ];
                             $actionName = 'instance';
                             $propertiesEnumClass['methods'] = [];
@@ -367,9 +373,9 @@ class DDDGenerator
                         }
 
                         $properties['fields']['name'] = [
-                          'primitive' => 'string',
-                          'description' => 'nome esplicativo della enum',
-                          'getter' => true,
+                            'primitive' => 'string',
+                            'description' => 'nome esplicativo della enum',
+                            'getter' => true,
                         ];
 
                         $config = new ClassConfig();
